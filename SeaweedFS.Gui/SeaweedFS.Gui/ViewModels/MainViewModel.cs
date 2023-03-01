@@ -29,6 +29,7 @@ public class MainViewModel : ViewModelBase
         this.savePicker = savePicker;
         History = new History(new EmptyFolderViewModel());
 
+        TransferManager = new TransferManager();
         Refresh = ReactiveCommand.CreateFromObservable(() => OnRefresh(seaweedFs, History.CurrentFolder, savePicker));
 
         Contents = this
@@ -42,7 +43,9 @@ public class MainViewModel : ViewModelBase
         Notify = ReactiveCommand.Create(() => notificationService.ShowMessage("Yepa, cómo vas?"));
     }
 
-    public ReactiveCommand<Unit, Unit> Notify { get; set; }
+    public TransferManager TransferManager { get; }
+
+    public ReactiveCommand<Unit, Unit> Notify { get; }
 
     public History History { get; }
 
@@ -139,6 +142,6 @@ public class MainViewModel : ViewModelBase
             return new FolderViewModel(entry.FullPath[1..], new List<EntryViewModel>(), this);
         }
 
-        return new FileViewModel(entry.FullPath[1..], seaweedFs, savePicker);
+        return new FileViewModel(entry.FullPath[1..], seaweedFs, savePicker, TransferManager);
     }
 }
