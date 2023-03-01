@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:SeaweedFS.Gui.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SeaweedFS.Gui.Views.MainView">
+  <Design.DataContext>
+      <viewModels:MainViewModel />
+  </Design.DataContext>
+    
+    <UserControl.DataTemplates>
+      <DataTemplate DataType="viewModels:FolderViewModel">
+        <Button HorizontalAlignment="Left" Content="{Binding Name}" Command="{Binding Navigate}" />
+      </DataTemplate>
+      <DataTemplate DataType="viewModels:FileViewModel">
+        <DockPanel>
+          <Button DockPanel.Dock="Right" Content="Download" Command="{Binding Download}" />
+          <TextBlock VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding Name}" />
+        </DockPanel>
+      </DataTemplate>
+    </UserControl.DataTemplates>
+
+  
+  <DockPanel>
+    <DockPanel DockPanel.Dock="Top" >
+      <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+        <Button Command="{Binding GoBack}">Go back</Button>
+        <Button Command="{Binding Refresh}" Content="Refresh" />
+        <Button Command="{Binding Upload}" Content="Upload" />
+        <Button Command="{Binding Notify}" Content="Notify" />
+        <Button Content="Create folder">
+          <Button.Flyout>
+            <Flyout Placement="BottomEdgeAlignedLeft">
+              <DockPanel Width="200">
+                <Button DockPanel.Dock="Right" Content="Create" Command="{Binding CreateFolder}" />
+                <TextBox VerticalAlignment="Center" Watermark="Folder name" Text="{Binding NewFolderName}" />
+              </DockPanel>
+            </Flyout>
+          </Button.Flyout>
+        </Button>
+      </StackPanel>
+      <TextBlock Margin="4" VerticalAlignment="Center" Text="{Binding History.CurrentFolder.Path}" />
+    </DockPanel>
+    <ListBox Items="{Binding Contents^.Items}" />
+  </DockPanel>
+  
+</UserControl>
