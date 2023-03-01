@@ -1,0 +1,59 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:session="clr-namespace:SeaweedFS.Gui.Features.Session"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SeaweedFS.Gui.Features.Session.FolderContentsView"
+             x:DataType="session:IFolderContentsViewModel"
+             xmlns:svg="clr-namespace:Avalonia.Svg;assembly=Avalonia.Svg"
+             x:CompileBindings="True">
+
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <ToggleButton DockPanel.Dock="Right" IsChecked="{Binding IsMultiselectionEnabled}">
+                <ToggleButton.Content>
+                    <svg:Svg Height="20" Path="/Assets/multiselect.svg" />
+                </ToggleButton.Content>
+            </ToggleButton>
+            <Panel>
+                <StackPanel Orientation="Horizontal" IsVisible="{Binding !IsMultiselectionEnabled, FallbackValue=True}">
+                    <Button Command="{Binding Upload}">
+                        <svg:Svg  Path="/Assets/upload-schematic.svg" Height="20" />
+                    </Button>
+                    <Button Content="New folder">
+                        <Button.Flyout>
+                            <Flyout Placement="BottomEdgeAlignedLeft">
+                                <DockPanel IsEnabled="{Binding !CreateFolder.IsExecuting^}">
+                                    <Panel DockPanel.Dock="Right" Margin="4">
+                                        <Button Content="Create"
+                                                Command="{Binding CreateFolder}" />
+                                        <ProgressBar MinWidth="10" IsIndeterminate="True"
+                                                     IsVisible="{Binding CreateFolder.IsExecuting^}" />
+                                    </Panel>
+                                    <TextBox VerticalAlignment="Center" Watermark="Folder name"
+                                             Width="120"
+                                             Text="{Binding NewFolderName, Mode=TwoWay}" />
+                                </DockPanel>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                </StackPanel>
+                <Button Command="{Binding DeleteSelected}" Content="Deleted selected"
+                        IsVisible="{Binding IsMultiselectionEnabled, FallbackValue=False}" />
+            </Panel>
+        </DockPanel>
+        <ListBox Items="{Binding Children}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="session:IEntryViewModelHost">
+                    <DockPanel>
+                        <CheckBox IsVisible="{Binding IsSelectionEnabled^}" DockPanel.Dock="Left"
+                                  IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                        <ContentControl VerticalAlignment="Center" Content="{Binding ViewModel}" />
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DockPanel>
+
+</UserControl>

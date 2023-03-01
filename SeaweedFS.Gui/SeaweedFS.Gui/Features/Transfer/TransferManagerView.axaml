@@ -1,0 +1,95 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:Zafiro.Avalonia;assembly=Zafiro.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="450"
+             x:Class="SeaweedFS.Gui.Features.Transfer.TransferManagerView"
+             x:DataType="transfer:ITransferManager"
+             xmlns:svg="clr-namespace:Avalonia.Svg;assembly=Avalonia.Svg"
+             xmlns:transfer="clr-namespace:SeaweedFS.Gui.Features.Transfer"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+             x:CompileBindings="True">
+
+    <Design.DataContext>
+        <transfer:TransferManagerDesign>
+            <transfer:TransferManagerDesign.TransferList>
+                <transfer:TransferDesign
+                    Name="Finished"
+                    TransferButtonText="{avalonia:Return Re-download}"
+                    ErrorMessage="{avalonia:Return Value=''}"
+                    IsTransferring="{avalonia:Return False}" />
+                <transfer:TransferDesign
+                    Name="Progressing..." Progress="{avalonia:Return 0.4}"
+                    IsIndeterminate="{avalonia:Return False}"
+                    IsTransferring="{avalonia:Return True}" />
+                <transfer:TransferDesign
+                    TransferButtonText="{avalonia:Return Download}"
+                    IsIndeterminate="{avalonia:Return False}"
+                    Name="Errored" ErrorMessage="{avalonia:Return Something unexpected happened}"
+                    IsTransferring="{avalonia:Return False}" />
+                <transfer:TransferDesign Name="Download starting..." IsTransferring="{avalonia:Return True}"
+                                         IsIndeterminate="{avalonia:Return True}" />
+            </transfer:TransferManagerDesign.TransferList>
+        </transfer:TransferManagerDesign>
+    </Design.DataContext>
+
+    <ListBox Items="{Binding Transfers}">
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel />
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Border BorderBrush="LightGray" BorderThickness="1" Padding="4">
+                    <Grid ColumnDefinitions="Auto * Auto Auto" RowDefinitions="* *">
+                        <svg:Svg Grid.RowSpan="2" Margin="2 0 0 0" Path="{Binding Icon}" DockPanel.Dock="Left"
+                                 VerticalAlignment="Center" Height="24" />
+                        <DockPanel Grid.Row="1" Grid.Column="1" Margin="8">
+                            <Panel DockPanel.Dock="Bottom">
+                                <ProgressBar IsVisible="{Binding IsTransferring^}"
+                                             Margin="0 4 0 0"
+                                             IsIndeterminate="{Binding IsIndeterminate^}"
+                                             ShowProgressText="{Binding !IsIndeterminate^}" Maximum="1"
+                                             Value="{Binding Progress^}" />
+                                <TextBlock TextAlignment="Center" VerticalAlignment="Center"
+                                           Foreground="DarkRed"
+                                           Text="{Binding ErrorMessage^}">
+                                    <TextBlock.IsVisible>
+                                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                            <Binding Path="!IsTransferring^" />
+                                            <Binding Path="ErrorMessage^"
+                                                     Converter="{x:Static StringConverters.IsNotNullOrEmpty}" />
+                                        </MultiBinding>
+                                    </TextBlock.IsVisible>
+                                </TextBlock>
+                            </Panel>
+                            <TextBlock VerticalAlignment="Center"
+                                       FontWeight="Bold" Text="{Binding Name}" />
+                        </DockPanel>
+                        <Panel Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="4 4 8 4" Width="120">
+                            <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                    Content="{Binding TransferButtonText^}" Command="{Binding Start}"
+                                    IsVisible="{Binding !IsTransferring^}" />
+                            <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="Cancel"
+                                    Command="{Binding Cancel}" IsVisible="{Binding IsTransferring^}" />
+                        </Panel>
+                        <Button Command="{Binding RemoveCommand}" Grid.Row="1" Grid.Column="3"
+                                VerticalAlignment="Center" Content="-" />
+
+                    </Grid>
+
+                    <i:Interaction.Behaviors>
+                        <ia:DataTriggerBehavior Binding="{Binding $parent[ListBoxItem].IsVisible}" Value="True">
+                            <ia:InvokeCommandAction Command="{Binding Start}" />
+                        </ia:DataTriggerBehavior>
+                    </i:Interaction.Behaviors>
+
+                </Border>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ListBox>
+
+</UserControl>
