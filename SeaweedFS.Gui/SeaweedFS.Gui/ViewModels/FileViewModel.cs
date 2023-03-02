@@ -35,10 +35,16 @@ class FileViewModel : EntryViewModel
 
     private async Task<Stream> GetStream()
     {
-        //var stream = File.OpenRead(@"C:\Users\JMN\OneDrive\Fotos\Imágenes\2021_04_16 11_54 Office Lens.jpg");
+        //var stream = File.OpenRead(@"D:\5 - Unimportant\Descargas\linux_amd64.tar.gz");
         //return stream;
-        var response = await seaweed.GetFileContent(Path);
-        return await response.Content.ReadAsStreamAsync();
+        using (var response = await seaweed.GetFileContent(Path))
+        {
+            var readAsStreamAsync = await response.Content.ReadAsStreamAsync();
+            var ms = new MemoryStream();
+            await readAsStreamAsync.CopyToAsync(ms);
+            ms.Position = 0;
+            return ms;
+        }
     }
 
     public ReactiveCommand<Unit, Result> Download { get; }
