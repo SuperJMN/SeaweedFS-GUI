@@ -35,6 +35,8 @@ class FileViewModel : EntryViewModel
 
     private async Task<Stream> GetStream()
     {
+        //var stream = File.OpenRead(@"C:\Users\JMN\OneDrive\Fotos\Imágenes\2021_04_16 11_54 Office Lens.jpg");
+        //return stream;
         var response = await seaweed.GetFileContent(Path);
         return await response.Content.ReadAsStreamAsync();
     }

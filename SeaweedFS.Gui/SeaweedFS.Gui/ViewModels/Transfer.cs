@@ -19,7 +19,8 @@ public class Transfer
         Percent = copier.Percent;
         Cancel = copier.Cancel;
         ErrorMessage = copier.ErrorMessage;
-        Start.Execute().Subscribe();
+        Start.Execute().Subscribe(result => {});
+        ErrorMessage.Subscribe(s => { });
     }
 
     public IObservable<string> ErrorMessage { get; }

@@ -11,35 +11,51 @@
 
 	<UserControl.DataTemplates>
 		<DataTemplate DataType="viewModels:FolderViewModel">
-			<Button HorizontalAlignment="Left" Content="{Binding Name}" Command="{Binding Navigate}" />
+			<Button Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Left" Command="{Binding Navigate}">
+				<Button.Content>
+					<DockPanel>
+						<Svg Path="/Assets/folder.svg" Height="32" DockPanel.Dock="Left" />
+						<TextBlock Margin="4" FontSize="{StaticResource FontSizeLarge}" VerticalAlignment="Center"
+                                   Text="{Binding Name}" TextDecorations="Underline" />
+					</DockPanel>
+				</Button.Content>
+			</Button>
 		</DataTemplate>
 		<DataTemplate DataType="viewModels:FileViewModel">
 			<DockPanel>
-				<Button DockPanel.Dock="Right" Content="Download" Command="{Binding Download}" />
+				<DockPanel.Styles>
+					<Style Selector="Button">
+						<Setter Property="Opacity" Value="0" />
+					</Style>
+					<Style Selector="Button.Selected">
+						<Setter Property="Opacity" Value="1" />
+					</Style>
+				</DockPanel.Styles>
+				<Button DockPanel.Dock="Right" Content="Download" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Command="{Binding Download}" />
 				<TextBlock VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding Name}" />
 			</DockPanel>
 		</DataTemplate>
 		<DataTemplate DataType="viewModels:Transfer">
-            <StackPanel>
+			<StackPanel>
 				<TextBlock Text="{Binding Name}" />
-                <Panel>
-                    <Button Content="Start" Command="{Binding Start}" IsVisible="{Binding !Start.IsExecuting^}" />
-                    <Button Content="Cancel" Command="{Binding Cancel}" IsVisible="{Binding Start.IsExecuting^}" />
-                </Panel>
-                <StackPanel IsVisible="{Binding Start.IsExecuting^}">
-                    <ProgressBar Maximum="1" Value="{Binding Percent^}" />
-                    <TextBlock Text="{Binding Eta^}">
-                        <TextBlock.Styles>
-                            <Style Selector="TextBlock.Infinity">
-                                <Setter Property="IsVisible" Value="False" />
-                            </Style>
-                        </TextBlock.Styles>
-                    </TextBlock>
-                </StackPanel>
-                <TextBlock Text="{Binding ErrorMessage^}" />
-            </StackPanel>
-        </DataTemplate>
-    </UserControl.DataTemplates>
+				<Panel>
+					<Button Content="Start" Command="{Binding Start}" IsVisible="{Binding !Start.IsExecuting^}" />
+					<Button Content="Cancel" Command="{Binding Cancel}" IsVisible="{Binding Start.IsExecuting^}" />
+				</Panel>
+				<StackPanel IsVisible="{Binding Start.IsExecuting^}">
+					<ProgressBar ShowProgressText="True" Maximum="1" Value="{Binding Percent^}" />
+					<TextBlock Text="{Binding Eta^}">
+						<TextBlock.Styles>
+							<Style Selector="TextBlock.Infinity">
+								<Setter Property="IsVisible" Value="False" />
+							</Style>
+						</TextBlock.Styles>
+					</TextBlock>
+				</StackPanel>
+				<TextBlock Text="{Binding ErrorMessage^}" />
+			</StackPanel>
+		</DataTemplate>
+	</UserControl.DataTemplates>
 
 
 	<DockPanel>
@@ -62,9 +78,12 @@
 			<TextBlock Margin="4" VerticalAlignment="Center" Text="{Binding History.CurrentFolder.Path}" />
 		</DockPanel>
 		<DockPanel>
-			<ItemsControl DockPanel.Dock="Bottom" Height="200" Items="{Binding TransferManager.Transfers}" />
-            <ListBox Items="{Binding Contents^.Items}" />
-        </DockPanel>
+			<Expander DockPanel.Dock="Bottom" IsExpanded="True" Header="File Transfers" IsVisible="{Binding TransferManager.Transfers.Count}">
+				<ItemsControl DockPanel.Dock="Bottom" Height="200" Items="{Binding TransferManager.Transfers}" />
+			</Expander>
+
+			<ListBox Items="{Binding Contents^.Items}" />
+		</DockPanel>
 	</DockPanel>
 
 </UserControl>

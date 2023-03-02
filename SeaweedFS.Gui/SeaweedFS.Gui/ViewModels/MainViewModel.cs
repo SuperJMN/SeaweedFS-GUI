@@ -13,6 +13,7 @@ using Zafiro.Avalonia;
 using Zafiro.Core.Mixins;
 using Zafiro.FileSystem;
 using Zafiro.UI;
+using Observable = System.Reactive.Linq.Observable;
 
 namespace SeaweedFS.Gui.ViewModels;
 
