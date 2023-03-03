@@ -94,7 +94,7 @@ public class MainViewModel : ViewModelBase
 
     private IObservable<Result> UploadFile(IStorable file)
     {
-        return Observable.FromAsync(() => DoUpload(file, History.CurrentFolder.Path, seaweedFs));
+        return System.Reactive.Linq.Observable.FromAsync(() => DoUpload(file, History.CurrentFolder.Path, seaweedFs));
     }
 
     private async Task<Result> DoUpload(IStorable zafiroFile, string path, ISeaweed seaweed)
@@ -116,11 +116,11 @@ public class MainViewModel : ViewModelBase
 
     private IObservable<IFolderViewModel> OnRefresh(ISeaweed client, IFolderViewModel folderViewModel, ISaveFilePicker saveFilePicker)
     {
-        var fromService = Observable
+        var fromService = System.Reactive.Linq.Observable
             .FromAsync(() => client.GetContents(folderViewModel.Path))
             .Select(folder => new FolderViewModel(folder.Path, GetChildren(folder, client, saveFilePicker), this));
 
-        var composed = Observable.Defer(() => fromService.Catch((Exception _) => Observable.Return(History.PreviousFolder)));
+        var composed = System.Reactive.Linq.Observable.Defer(() => fromService.Catch((Exception _) => System.Reactive.Linq.Observable.Return(History.PreviousFolder)));
 
         return composed;
     }

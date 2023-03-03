@@ -2,13 +2,14 @@ using System;
 using System.IO;
 using System.Reactive;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CSharpFunctionalExtensions;
 using ReactiveUI;
 using Zafiro.UI;
 
 namespace SeaweedFS.Gui.ViewModels;
 
-public class Transfer
+public class Transfer : ITransfer
 {
     public Transfer(string name, Func<Task<Stream>> originFactory, Func<Task<Stream>> destinationFactory)
     {
@@ -19,21 +20,23 @@ public class Transfer
         Percent = copier.Percent;
         Cancel = copier.Cancel;
         ErrorMessage = copier.ErrorMessage;
-        Start.Execute().Subscribe(result => {});
+        copier.Start.Execute().Subscribe(result => {});
         ErrorMessage.Subscribe(s => { });
+        IsTransferring = copier.Start.IsExecuting;
     }
 
     public IObservable<string> ErrorMessage { get; }
 
     public string Name { get; }
 
-    public ReactiveCommand<Unit, Unit> Cancel { get; }
+    public ICommand Cancel { get; }
 
     public IObservable<double> Percent { get; }
 
     public IObservable<TimeSpan> Eta { get; }
 
-    public ReactiveCommand<Unit, Result> Start { get; }
+    public ICommand Start { get; }
+    public IObservable<bool> IsTransferring { get; }
 
     public TransferKey Key => new TransferKey(Name);
 }

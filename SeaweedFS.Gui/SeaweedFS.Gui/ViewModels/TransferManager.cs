@@ -4,9 +4,14 @@ using DynamicData;
 
 namespace SeaweedFS.Gui.ViewModels;
 
-public class TransferManager
+public interface ITransferManager
 {
-    private readonly SourceCache<Transfer, TransferKey> sourceCache = new(x => x.Key);
+    ReadOnlyObservableCollection<ITransfer> Transfers { get; }
+}
+
+public class TransferManager : ITransferManager
+{
+    private readonly SourceCache<ITransfer, TransferKey> sourceCache = new(x => x.Key);
 
     public TransferManager()
     {
@@ -18,7 +23,7 @@ public class TransferManager
         Transfers = transfers;
     }
 
-    public ReadOnlyObservableCollection<Transfer> Transfers { get; }
+    public ReadOnlyObservableCollection<ITransfer> Transfers { get; }
 
     public void Add(Transfer copier)
     {

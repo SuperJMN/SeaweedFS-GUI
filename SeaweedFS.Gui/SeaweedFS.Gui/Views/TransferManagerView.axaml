@@ -1,0 +1,80 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:SeaweedFS.Gui.ViewModels"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:avalonia="clr-namespace:Zafiro.Avalonia;assembly=Zafiro.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="250"
+             x:Class="SeaweedFS.Gui.Views.TransferManagerView"
+             x:DataType="viewModels:ITransferManager"
+             x:CompileBindings="True">
+
+	<Design.DataContext>
+		<viewModels:TransferManagerDesign>
+			<viewModels:TransferManagerDesign.TransferList>
+				<viewModels:TransferDesign
+                    Name="Test1" ErrorMessage="{avalonia:Return Failure}" IsTransferring="{avalonia:Return True}"
+                    Percent="{avalonia:Return 0.8}">
+				</viewModels:TransferDesign>
+				<viewModels:TransferDesign
+                    Name="Test2" ErrorMessage="{avalonia:Return Error message}">
+					<viewModels:TransferDesign.IsTransferring>
+						<avalonia:Return>
+							<avalonia:Return.Value>
+								<system:Boolean>True</system:Boolean>
+							</avalonia:Return.Value>
+						</avalonia:Return>
+					</viewModels:TransferDesign.IsTransferring>
+				</viewModels:TransferDesign>
+				<viewModels:TransferDesign
+                    Name="Test3" ErrorMessage="{avalonia:Return Error message}">
+					<viewModels:TransferDesign.IsTransferring>
+						<avalonia:Return>
+							<avalonia:Return.Value>
+								<system:Boolean>False</system:Boolean>
+							</avalonia:Return.Value>
+						</avalonia:Return>
+					</viewModels:TransferDesign.IsTransferring>
+				</viewModels:TransferDesign>
+			</viewModels:TransferManagerDesign.TransferList>
+		</viewModels:TransferManagerDesign>
+	</Design.DataContext>
+
+	<!--<DataGrid Items="{Binding Transfers}">
+        <DataGrid.Columns>
+			<DataGridTextColumn x:DataType="viewModels:ITransfer" Binding="{Binding Name}" />
+        </DataGrid.Columns>
+    </DataGrid>-->
+	<ListBox Items="{Binding Transfers}">
+		<ItemsControl.ItemTemplate>
+			<DataTemplate>
+				<Border BorderBrush="LightGray" BorderThickness="1" Padding="4">
+					<DockPanel>
+						<!--<Svg Path="/Assets/transfer.svg" DockPanel.Dock="Left" VerticalAlignment="Center" Height="24" />-->
+						<Panel DockPanel.Dock="Right" VerticalAlignment="Center" Margin="10" Width="60">
+							<Button Content="Start" Command="{Binding Start}" IsVisible="{Binding !IsTransferring^}" />
+							<Button Content="Cancel" Command="{Binding Cancel}" IsVisible="{Binding IsTransferring^}" />
+						</Panel>
+						<Panel DockPanel.Dock="Bottom">
+							<StackPanel IsVisible="{Binding IsTransferring^}" Margin="0 4" Spacing="4">
+								<ProgressBar ShowProgressText="True" Maximum="1" Value="{Binding Percent^}" />
+								<TextBlock Text="{Binding Eta^}">
+									<TextBlock.Styles>
+										<Style Selector="TextBlock.Infinity">
+											<Setter Property="IsVisible" Value="False" />
+										</Style>
+									</TextBlock.Styles>
+								</TextBlock>
+							</StackPanel>
+                            <TextBlock TextAlignment="Center" IsVisible="{Binding !IsTransferring^}" DockPanel.Dock="Right" Foreground="Red" Text="{Binding ErrorMessage^}" />
+						</Panel>
+
+						<TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{Binding Name}" />
+					</DockPanel>
+				</Border>
+			</DataTemplate>
+		</ItemsControl.ItemTemplate>
+	</ListBox>
+
+</UserControl>

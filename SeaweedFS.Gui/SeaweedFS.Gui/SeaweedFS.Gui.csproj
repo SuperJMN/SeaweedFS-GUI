@@ -12,6 +12,7 @@
 
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
+        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.0-preview5" />
         <PackageReference Include="Avalonia.Svg" Version="11.0.0-preview5" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
@@ -31,5 +32,11 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Zafiro.Avalonia\Zafiro.Avalonia\Zafiro.Avalonia.csproj" />
       <ProjectReference Include="..\..\Zafiro.Avalonia\Zafiro\Source\UI\UI.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\TransferManagerView.axaml.cs">
+        <DependentUpon>TransferManagerView.axaml</DependentUpon>
+      </Compile>
     </ItemGroup>
 </Project>

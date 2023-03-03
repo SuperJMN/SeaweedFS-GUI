@@ -3,9 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SeaweedFS.Gui.ViewModels"
+             xmlns:views="clr-namespace:SeaweedFS.Gui.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SeaweedFS.Gui.Views.MainView">
-	<Design.DataContext>
+    <Design.DataContext>
 		<viewModels:MainViewModel />
 	</Design.DataContext>
 
@@ -35,27 +36,7 @@
 				<TextBlock VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding Name}" />
 			</DockPanel>
 		</DataTemplate>
-		<DataTemplate DataType="viewModels:Transfer">
-			<StackPanel>
-				<TextBlock Text="{Binding Name}" />
-				<Panel>
-					<Button Content="Start" Command="{Binding Start}" IsVisible="{Binding !Start.IsExecuting^}" />
-					<Button Content="Cancel" Command="{Binding Cancel}" IsVisible="{Binding Start.IsExecuting^}" />
-				</Panel>
-				<StackPanel IsVisible="{Binding Start.IsExecuting^}">
-					<ProgressBar ShowProgressText="True" Maximum="1" Value="{Binding Percent^}" />
-					<TextBlock Text="{Binding Eta^}">
-						<TextBlock.Styles>
-							<Style Selector="TextBlock.Infinity">
-								<Setter Property="IsVisible" Value="False" />
-							</Style>
-						</TextBlock.Styles>
-					</TextBlock>
-				</StackPanel>
-				<TextBlock Text="{Binding ErrorMessage^}" />
-			</StackPanel>
-		</DataTemplate>
-	</UserControl.DataTemplates>
+    </UserControl.DataTemplates>
 
 
 	<DockPanel>
@@ -78,9 +59,17 @@
 			<TextBlock Margin="4" VerticalAlignment="Center" Text="{Binding History.CurrentFolder.Path}" />
 		</DockPanel>
 		<DockPanel>
-			<Expander DockPanel.Dock="Bottom" IsExpanded="True" Header="File Transfers" IsVisible="{Binding TransferManager.Transfers.Count}">
-				<ItemsControl DockPanel.Dock="Bottom" Height="200" Items="{Binding TransferManager.Transfers}" />
-			</Expander>
+
+            <Expander DockPanel.Dock="Bottom" IsExpanded="True" Header="File Transfers" IsVisible="{Binding TransferManager.Transfers.Count}">
+				<views:TransferManagerView Height="200">
+                    <views:TransferManagerView.DataContext>
+                        <Binding Path="TransferManager" />
+                    </views:TransferManagerView.DataContext>
+
+
+
+                </views:TransferManagerView>
+            </Expander>
 
 			<ListBox Items="{Binding Contents^.Items}" />
 		</DockPanel>
