@@ -65,9 +65,6 @@
                     <views:TransferManagerView.DataContext>
                         <Binding Path="TransferManager" />
                     </views:TransferManagerView.DataContext>
-
-
-
                 </views:TransferManagerView>
             </Expander>
 

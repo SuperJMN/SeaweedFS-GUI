@@ -21,25 +21,20 @@ public class Transfer : ITransfer
         IsTransferring = copier.Start.IsExecuting;
 
         TransferButtonText = copier.Start.Any().Select(_ => "Re-download").StartWith("Download");
+        IsIndeterminate = copier.Percent
+            .CombineLatest(copier.Start.IsExecuting, (percent, isExecuting) => percent == 0 && isExecuting);
 
         copier.Start.Execute().Subscribe();
     }
 
     public IObservable<string> TransferButtonText { get; }
-
     public IObservable<string> ErrorMessage { get; }
-
     public string Name { get; }
-
     public ICommand Cancel { get; }
-
     public IObservable<double> Percent { get; }
-
     public IObservable<TimeSpan> Eta { get; }
-
     public ICommand Start { get; }
-
     public IObservable<bool> IsTransferring { get; }
-
+    public IObservable<bool> IsIndeterminate { get; }
     public TransferKey Key => new TransferKey(Name);
 }

@@ -15,6 +15,7 @@ public interface ITransfer
     IObservable<TimeSpan> Eta { get; }
     System.Windows.Input.ICommand Start { get; }
     IObservable<bool> IsTransferring { get; }
+    IObservable<bool> IsIndeterminate { get; }
     TransferKey Key { get; }
     IObservable<string> TransferButtonText { get; }
 }

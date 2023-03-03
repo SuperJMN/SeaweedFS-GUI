@@ -3,78 +3,70 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SeaweedFS.Gui.ViewModels"
-             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:avalonia="clr-namespace:Zafiro.Avalonia;assembly=Zafiro.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="250"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="450"
              x:Class="SeaweedFS.Gui.Views.TransferManagerView"
              x:DataType="viewModels:ITransferManager"
+             xmlns:svg="clr-namespace:Avalonia.Svg;assembly=Avalonia.Svg"
              x:CompileBindings="True">
 
 	<Design.DataContext>
 		<viewModels:TransferManagerDesign>
 			<viewModels:TransferManagerDesign.TransferList>
 				<viewModels:TransferDesign
-                    Name="Test1"
-					TransferButtonText="{avalonia:Return Download}"
-                    IsTransferring="{avalonia:Return False}"
-                    Percent="{avalonia:Return 0.8}">
+                    Name="Finished"
+					TransferButtonText="{avalonia:Return Re-download}"
+					ErrorMessage="{avalonia:Return Value=''}"
+                    IsTransferring="{avalonia:Return False}">
 				</viewModels:TransferDesign>
 				<viewModels:TransferDesign
-                    Name="Test2" ErrorMessage="{avalonia:Return Error message}" Percent="{avalonia:Return 0.4}">
-					<viewModels:TransferDesign.IsTransferring>
-						<avalonia:Return>
-							<avalonia:Return.Value>
-								<system:Boolean>True</system:Boolean>
-							</avalonia:Return.Value>
-						</avalonia:Return>
-					</viewModels:TransferDesign.IsTransferring>
+                    Name="Progressing..." Percent="{avalonia:Return 0.4}"
+					IsIndeterminate="{avalonia:Return False}"
+                    IsTransferring="{avalonia:Return True}">
 				</viewModels:TransferDesign>
 				<viewModels:TransferDesign
                     TransferButtonText="{avalonia:Return Download}"
-                    Name="Test3" ErrorMessage="{avalonia:Return Error message}">
-					<viewModels:TransferDesign.IsTransferring>
-						<avalonia:Return>
-							<avalonia:Return.Value>
-								<system:Boolean>False</system:Boolean>
-							</avalonia:Return.Value>
-						</avalonia:Return>
-					</viewModels:TransferDesign.IsTransferring>
+					IsIndeterminate="{avalonia:Return False}"
+                    Name="Errored" ErrorMessage="{avalonia:Return Something unexpected happened}" IsTransferring="{avalonia:Return False}">
 				</viewModels:TransferDesign>
+				<viewModels:TransferDesign Name="Download starting..." IsIndeterminate="{avalonia:Return True}" />
 			</viewModels:TransferManagerDesign.TransferList>
 		</viewModels:TransferManagerDesign>
 	</Design.DataContext>
 
-	<!--<DataGrid Items="{Binding Transfers}">
-        <DataGrid.Columns>
-			<DataGridTextColumn x:DataType="viewModels:ITransfer" Binding="{Binding Name}" />
-        </DataGrid.Columns>
-    </DataGrid>-->
 	<ListBox Items="{Binding Transfers}">
 		<ItemsControl.ItemTemplate>
 			<DataTemplate>
 				<Border BorderBrush="LightGray" BorderThickness="1" Padding="4">
-					<DockPanel>
-						<!--<Svg Path="/Assets/transfer.svg" DockPanel.Dock="Left" VerticalAlignment="Center" Height="24" />-->
-						<Panel DockPanel.Dock="Right" VerticalAlignment="Center" Margin="10" Width="80">
+					<Grid ColumnDefinitions="Auto * Auto" RowDefinitions="* *">
+						<svg:Svg Grid.RowSpan="2" Margin="2 0 0 0" Path="/Assets/transfer.svg" DockPanel.Dock="Left" VerticalAlignment="Center" Height="24" />
+						<DockPanel Grid.Row="1" Grid.Column="1" Margin="8">
+                            <Panel DockPanel.Dock="Bottom">
+                                <ProgressBar IsVisible="{Binding IsTransferring^}"
+                                             Margin="0 4 0 0"
+                                             IsIndeterminate="{Binding IsIndeterminate^}"
+                                             ShowProgressText="{Binding !IsIndeterminate^}" Maximum="1"
+                                             Value="{Binding Percent^}" />
+                                <TextBlock TextAlignment="Center" VerticalAlignment="Center"
+                                           Foreground="DarkRed"
+                                           Text="{Binding ErrorMessage^}">
+                                    <TextBlock.IsVisible>
+                                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                            <Binding Path="!IsTransferring^" />
+                                            <Binding Path="ErrorMessage^"
+                                                     Converter="{x:Static StringConverters.IsNotNullOrEmpty}" />
+                                        </MultiBinding>
+                                    </TextBlock.IsVisible>
+                                </TextBlock>
+                            </Panel>
+                            <TextBlock VerticalAlignment="Center"
+                                       FontWeight="Bold" Text="{Binding Name}" />
+                        </DockPanel>
+						<Panel Grid.Row="1" Grid.Column="2" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="4 4 8 4" Width="80">
 							<Button Content="{Binding TransferButtonText^}" Command="{Binding Start}" IsVisible="{Binding !IsTransferring^}" />
 							<Button Content="Cancel" Command="{Binding Cancel}" IsVisible="{Binding IsTransferring^}" />
 						</Panel>
-						<Panel DockPanel.Dock="Bottom">
-							<StackPanel IsVisible="{Binding IsTransferring^}" Margin="0 4" Spacing="4">
-								<ProgressBar ShowProgressText="True" Maximum="1" Value="{Binding Percent^}" />
-								<TextBlock Text="{Binding Eta^}">
-									<TextBlock.Styles>
-										<Style Selector="TextBlock.Infinity">
-											<Setter Property="IsVisible" Value="False" />
-										</Style>
-									</TextBlock.Styles>
-								</TextBlock>
-							</StackPanel>
-                            <TextBlock TextAlignment="Center" IsVisible="{Binding !IsTransferring^}" DockPanel.Dock="Right" Foreground="Red" Text="{Binding ErrorMessage^}" />
-						</Panel>
-
-						<TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{Binding Name}" />
-					</DockPanel>
+					</Grid>
 				</Border>
 			</DataTemplate>
 		</ItemsControl.ItemTemplate>
