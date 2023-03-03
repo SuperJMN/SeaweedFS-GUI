@@ -1,10 +1,8 @@
 using System;
 using System.IO;
-using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CSharpFunctionalExtensions;
-using ReactiveUI;
 using Zafiro.UI;
 
 namespace SeaweedFS.Gui.ViewModels;
@@ -20,10 +18,14 @@ public class Transfer : ITransfer
         Percent = copier.Percent;
         Cancel = copier.Cancel;
         ErrorMessage = copier.ErrorMessage;
-        copier.Start.Execute().Subscribe(result => {});
-        ErrorMessage.Subscribe(s => { });
         IsTransferring = copier.Start.IsExecuting;
+
+        TransferButtonText = copier.Start.Any().Select(_ => "Re-download").StartWith("Download");
+
+        copier.Start.Execute().Subscribe();
     }
+
+    public IObservable<string> TransferButtonText { get; }
 
     public IObservable<string> ErrorMessage { get; }
 
@@ -36,6 +38,7 @@ public class Transfer : ITransfer
     public IObservable<TimeSpan> Eta { get; }
 
     public ICommand Start { get; }
+
     public IObservable<bool> IsTransferring { get; }
 
     public TransferKey Key => new TransferKey(Name);

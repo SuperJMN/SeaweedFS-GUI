@@ -16,4 +16,5 @@ public interface ITransfer
     System.Windows.Input.ICommand Start { get; }
     IObservable<bool> IsTransferring { get; }
     TransferKey Key { get; }
+    IObservable<string> TransferButtonText { get; }
 }

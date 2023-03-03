@@ -13,4 +13,5 @@ public class TransferDesign : ITransfer
     public ICommand Start { get; }
     public IObservable<bool> IsTransferring { get; set; }
     public TransferKey Key { get; }
+    public IObservable<string> TransferButtonText { get; set; }
 }

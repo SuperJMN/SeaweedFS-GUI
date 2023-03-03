@@ -14,11 +14,13 @@
 		<viewModels:TransferManagerDesign>
 			<viewModels:TransferManagerDesign.TransferList>
 				<viewModels:TransferDesign
-                    Name="Test1" ErrorMessage="{avalonia:Return Failure}" IsTransferring="{avalonia:Return True}"
+                    Name="Test1"
+					TransferButtonText="{avalonia:Return Download}"
+                    IsTransferring="{avalonia:Return False}"
                     Percent="{avalonia:Return 0.8}">
 				</viewModels:TransferDesign>
 				<viewModels:TransferDesign
-                    Name="Test2" ErrorMessage="{avalonia:Return Error message}">
+                    Name="Test2" ErrorMessage="{avalonia:Return Error message}" Percent="{avalonia:Return 0.4}">
 					<viewModels:TransferDesign.IsTransferring>
 						<avalonia:Return>
 							<avalonia:Return.Value>
@@ -28,6 +30,7 @@
 					</viewModels:TransferDesign.IsTransferring>
 				</viewModels:TransferDesign>
 				<viewModels:TransferDesign
+                    TransferButtonText="{avalonia:Return Download}"
                     Name="Test3" ErrorMessage="{avalonia:Return Error message}">
 					<viewModels:TransferDesign.IsTransferring>
 						<avalonia:Return>
@@ -52,8 +55,8 @@
 				<Border BorderBrush="LightGray" BorderThickness="1" Padding="4">
 					<DockPanel>
 						<!--<Svg Path="/Assets/transfer.svg" DockPanel.Dock="Left" VerticalAlignment="Center" Height="24" />-->
-						<Panel DockPanel.Dock="Right" VerticalAlignment="Center" Margin="10" Width="60">
-							<Button Content="Start" Command="{Binding Start}" IsVisible="{Binding !IsTransferring^}" />
+						<Panel DockPanel.Dock="Right" VerticalAlignment="Center" Margin="10" Width="80">
+							<Button Content="{Binding TransferButtonText^}" Command="{Binding Start}" IsVisible="{Binding !IsTransferring^}" />
 							<Button Content="Cancel" Command="{Binding Cancel}" IsVisible="{Binding IsTransferring^}" />
 						</Panel>
 						<Panel DockPanel.Dock="Bottom">
