@@ -1,20 +1,20 @@
 using System.Collections.Generic;
-using System.Reactive;
+using System.Windows.Input;
 using ReactiveUI;
 
 namespace SeaweedFS.Gui.ViewModels;
 
 public class FolderViewModel : EntryViewModel, IFolderViewModel
 {
-    public FolderViewModel(string path, IEnumerable<EntryViewModel> children, MainViewModel mainViewModel)
+    public FolderViewModel(string path, IEnumerable<IEntryViewModel> children, IMainViewModel mainViewModel)
     {
         Path = path;
         Navigate = ReactiveCommand.Create(() => mainViewModel.History.CurrentFolder = this);
         Items = children;
     }
 
-    public IEnumerable<EntryViewModel> Items { get; }
-    public ReactiveCommand<Unit, IFolderViewModel> Navigate { get; }
+    public IEnumerable<IEntryViewModel> Items { get; }
+    public ICommand Navigate { get; }
     public string Path { get; }
     public string Name => Path;
 }

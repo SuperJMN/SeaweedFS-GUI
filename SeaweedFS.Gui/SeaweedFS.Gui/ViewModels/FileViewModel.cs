@@ -1,7 +1,7 @@
 using System.IO;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CSharpFunctionalExtensions;
 using ReactiveUI;
 using SeaweedFS.Gui.SeaweedFS;
@@ -9,11 +9,11 @@ using Zafiro.UI;
 
 namespace SeaweedFS.Gui.ViewModels;
 
-class FileViewModel : EntryViewModel
+class FileViewModel : EntryViewModel, IFileViewModel
 {
     private readonly ISeaweed seaweed;
 
-    public FileViewModel(string path, ISeaweed seaweed, ISaveFilePicker saveFilePicker, TransferManager transferManager)
+    public FileViewModel(string path, ISeaweed seaweed, ISaveFilePicker saveFilePicker, ITransferManager transferManager)
     {
         this.seaweed = seaweed;
         Path = path;
@@ -47,9 +47,14 @@ class FileViewModel : EntryViewModel
         }
     }
 
-    public ReactiveCommand<Unit, Result> Download { get; }
+    public ICommand Download { get; }
 
     public string Path { get; }
 
     public string Name => System.IO.Path.GetFileName(Path);
+}
+
+internal interface IFileViewModel : IEntryViewModel
+{
+    public ICommand Download { get; }
 }

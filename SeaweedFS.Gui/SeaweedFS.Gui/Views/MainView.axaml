@@ -2,27 +2,56 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:viewModels="clr-namespace:SeaweedFS.Gui.ViewModels"
+             xmlns:vm="clr-namespace:SeaweedFS.Gui.ViewModels"
+             xmlns:svg="clr-namespace:Avalonia.Svg;assembly=Avalonia.Svg"
              xmlns:views="clr-namespace:SeaweedFS.Gui.Views"
+             xmlns:avalonia="clr-namespace:Zafiro.Avalonia;assembly=Zafiro.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:DataType="vm:IMainViewModel"
+			 x:CompileBindings="True"
              x:Class="SeaweedFS.Gui.Views.MainView">
+
     <Design.DataContext>
-		<viewModels:MainViewModel />
-	</Design.DataContext>
+		<vm:MainViewModelDesign
+            NewFolderName="New folder name">
+            <vm:MainViewModelDesign.Contents>
+				<avalonia:Return>
+                    <avalonia:Return.Value>
+						<vm:FolderViewModelDesign>
+                            <vm:FolderViewModelDesign.ItemsList>
+								<vm:FolderViewModelDesign Path="Sample path" Name="Sample folder" />
+                                <vm:FolderViewModelDesign Path="Sample path" Name="Another folder" />
+                                <vm:FileViewModelDesign Path="Sample path" Name="File1.abc" />
+                                <vm:FileViewModelDesign Path="Sample path" Name="File2.def" />
+                                <vm:FileViewModelDesign Path="Sample path" Name="Long file with spaces.tmp" />
+                            </vm:FolderViewModelDesign.ItemsList>
+                        </vm:FolderViewModelDesign>
+                    </avalonia:Return.Value>
+                </avalonia:Return>
+            </vm:MainViewModelDesign.Contents>
+            <vm:MainViewModelDesign.TransferManager>
+				<vm:TransferManagerDesign>
+					<vm:TransferManagerDesign.TransferList>
+						<vm:TransferDesign IsTransferring="{avalonia:Return True}" Name="Download 1" Percent="{avalonia:Return 0.2}" />
+                    </vm:TransferManagerDesign.TransferList>
+                </vm:TransferManagerDesign>
+            </vm:MainViewModelDesign.TransferManager>
+        </vm:MainViewModelDesign>
+    </Design.DataContext>
 
 	<UserControl.DataTemplates>
-		<DataTemplate DataType="viewModels:FolderViewModel">
+		<DataTemplate DataType="vm:IFolderViewModel">
 			<Button Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Left" Command="{Binding Navigate}">
 				<Button.Content>
 					<DockPanel>
-						<Svg Path="/Assets/folder.svg" Height="32" DockPanel.Dock="Left" />
+						<svg:Svg Path="/Assets/folder.svg" Height="32" DockPanel.Dock="Left" />
 						<TextBlock Margin="4" FontSize="{StaticResource FontSizeLarge}" VerticalAlignment="Center"
                                    Text="{Binding Name}" TextDecorations="Underline" />
 					</DockPanel>
 				</Button.Content>
 			</Button>
 		</DataTemplate>
-		<DataTemplate DataType="viewModels:FileViewModel">
+		<DataTemplate DataType="vm:IFileViewModel">
 			<DockPanel>
 				<DockPanel.Styles>
 					<Style Selector="Button">

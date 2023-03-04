@@ -5,7 +5,7 @@ using ReactiveUI;
 
 namespace SeaweedFS.Gui.ViewModels;
 
-public class History : ReactiveObject
+public class History : ReactiveObject, IHistory
 {
     private readonly Stack<IFolderViewModel> currentFolderStack;
 

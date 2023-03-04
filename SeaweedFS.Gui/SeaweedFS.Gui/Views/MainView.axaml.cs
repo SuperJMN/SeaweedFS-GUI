@@ -13,6 +13,9 @@ public partial class MainView : UserControl
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
-        DataContext = CompositionRoot.Create(TopLevel.GetTopLevel(this)!);
+        if (!Design.IsDesignMode)
+        {
+            DataContext = CompositionRoot.Create(TopLevel.GetTopLevel(this)!);
+        }
     }
 }

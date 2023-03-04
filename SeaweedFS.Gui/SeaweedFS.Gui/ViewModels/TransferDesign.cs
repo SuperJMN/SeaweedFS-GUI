@@ -1,10 +1,17 @@
 using System;
 using System.Windows.Input;
+using ReactiveUI;
 
 namespace SeaweedFS.Gui.ViewModels;
 
 public class TransferDesign : ITransfer
 {
+    public TransferDesign()
+    {
+        Cancel = ReactiveCommand.Create(() => { });
+        Start = ReactiveCommand.Create(() => { });
+    }
+
     public IObservable<string> ErrorMessage { get; set; }
     public string Name { get; set;  }
     public ICommand Cancel { get; }

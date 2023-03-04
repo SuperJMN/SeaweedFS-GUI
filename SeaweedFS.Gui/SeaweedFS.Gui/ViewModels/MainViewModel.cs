@@ -13,11 +13,10 @@ using Zafiro.Avalonia;
 using Zafiro.Core.Mixins;
 using Zafiro.FileSystem;
 using Zafiro.UI;
-using Observable = System.Reactive.Linq.Observable;
 
 namespace SeaweedFS.Gui.ViewModels;
 
-public class MainViewModel : ViewModelBase
+public class MainViewModel : ViewModelBase, IMainViewModel
 {
     private readonly IOpenFilePicker filePicker;
     private readonly ISaveFilePicker savePicker;
@@ -44,11 +43,11 @@ public class MainViewModel : ViewModelBase
         Notify = ReactiveCommand.Create(() => notificationService.ShowMessage("Yepa, cómo vas?"));
     }
 
-    public TransferManager TransferManager { get; }
+    public ITransferManager TransferManager { get; }
 
     public ReactiveCommand<Unit, Unit> Notify { get; }
 
-    public History History { get; }
+    public IHistory History { get; }
 
     public ReactiveCommand<Unit, Unit> CreateFolder { get; set; }
 
@@ -125,22 +124,22 @@ public class MainViewModel : ViewModelBase
         return composed;
     }
 
-    private List<EntryViewModel> GetChildren(Folder folder, ISeaweed seaweed, ISaveFilePicker saveFilePicker)
+    private List<IEntryViewModel> GetChildren(Folder folder, ISeaweed seaweed, ISaveFilePicker saveFilePicker)
     {
         if (folder.Entries != null)
         {
-            return folder.Entries.Select(Factory).OrderBy(x => x is FolderViewModel ? 0 : 1).ToList();
+            return folder.Entries.Select(Factory).OrderBy(x => x is IFolderViewModel ? 0 : 1).ToList();
         }
 
-        return new List<EntryViewModel>();
+        return new List<IEntryViewModel>();
     }
 
 
-    private EntryViewModel Factory(Entry entry)
+    private IEntryViewModel Factory(Entry entry)
     {
         if (entry.Chunks == null)
         {
-            return new FolderViewModel(entry.FullPath[1..], new List<EntryViewModel>(), this);
+            return new FolderViewModel(entry.FullPath[1..], new List<IEntryViewModel>(), this);
         }
 
         return new FileViewModel(entry.FullPath[1..], seaweedFs, savePicker, TransferManager);

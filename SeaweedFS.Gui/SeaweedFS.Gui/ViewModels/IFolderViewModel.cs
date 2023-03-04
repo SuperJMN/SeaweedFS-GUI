@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace SeaweedFS.Gui.ViewModels;
 
-public interface IFolderViewModel
+public interface IFolderViewModel : IEntryViewModel
 {
     string Path { get; }
-    IEnumerable<EntryViewModel> Items { get; }
+    IEnumerable<IEntryViewModel> Items { get; }
+    public ICommand Navigate { get; }
 }
