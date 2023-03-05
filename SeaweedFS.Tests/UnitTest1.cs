@@ -15,7 +15,7 @@ namespace SeaweedFS.Tests
 
             var httpResponseMessage = await client.GetFileContent("Vídeo sin título.mp4");
             var stream = await httpResponseMessage.Content.ReadAsStreamAsync();
-            var obs = stream.ToObservable();
+            var obs = stream.ToObservableAlternate();
             await obs.LastOrDefaultAsync();
         }
 
