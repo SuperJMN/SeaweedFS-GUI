@@ -5,6 +5,7 @@ using System.Windows.Input;
 using CSharpFunctionalExtensions;
 using ReactiveUI;
 using SeaweedFS.Gui.SeaweedFS;
+using Zafiro.Core;
 using Zafiro.UI;
 
 namespace SeaweedFS.Gui.ViewModels;
@@ -21,30 +22,21 @@ class FileViewModel : EntryViewModel, IFileViewModel
         {
             return saveFilePicker
                 .Pick(System.IO.Path.GetFileNameWithoutExtension(path), System.IO.Path.GetExtension(path)[1..])
-                .SelectMany(async maybe =>
+                .SelectMany(maybe =>
                 {
                     if (maybe.HasValue)
                     {
                         transferManager.Add(new Transfer(Path, async () => await GetStream(), () => maybe.Value.OpenWrite()));
                     }
 
-                    return Result.Success();
+                    return Task.FromResult(Result.Success());
                 });
         });
     }
 
     private async Task<Stream> GetStream()
     {
-        //var stream = File.OpenRead(@"D:\5 - Unimportant\Descargas\linux_amd64.tar.gz");
-        //return stream;
-        using (var response = await seaweed.GetFileContent(Path))
-        {
-            var readAsStreamAsync = await response.Content.ReadAsStreamAsync();
-            var ms = new MemoryStream();
-            await readAsStreamAsync.CopyToAsync(ms);
-            ms.Position = 0;
-            return ms;
-        }
+        return await HttpResponseMessageStream.Create(await seaweed.GetFileContent(Path));
     }
 
     public ICommand Download { get; }

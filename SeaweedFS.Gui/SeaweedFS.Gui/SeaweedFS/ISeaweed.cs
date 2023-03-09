@@ -23,22 +23,22 @@ public interface ISeaweed
     Task<HttpResponseMessage> GetFileContent(string filePath);
 }
 
-class CustomDelegatingHandler : DelegatingHandler
-{
-    public CustomDelegatingHandler(HttpMessageHandler innerHandler = null) : base(innerHandler ?? new HttpClientHandler()) { }
+//class CustomDelegatingHandler : DelegatingHandler
+//{
+//    public CustomDelegatingHandler(HttpMessageHandler innerHandler = null) : base(innerHandler ?? new HttpClientHandler()) { }
 
-    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var httpResponseMessage = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
-            var asStr = await httpResponseMessage.Content.ReadAsStringAsync();
-            return httpResponseMessage;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-    }
-}
+//    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+//    {
+//        try
+//        {
+//            var httpResponseMessage = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+//            var asStr = await httpResponseMessage.Content.ReadAsStringAsync();
+//            return httpResponseMessage;
+//        }
+//        catch (Exception e)
+//        {
+//            Console.WriteLine(e);
+//            throw;
+//        }
+//    }
+//}

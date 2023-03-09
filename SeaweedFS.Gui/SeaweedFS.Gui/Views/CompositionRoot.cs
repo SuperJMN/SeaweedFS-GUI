@@ -13,7 +13,8 @@ public static class CompositionRoot
 {
     public static MainViewModel Create(TopLevel topLevel)
     {
-        var httpClient = new HttpClient(new CustomDelegatingHandler());
+        //var httpClient = new HttpClient(new CustomDelegatingHandler());
+        var httpClient = new HttpClient();
         var uriString = "http://192.168.1.31:8888";
         var uri = new Uri(uriString);
         httpClient.BaseAddress = uri;
