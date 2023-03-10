@@ -19,14 +19,14 @@ namespace SeaweedFS.Gui.ViewModels;
 public class MainViewModel : ViewModelBase, IMainViewModel
 {
     private readonly IOpenFilePicker filePicker;
-    private readonly ISaveFilePicker savePicker;
     private readonly ISeaweed seaweedFs;
+    private readonly IStorage storage;
 
-    public MainViewModel(ISeaweed seaweedFs, IOpenFilePicker filePicker, ISaveFilePicker savePicker, INotificationService notificationService)
+    public MainViewModel(ISeaweed seaweedFs, IOpenFilePicker filePicker, ISaveFilePicker savePicker, INotificationService notificationService, IStorage storage)
     {
         this.seaweedFs = seaweedFs;
         this.filePicker = filePicker;
-        this.savePicker = savePicker;
+        this.storage = storage;
         History = new History(new EmptyFolderViewModel());
 
         TransferManager = new TransferManager();
@@ -115,11 +115,11 @@ public class MainViewModel : ViewModelBase, IMainViewModel
 
     private IObservable<IFolderViewModel> OnRefresh(ISeaweed client, IFolderViewModel folderViewModel, ISaveFilePicker saveFilePicker)
     {
-        var fromService = System.Reactive.Linq.Observable
+        var fromService = Observable
             .FromAsync(() => client.GetContents(folderViewModel.Path))
             .Select(folder => new FolderViewModel(folder.Path, GetChildren(folder, client, saveFilePicker), this));
 
-        var composed = System.Reactive.Linq.Observable.Defer(() => fromService.Catch((Exception _) => System.Reactive.Linq.Observable.Return(History.PreviousFolder)));
+        var composed = Observable.Defer(() => fromService.Catch((Exception _) => Observable.Return(History.PreviousFolder)));
 
         return composed;
     }
@@ -142,6 +142,6 @@ public class MainViewModel : ViewModelBase, IMainViewModel
             return new FolderViewModel(entry.FullPath[1..], new List<IEntryViewModel>(), this);
         }
 
-        return new FileViewModel(entry.FullPath[1..], seaweedFs, savePicker, TransferManager);
+        return new FileViewModel(entry.FullPath[1..], TransferManager, storage, seaweedFs);
     }
 }

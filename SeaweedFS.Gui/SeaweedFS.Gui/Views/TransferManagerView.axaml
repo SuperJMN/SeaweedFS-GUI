@@ -30,7 +30,7 @@
                     Name="Errored" ErrorMessage="{avalonia:Return Something unexpected happened}" IsTransferring="{avalonia:Return False}">
 				</viewModels:TransferDesign>
 				<viewModels:TransferDesign Name="Download starting..." IsIndeterminate="{avalonia:Return True}" />
-			</viewModels:TransferManagerDesign.TransferList>
+            </viewModels:TransferManagerDesign.TransferList>
 		</viewModels:TransferManagerDesign>
 	</Design.DataContext>
 

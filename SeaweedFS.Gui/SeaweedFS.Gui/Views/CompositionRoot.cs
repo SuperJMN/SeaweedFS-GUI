@@ -22,6 +22,6 @@ public static class CompositionRoot
 
         var filePicker = new OpenFilePicker(topLevel);
         var desktopSaveFilePicker = new SaveFilePicker(topLevel);
-        return new MainViewModel(client, filePicker, desktopSaveFilePicker, new NotificationService(new WindowNotificationManager(topLevel)));
+        return new MainViewModel(client, filePicker, desktopSaveFilePicker, new NotificationService(new WindowNotificationManager(topLevel)), new AvaloniaStorage(topLevel.StorageProvider));
     }
 }

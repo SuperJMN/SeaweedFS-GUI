@@ -1,42 +1,64 @@
 using System.IO;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
+using System;
+using System.Linq;
+using System.Reactive.Linq;
 using System.Windows.Input;
-using CSharpFunctionalExtensions;
 using ReactiveUI;
 using SeaweedFS.Gui.SeaweedFS;
+using Zafiro.Avalonia;
 using Zafiro.Core;
-using Zafiro.UI;
+using Zafiro.Core.Mixins;
+using Zafiro.FileSystem;
 
 namespace SeaweedFS.Gui.ViewModels;
 
 class FileViewModel : EntryViewModel, IFileViewModel
 {
-    private readonly ISeaweed seaweed;
+    private readonly ITransferManager transferManager;
+    private readonly IStorage storage;
+    private ISeaweed seaweed;
 
-    public FileViewModel(string path, ISeaweed seaweed, ISaveFilePicker saveFilePicker, ITransferManager transferManager)
+    public FileViewModel(string path, ITransferManager transferManager, IStorage storage, ISeaweed seaweed)
     {
+        this.transferManager = transferManager;
+        this.storage = storage;
         this.seaweed = seaweed;
         Path = path;
-        Download = ReactiveCommand.CreateFromObservable(() =>
-        {
-            return saveFilePicker
-                .Pick(System.IO.Path.GetFileNameWithoutExtension(path), System.IO.Path.GetExtension(path)[1..])
-                .SelectMany(maybe =>
-                {
-                    if (maybe.HasValue)
-                    {
-                        transferManager.Add(new Transfer(Path, async () => await GetStream(), () => maybe.Value.OpenWrite()));
-                    }
+        
+        var download = ReactiveCommand.CreateFromObservable(DownloadMe);
+        download
+            .Do(Add)
+            .Subscribe();
 
-                    return Task.FromResult(Result.Success());
-                });
-        });
+        Download = download;
     }
 
-    private async Task<Stream> GetStream()
+    private void Add(Transfer transfer)
     {
-        return await HttpResponseMessageStream.Create(await seaweed.GetFileContent(Path));
+        transferManager.Add(transfer);
+    }
+    
+    private IObservable<Transfer> DownloadMe()
+    {
+        return storage
+            .PickForSave(Name, ".txt")
+            .Values()
+            .Select(GetTransfer);
+    }
+
+    private Transfer GetTransfer(IStorable s)
+    {
+        var name = s.Path.RouteFragments.Last();
+        async Task<Stream> OriginFactory()
+        {
+            var httpResponseMessage = await seaweed.GetFileContent(Path);
+            var httpResponseMessageStream = await HttpResponseMessageStream.Create(httpResponseMessage);
+            return httpResponseMessageStream;
+        }
+
+        var transfer = new Transfer(name, OriginFactory, s.OpenRead);
+        return transfer;
     }
 
     public ICommand Download { get; }
@@ -44,9 +66,4 @@ class FileViewModel : EntryViewModel, IFileViewModel
     public string Path { get; }
 
     public string Name => System.IO.Path.GetFileName(Path);
-}
-
-internal interface IFileViewModel : IEntryViewModel
-{
-    public ICommand Download { get; }
 }
