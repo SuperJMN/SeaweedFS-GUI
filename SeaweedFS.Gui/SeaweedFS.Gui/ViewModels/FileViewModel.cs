@@ -57,7 +57,7 @@ class FileViewModel : EntryViewModel, IFileViewModel
             return httpResponseMessageStream;
         }
 
-        var transfer = new Transfer(name, OriginFactory, s.OpenRead);
+        var transfer = new Transfer(name, OriginFactory, s.OpenWrite);
         return transfer;
     }
 
