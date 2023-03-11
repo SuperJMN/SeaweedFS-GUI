@@ -3,21 +3,22 @@ using Refit;
 using SeaweedFS.Gui.SeaweedFS;
 using SeaweedFS.Gui.ViewModels;
 using Zafiro.Core.Mixins;
+using Zafiro.UI.Transfers;
 
 namespace SeaweedFS.Tests
 {
     public class UnitTest1
     {
-        [Fact]
-        public async Task Test1()
-        {
-            var client = CreateClient();
+        //[Fact]
+        //public async Task Test1()
+        //{
+        //    var client = CreateClient();
 
-            var httpResponseMessage = await client.GetFileContent("Vídeo sin título.mp4");
-            var stream = await httpResponseMessage.Content.ReadAsStreamAsync();
-            var obs = stream.ToObservableAlternate();
-            await obs.LastOrDefaultAsync();
-        }
+        //    var httpResponseMessage = await client.GetContents("Vídeo sin título.mp4");
+        //    var stream = await httpResponseMessage.Content.ReadAsStreamAsync();
+        //    var obs = stream.ToObservableAlternate();
+        //    await obs.LastOrDefaultAsync();
+        //}
 
         [Fact]
         public async Task Copier()
@@ -25,24 +26,24 @@ namespace SeaweedFS.Tests
             var input = new MemoryStream(new byte[] { 1, 23 });
             var output = new MemoryStream();
 
-            var sut = new Transfer("Test", () => Task.FromResult((Stream)new TestStream(input)), () => Task.FromResult((Stream)new TestStream(output)));
+            var sut = new StreamTransfer("Test", () => Task.FromResult((Stream)new TestStream(input)), () => Task.FromResult((Stream)new TestStream(output)));
             //await sut.Start.Execute();
         }
 
-        private static ISeaweed CreateClient()
+        private static ISeaweedApi CreateClient()
         {
             var httpClient = new HttpClient();
             var uriString = "http://192.168.1.31:8888";
             var uri = new Uri(uriString);
             httpClient.BaseAddress = uri;
-            var client = RestService.For<ISeaweed>(httpClient);
+            var client = RestService.For<ISeaweedApi>(httpClient);
             return client;
         }
     }
 
     public class TestStream : Stream
     {
-        private Stream streamImplementation;
+        private readonly Stream streamImplementation;
 
         public TestStream(Stream inner)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using Refit;
 namespace SeaweedFS.Gui.SeaweedFS;
 
 [Headers("Accept: application/json")]
-public interface ISeaweed
+public interface ISeaweedApi
 {
     [Get("/{directoryPath}?pretty=y")]
     Task<Folder> GetContents(string directoryPath);
@@ -18,9 +19,6 @@ public interface ISeaweed
 
     [Post("/{directoryPath}")]
     Task CreateFolder(string directoryPath);
-
-    [Get("/{filePath}")]
-    Task<HttpResponseMessage> GetFileContent(string filePath);
 }
 
 //class CustomDelegatingHandler : DelegatingHandler

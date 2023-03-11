@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using DynamicData;
+using Zafiro.UI.Transfers;
 
 namespace SeaweedFS.Gui.ViewModels;
 
@@ -20,7 +21,7 @@ public class TransferManager : ITransferManager
 
     public ReadOnlyObservableCollection<ITransfer> Transfers { get; }
 
-    public void Add(Transfer copier)
+    public void Add(ITransfer copier)
     {
         sourceCache.AddOrUpdate(copier);
     }

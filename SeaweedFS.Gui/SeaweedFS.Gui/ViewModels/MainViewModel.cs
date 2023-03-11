@@ -12,21 +12,23 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Refit;
 using SeaweedFS.Gui.SeaweedFS;
+using SeaweedFS.Gui.Views;
 using Zafiro.Avalonia;
 using Zafiro.Core;
 using Zafiro.Core.Mixins;
 using Zafiro.FileSystem;
 using Zafiro.UI;
+using Zafiro.UI.Transfers;
 
 namespace SeaweedFS.Gui.ViewModels;
 
 public class MainViewModel : ViewModelBase, IMainViewModel
 {
     private readonly IOpenFilePicker filePicker;
-    private readonly ISeaweed seaweed;
+    private readonly ISeaweedFS seaweed;
     private readonly IStorage storage;
 
-    public MainViewModel(ISeaweed seaweed, IOpenFilePicker filePicker, ISaveFilePicker savePicker, INotificationService notificationService, IStorage storage)
+    public MainViewModel(ISeaweedFS seaweed, IOpenFilePicker filePicker, ISaveFilePicker savePicker, INotificationService notificationService, IStorage storage)
     {
         this.seaweed = seaweed;
         this.filePicker = filePicker;
@@ -55,7 +57,7 @@ public class MainViewModel : ViewModelBase, IMainViewModel
 
     public ICommand Upload2 { get; }
 
-    private IObservable<Transfer> UploadMe()
+    private IObservable<ITransfer> UploadMe()
     {
         return storage
             .PickForOpen(new FileTypeFilter("All files", "*.*"))
@@ -63,23 +65,11 @@ public class MainViewModel : ViewModelBase, IMainViewModel
             .Select(GetTransfer);
     }
 
-    private Transfer GetTransfer(IStorable s)
+    private ITransfer GetTransfer(IStorable s)
     {
         var name = s.Path.RouteFragments.Last();
-        
-        var transfer = new Transfer(name, s.OpenRead, async () =>
-        {
-            var httpClient = new HttpClient();
-            var stream = new MemoryStream();
-            await httpClient.SendAsync(new HttpRequestMessage()
-            {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(History.CurrentFolder.Path),
-                Content = new MultipartContent(){ new MultipartContent() }
-            });
-            return stream;
-        });
-        return transfer;
+        var upload = new SendTransfer(name, s.OpenRead, new Uri(new Uri("http://192.168.1.31:8888"), History.CurrentFolder.Path));
+        return upload;
     }
     
     public ITransferManager TransferManager { get; }
@@ -135,7 +125,7 @@ public class MainViewModel : ViewModelBase, IMainViewModel
         return System.Reactive.Linq.Observable.FromAsync(() => DoUpload(file, History.CurrentFolder.Path, seaweed));
     }
 
-    private async Task<Result> DoUpload(IStorable zafiroFile, string path, ISeaweed seaweed)
+    private async Task<Result> DoUpload(IStorable zafiroFile, string path, ISeaweedFS seaweed)
     {
         try
         {
@@ -152,7 +142,7 @@ public class MainViewModel : ViewModelBase, IMainViewModel
         }
     }
 
-    private IObservable<IFolderViewModel> OnRefresh(ISeaweed client, IFolderViewModel folderViewModel, ISaveFilePicker saveFilePicker)
+    private IObservable<IFolderViewModel> OnRefresh(ISeaweedFS client, IFolderViewModel folderViewModel, ISaveFilePicker saveFilePicker)
     {
         var fromService = Observable
             .FromAsync(() => client.GetContents(folderViewModel.Path))
@@ -163,7 +153,7 @@ public class MainViewModel : ViewModelBase, IMainViewModel
         return composed;
     }
 
-    private List<IEntryViewModel> GetChildren(Folder folder, ISeaweed seaweed, ISaveFilePicker saveFilePicker)
+    private List<IEntryViewModel> GetChildren(Folder folder, ISeaweedFS seaweed, ISaveFilePicker saveFilePicker)
     {
         if (folder.Entries != null)
         {

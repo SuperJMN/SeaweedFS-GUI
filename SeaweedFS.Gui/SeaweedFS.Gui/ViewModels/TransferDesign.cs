@@ -1,6 +1,8 @@
 using System;
-using System.Windows.Input;
+using System.Reactive;
+using CSharpFunctionalExtensions;
 using ReactiveUI;
+using Zafiro.UI.Transfers;
 
 namespace SeaweedFS.Gui.ViewModels;
 
@@ -9,15 +11,15 @@ public class TransferDesign : ITransfer
     public TransferDesign()
     {
         Cancel = ReactiveCommand.Create(() => { });
-        Start = ReactiveCommand.Create(() => { });
+        Start = ReactiveCommand.Create(Result.Success);
     }
 
     public IObservable<string> ErrorMessage { get; set; }
     public string Name { get; set;  }
-    public ICommand Cancel { get; }
+    public ReactiveCommand<Unit, Unit> Cancel { get; }
     public IObservable<double> Percent { get; set; }
     public IObservable<TimeSpan> Eta { get; set; }
-    public ICommand Start { get; }
+    public ReactiveCommand<Unit, Result> Start { get; }
     public IObservable<bool> IsTransferring { get; set; }
     public IObservable<bool> IsIndeterminate { get; set; }
     public TransferKey Key { get; }
