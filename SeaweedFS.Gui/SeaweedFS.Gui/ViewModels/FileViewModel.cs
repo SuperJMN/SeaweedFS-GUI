@@ -10,6 +10,7 @@ using Zafiro.Avalonia;
 using Zafiro.Core;
 using Zafiro.Core.Mixins;
 using Zafiro.FileSystem;
+using Zafiro.UI;
 
 namespace SeaweedFS.Gui.ViewModels;
 
@@ -41,8 +42,9 @@ class FileViewModel : EntryViewModel, IFileViewModel
     
     private IObservable<Transfer> DownloadMe()
     {
+        var defaultExtension = ((ZafiroPath)Name).Extension();
         return storage
-            .PickForSave(Name, ".txt")
+            .PickForSave(Name, defaultExtension, new FileTypeFilter("*." + defaultExtension, "*." +  defaultExtension))
             .Values()
             .Select(GetTransfer);
     }
