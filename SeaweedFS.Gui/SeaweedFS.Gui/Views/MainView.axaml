@@ -73,7 +73,7 @@
 			<StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
 				<Button Command="{Binding GoBack}">Go back</Button>
 				<Button Command="{Binding Refresh}" Content="Refresh" />
-				<Button Command="{Binding Upload}" Content="Upload" />
+				<Button Command="{Binding Upload2}" Content="Upload" />
 				<Button Content="Create folder">
 					<Button.Flyout>
 						<Flyout Placement="BottomEdgeAlignedLeft">

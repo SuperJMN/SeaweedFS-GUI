@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive;
+using System.Windows.Input;
 using CSharpFunctionalExtensions;
 using ReactiveUI;
 
@@ -13,6 +14,7 @@ public class MainViewModelDesign : IMainViewModel
     public ReactiveCommand<Unit, Unit> CreateFolder { get; set; }
     public string? NewFolderName { get; set; }
     public ReactiveCommand<Unit, IList<Result>> Upload { get; set; }
+    public ICommand Upload2 { get; }
     public ReactiveCommand<Unit, Unit> GoBack { get; }
     public IObservable<IFolderViewModel> Contents { get; set; }
     public ReactiveCommand<Unit, IFolderViewModel> Refresh { get; }

@@ -1,15 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CSharpFunctionalExtensions;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Refit;
 using SeaweedFS.Gui.SeaweedFS;
 using Zafiro.Avalonia;
+using Zafiro.Core;
 using Zafiro.Core.Mixins;
 using Zafiro.FileSystem;
 using Zafiro.UI;
@@ -19,30 +23,65 @@ namespace SeaweedFS.Gui.ViewModels;
 public class MainViewModel : ViewModelBase, IMainViewModel
 {
     private readonly IOpenFilePicker filePicker;
-    private readonly ISeaweed seaweedFs;
+    private readonly ISeaweed seaweed;
     private readonly IStorage storage;
 
-    public MainViewModel(ISeaweed seaweedFs, IOpenFilePicker filePicker, ISaveFilePicker savePicker, INotificationService notificationService, IStorage storage)
+    public MainViewModel(ISeaweed seaweed, IOpenFilePicker filePicker, ISaveFilePicker savePicker, INotificationService notificationService, IStorage storage)
     {
-        this.seaweedFs = seaweedFs;
+        this.seaweed = seaweed;
         this.filePicker = filePicker;
         this.storage = storage;
         History = new History(new EmptyFolderViewModel());
 
         TransferManager = new TransferManager();
-        Refresh = ReactiveCommand.CreateFromObservable(() => OnRefresh(seaweedFs, History.CurrentFolder, savePicker));
+        Refresh = ReactiveCommand.CreateFromObservable(() => OnRefresh(seaweed, History.CurrentFolder, savePicker));
 
         Contents = this
             .WhenAnyValue(x => x.History.CurrentFolder)
             .Merge(Refresh)
-            .SelectMany(f => OnRefresh(seaweedFs, f, savePicker));
+            .SelectMany(f => OnRefresh(seaweed, f, savePicker));
 
         GoBack = History.GoBack;
         Upload = ReactiveCommand.CreateFromObservable(PickAndUpload);
-        CreateFolder = ReactiveCommand.CreateFromTask(() => seaweedFs.CreateFolder(GetFolderName()), this.WhenAnyValue(x => x.NewFolderName).SelectNotEmpty());
+        var upload = ReactiveCommand.CreateFromObservable(() => UploadMe());
+        upload
+            .Do(transfer => TransferManager.Add(transfer))
+            .Subscribe();
+            
+        Upload2 = upload;
+        CreateFolder = ReactiveCommand.CreateFromTask(() => seaweed.CreateFolder(GetFolderName()), this.WhenAnyValue(x => x.NewFolderName).SelectNotEmpty());
         Notify = ReactiveCommand.Create(() => notificationService.ShowMessage("Yepa, cómo vas?"));
     }
 
+    public ICommand Upload2 { get; }
+
+    private IObservable<Transfer> UploadMe()
+    {
+        return storage
+            .PickForOpen(new FileTypeFilter("All files", "*.*"))
+            .Values()
+            .Select(GetTransfer);
+    }
+
+    private Transfer GetTransfer(IStorable s)
+    {
+        var name = s.Path.RouteFragments.Last();
+        
+        var transfer = new Transfer(name, s.OpenRead, async () =>
+        {
+            var httpClient = new HttpClient();
+            var stream = new MemoryStream();
+            await httpClient.SendAsync(new HttpRequestMessage()
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(History.CurrentFolder.Path),
+                Content = new MultipartContent(){ new MultipartContent() }
+            });
+            return stream;
+        });
+        return transfer;
+    }
+    
     public ITransferManager TransferManager { get; }
 
     public ReactiveCommand<Unit, Unit> Notify { get; }
@@ -93,7 +132,7 @@ public class MainViewModel : ViewModelBase, IMainViewModel
 
     private IObservable<Result> UploadFile(IStorable file)
     {
-        return System.Reactive.Linq.Observable.FromAsync(() => DoUpload(file, History.CurrentFolder.Path, seaweedFs));
+        return System.Reactive.Linq.Observable.FromAsync(() => DoUpload(file, History.CurrentFolder.Path, seaweed));
     }
 
     private async Task<Result> DoUpload(IStorable zafiroFile, string path, ISeaweed seaweed)
@@ -142,6 +181,6 @@ public class MainViewModel : ViewModelBase, IMainViewModel
             return new FolderViewModel(entry.FullPath[1..], new List<IEntryViewModel>(), this);
         }
 
-        return new FileViewModel(entry.FullPath[1..], TransferManager, storage, seaweedFs);
+        return new FileViewModel(entry.FullPath[1..], TransferManager, storage, seaweed);
     }
 }
