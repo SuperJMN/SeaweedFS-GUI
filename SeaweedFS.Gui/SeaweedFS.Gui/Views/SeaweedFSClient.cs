@@ -1,5 +1,6 @@
 using System.IO;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Refit;
 using SeaweedFS.Gui.SeaweedFS;
@@ -22,9 +23,9 @@ internal class SeaweedFSClient : ISeaweedFS
         return inner.GetContents(directoryPath);
     }
 
-    public Task Upload(string path, StreamPart stream)
+    public Task Upload(string path, StreamPart stream, CancellationToken cancellationToken)
     {
-        return inner.Upload(path, stream);
+        return inner.Upload(path, stream, cancellationToken);
     }
 
     public Task CreateFolder(string directoryPath)

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Refit;
 
 namespace SeaweedFS.Gui.SeaweedFS;
@@ -11,7 +12,7 @@ public interface ISeaweedApi
 
     [Multipart]
     [Post("/{path}")]
-    Task Upload(string path, StreamPart stream);
+    Task Upload(string path, StreamPart stream, CancellationToken cancellationToken);
 
     [Post("/{directoryPath}")]
     Task CreateFolder(string directoryPath);

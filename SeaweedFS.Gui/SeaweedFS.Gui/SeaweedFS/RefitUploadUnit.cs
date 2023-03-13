@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using Refit;
@@ -13,10 +14,10 @@ namespace SeaweedFS.Gui.SeaweedFS;
 public class RefitUploadUnit : TransferUnit
 {
     private readonly Func<Task<Stream>> inputFactory;
-    private readonly Func<StreamPart, Task> call;
+    private readonly Func<StreamPart, CancellationToken, Task> call;
     private readonly Subject<double> progressSubject = new();
 
-    public RefitUploadUnit(string name, Func<Task<Stream>> inputFactory, Func<StreamPart, Task> call) : base(name)
+    public RefitUploadUnit(string name, Func<Task<Stream>> inputFactory, Func<StreamPart, CancellationToken, Task> call) : base(name)
     {
         this.inputFactory = inputFactory;
         this.call = call;
@@ -28,16 +29,13 @@ public class RefitUploadUnit : TransferUnit
     public override TransferKey Key => new TransferKey(Name);
     protected override IObservable<Result> Transfer()
     {
-        async Task<Result> Post()
+        async Task<Result> Post(CancellationToken ct)
         {
             var output = new ProgressNotifyingStream(await inputFactory());
-
-            output.Progress.Subscribe(d => { });
-
             using (output.Progress.Subscribe(progressSubject))
             {
                 var part = new StreamPart(output, Name);
-                return await Result.Try(() => call(part));
+                return await Result.Try(() => call(part, ct));
             }
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using MoreLinq;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SeaweedFS.Gui.SeaweedFS;
@@ -39,7 +40,7 @@ public class MainViewModel : ViewModelBase, IMainViewModel
         GoBack = History.GoBack;
         var upload = ReactiveCommand.CreateFromObservable(DoUpload);
         upload
-            .Do(transfer => TransferManager.Add(transfer))
+            .Do(transfer => transfer.ForEach(t => TransferManager.Add(t)))
             .Subscribe();
             
         Upload = upload;
@@ -49,18 +50,17 @@ public class MainViewModel : ViewModelBase, IMainViewModel
 
     public ICommand Upload { get; }
 
-    private IObservable<ITransfer> DoUpload()
+    private IObservable<IEnumerable<ITransfer>> DoUpload()
     {
         return storage
-            .PickForOpen(new FileTypeFilter("All files", "*.*"))
-            .Values()
-            .Select(GetTransfer);
+            .PickForOpenMultiple(new FileTypeFilter("All files", "*.*"))
+            .Select(list => list.Select(GetTransfer));
     }
 
     private ITransfer GetTransfer(IStorable s)
     {
         var name = s.Path.RouteFragments.Last();
-        return new RefitUploadUnit(name, s.OpenRead, streamPart => seaweed.Upload(History.CurrentFolder.Path, streamPart));
+        return new RefitUploadUnit(name, s.OpenRead, (streamPart, ct) => seaweed.Upload(History.CurrentFolder.Path, streamPart, ct));
     }
     
     public ITransferManager TransferManager { get; }
