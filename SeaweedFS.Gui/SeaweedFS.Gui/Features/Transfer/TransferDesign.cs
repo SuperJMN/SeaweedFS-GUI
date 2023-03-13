@@ -1,5 +1,6 @@
 using System;
 using System.Reactive;
+using System.Windows.Input;
 using CSharpFunctionalExtensions;
 using ReactiveUI;
 using Zafiro.UI.Transfers;
@@ -25,4 +26,5 @@ public class TransferDesign : ITransferViewModel
     public TransferKey Key { get; }
     public IObservable<string> TransferButtonText { get; set; }
     public string Icon { get; set; }
+    public ICommand RemoveCommand { get; }
 }

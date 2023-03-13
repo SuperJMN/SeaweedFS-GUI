@@ -59,7 +59,7 @@ public class MainViewModel : ViewModelBase, IMainViewModel
     private ITransferViewModel GetTransfer(IStorable s)
     {
         var name = s.Path.RouteFragments.Last();
-        return new Upload(name, s.OpenRead, (streamPart, ct) => seaweed.Upload(History.CurrentFolder.Path, streamPart, ct));
+        return new Upload(name, s.OpenRead, (streamPart, ct) => seaweed.Upload(History.CurrentFolder.Path, streamPart, ct), TransferManager.Remove);
     }
 
     public ITransferManager TransferManager { get; }

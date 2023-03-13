@@ -53,7 +53,7 @@ public class FileViewModel : EntryViewModel, IFileViewModel
     private ITransferViewModel GetTransfer(IStorable s)
     {
         var name = s.Path.RouteFragments.Last();
-        return new Download(name, () => seaweed.GetFileContent(Path), async _ => new ProgressNotifyingStream(await s.OpenWrite(), () => Size));
+        return new Download(name, () => seaweed.GetFileContent(Path), async _ => new ProgressNotifyingStream(await s.OpenWrite(), () => Size), transferManager.Remove);
     }
 
     public ICommand Download { get; }

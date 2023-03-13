@@ -2,9 +2,11 @@ using System;
 using System.IO;
 using System.Reactive;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CSharpFunctionalExtensions;
 using ReactiveUI;
 using Zafiro.Core.IO;
+using Zafiro.Core.Mixins;
 using Zafiro.UI.Transfers;
 
 namespace SeaweedFS.Gui.Features.Transfer;
@@ -13,12 +15,14 @@ public class Download : ITransferViewModel
 {
     private readonly ITransfer inner;
 
-    public Download(string name, Func<Task<Stream>> inputFactory, Func<Stream, Task<ProgressNotifyingStream>> outputFactory)
+    public Download(string name, Func<Task<Stream>> inputFactory, Func<Stream, Task<ProgressNotifyingStream>> outputFactory, Action<TransferKey> onRemove)
     {
         inner = new StreamTransferUnit(name, inputFactory, outputFactory);
+        RemoveCommand = ReactiveCommand.Create(() => onRemove(Key), IsTransferring.Not());
     }
 
     public string Icon => "/Assets/download.svg";
+    public ICommand RemoveCommand { get; }
 
     public IObservable<string> ErrorMessage => inner.ErrorMessage;
 

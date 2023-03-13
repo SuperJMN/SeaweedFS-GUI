@@ -3,10 +3,12 @@ using System.IO;
 using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CSharpFunctionalExtensions;
 using ReactiveUI;
 using Refit;
 using SeaweedFS.Gui.SeaweedFS;
+using Zafiro.Core.Mixins;
 using Zafiro.UI.Transfers;
 
 namespace SeaweedFS.Gui.Features.Transfer;
@@ -15,12 +17,14 @@ public class Upload : ITransferViewModel
 {
     private readonly ITransfer inner;
 
-    public Upload(string name, Func<Task<Stream>> inputFactory, Func<StreamPart, CancellationToken, Task> func)
+    public Upload(string name, Func<Task<Stream>> inputFactory, Func<StreamPart, CancellationToken, Task> func, Action<TransferKey> onRemove)
     {
         inner = new RefitUploadUnit(name, inputFactory, func);
+        RemoveCommand = ReactiveCommand.Create(() => onRemove(Key), IsTransferring.Not());
     }
 
     public string Icon => "/Assets/upload.svg";
+    public ICommand RemoveCommand { get; }
 
     public IObservable<string> ErrorMessage => inner.ErrorMessage;
 

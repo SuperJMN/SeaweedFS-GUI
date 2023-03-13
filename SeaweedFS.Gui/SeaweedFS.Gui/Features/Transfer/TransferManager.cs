@@ -25,4 +25,9 @@ public class TransferManager : ITransferManager
     {
         sourceCache.AddOrUpdate(copier);
     }
+
+    public void Remove(TransferKey key)
+    {
+        sourceCache.Remove(key);
+    }
 }
