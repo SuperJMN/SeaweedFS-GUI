@@ -1,0 +1,104 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:svg="clr-namespace:Avalonia.Svg;assembly=Avalonia.Svg"
+             xmlns:avalonia="clr-namespace:Zafiro.Avalonia;assembly=Zafiro.Avalonia"
+             xmlns:main="clr-namespace:SeaweedFS.Gui.Features.Main"
+             xmlns:transfer="clr-namespace:SeaweedFS.Gui.Features.Transfer"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:DataType="main:IMainViewModel"
+			 x:CompileBindings="True"
+             x:Class="SeaweedFS.Gui.Features.Main.MainView">
+
+    <Design.DataContext>
+		<main:MainViewModelDesign
+            NewFolderName="New folder name">
+            <main:MainViewModelDesign.Contents>
+				<avalonia:Return>
+                    <avalonia:Return.Value>
+						<main:FolderViewModelDesign>
+                            <main:FolderViewModelDesign.ItemsList>
+								<main:FolderViewModelDesign Path="Sample path" Name="Sample folder" />
+                                <main:FolderViewModelDesign Path="Sample path" Name="Another folder" />
+                                <main:FileViewModelDesign Path="Sample path" Name="File1.abc" />
+                                <main:FileViewModelDesign Path="Sample path" Name="File2.def" />
+                                <main:FileViewModelDesign Path="Sample path" Name="Long file with spaces.tmp" />
+                            </main:FolderViewModelDesign.ItemsList>
+                        </main:FolderViewModelDesign>
+                    </avalonia:Return.Value>
+                </avalonia:Return>
+            </main:MainViewModelDesign.Contents>
+            <main:MainViewModelDesign.TransferManager>
+				<transfer:TransferManagerDesign>
+					<transfer:TransferManagerDesign.TransferList>
+						<transfer:TransferDesign IsTransferring="{avalonia:Return True}" Name="Download 1" Progress="{avalonia:Return 0.2}" />
+                    </transfer:TransferManagerDesign.TransferList>
+                </transfer:TransferManagerDesign>
+            </main:MainViewModelDesign.TransferManager>
+        </main:MainViewModelDesign>
+    </Design.DataContext>
+
+	<UserControl.DataTemplates>
+		<DataTemplate DataType="main:IFolderViewModel">
+			<Button Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Left" Command="{Binding Navigate}">
+				<Button.Content>
+					<DockPanel>
+						<svg:Svg Path="/Assets/folder.svg" Height="32" DockPanel.Dock="Left" />
+						<TextBlock Margin="4" FontSize="{StaticResource FontSizeLarge}" VerticalAlignment="Center"
+                                   Text="{Binding Name}" TextDecorations="Underline" />
+					</DockPanel>
+				</Button.Content>
+			</Button>
+		</DataTemplate>
+		<DataTemplate DataType="main:IFileViewModel">
+			<DockPanel>
+				<DockPanel.Styles>
+					<Style Selector="Button">
+						<Setter Property="Opacity" Value="0" />
+					</Style>
+					<Style Selector="Button.Selected">
+						<Setter Property="Opacity" Value="1" />
+					</Style>
+				</DockPanel.Styles>
+				<Button DockPanel.Dock="Right" Content="Download" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Command="{Binding Download}" />
+				<TextBlock VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding Name}" />
+			</DockPanel>
+		</DataTemplate>
+    </UserControl.DataTemplates>
+
+
+	<DockPanel>
+		<DockPanel DockPanel.Dock="Top" >
+			<StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+				<Button Command="{Binding GoBack}">Go back</Button>
+				<Button Command="{Binding Refresh}" Content="Refresh" />
+				<Button Command="{Binding Upload}" Content="Upload" />
+				<Button Content="Create folder">
+					<Button.Flyout>
+						<Flyout Placement="BottomEdgeAlignedLeft">
+							<DockPanel Width="200">
+								<Button DockPanel.Dock="Right" Content="Create" Command="{Binding CreateFolder}" />
+								<TextBox VerticalAlignment="Center" Watermark="Folder name" Text="{Binding NewFolderName}" />
+							</DockPanel>
+						</Flyout>
+					</Button.Flyout>
+				</Button>
+			</StackPanel>
+			<TextBlock Margin="4" VerticalAlignment="Center" Text="{Binding History.CurrentFolder.Path}" />
+		</DockPanel>
+		<DockPanel>
+
+            <Expander DockPanel.Dock="Bottom" IsExpanded="True" Header="File Transfers" IsVisible="{Binding TransferManager.Transfers.Count}">
+				<transfer:TransferManagerView Height="200">
+                    <transfer:TransferManagerView.DataContext>
+                        <Binding Path="TransferManager" />
+                    </transfer:TransferManagerView.DataContext>
+                </transfer:TransferManagerView>
+            </Expander>
+
+			<ListBox Items="{Binding Contents^.Items}" />
+		</DockPanel>
+	</DockPanel>
+
+</UserControl>

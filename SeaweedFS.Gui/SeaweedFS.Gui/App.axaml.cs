@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using SeaweedFS.Gui.Views;
+using SeaweedFS.Gui.Features.Main;
 
 namespace SeaweedFS.Gui;
 

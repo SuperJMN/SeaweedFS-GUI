@@ -7,6 +7,8 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
+        <None Remove="Assets\download.svg" />
+        <None Remove="Assets\upload.svg" />
         <TrimmerRootDescriptor Include="Roots.xml" />
     </ItemGroup>
 
@@ -26,17 +28,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Models" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\Zafiro.Avalonia\Zafiro.Avalonia\Zafiro.Avalonia.csproj" />
       <ProjectReference Include="..\..\Zafiro.Avalonia\Zafiro\Source\UI\UI.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Compile Update="Views\TransferManagerView.axaml.cs">
-        <DependentUpon>TransferManagerView.axaml</DependentUpon>
-      </Compile>
-    </ItemGroup>
 </Project>
