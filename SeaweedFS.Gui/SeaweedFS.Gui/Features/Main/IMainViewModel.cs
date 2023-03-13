@@ -1,7 +1,5 @@
 using System;
-using System.Reactive;
 using System.Windows.Input;
-using ReactiveUI;
 using SeaweedFS.Gui.Features.Transfer;
 
 namespace SeaweedFS.Gui.Features.Main;

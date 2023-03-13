@@ -1,7 +1,6 @@
 using System;
 using System.Net.Http;
 using Avalonia.Controls;
-using Avalonia.Controls.Notifications;
 using SeaweedFS.Gui.Features.Main;
 using SeaweedFS.Gui.SeaweedFS;
 using Zafiro.Avalonia;
@@ -19,7 +18,7 @@ public static class CompositionRoot
         httpClient.BaseAddress = uri;
         var client = Client(httpClient);
 
-        return new MainViewModel(client, new NotificationService(new WindowNotificationManager(topLevel)), new AvaloniaStorage(topLevel.StorageProvider));
+        return new MainViewModel(client, new AvaloniaStorage(topLevel.StorageProvider));
     }
 
     private static ISeaweedFS Client(HttpClient httpClient)

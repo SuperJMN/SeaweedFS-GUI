@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using MoreLinq;
@@ -21,7 +20,7 @@ public class MainViewModel : ViewModelBase, IMainViewModel
     private readonly ISeaweedFS seaweed;
     private readonly IStorage storage;
 
-    public MainViewModel(ISeaweedFS seaweed, INotificationService notificationService, IStorage storage)
+    public MainViewModel(ISeaweedFS seaweed, IStorage storage)
     {
         this.seaweed = seaweed;
         this.storage = storage;
@@ -44,10 +43,23 @@ public class MainViewModel : ViewModelBase, IMainViewModel
 
         Upload = upload;
         CreateFolder = ReactiveCommand.CreateFromTask(() => seaweed.CreateFolder(GetFolderName()), this.WhenAnyValue(x => x.NewFolderName).SelectNotEmpty());
-        Notify = ReactiveCommand.Create(() => notificationService.ShowMessage("Yepa, cómo vas?"));
     }
 
     public ICommand Upload { get; }
+
+    public ITransferManager TransferManager { get; }
+
+    public IHistory History { get; }
+
+    public ICommand CreateFolder { get; }
+
+    [Reactive] public string? NewFolderName { get; set; }
+
+    public ICommand GoBack { get; }
+
+    public IObservable<IFolderViewModel> Contents { get; }
+
+    public ICommand Refresh { get; }
 
     private IObservable<IEnumerable<ITransferViewModel>> DoUpload()
     {
@@ -61,22 +73,6 @@ public class MainViewModel : ViewModelBase, IMainViewModel
         var name = s.Path.RouteFragments.Last();
         return new Upload(name, s.OpenRead, (streamPart, ct) => seaweed.Upload(History.CurrentFolder.Path, streamPart, ct), TransferManager.Remove);
     }
-
-    public ITransferManager TransferManager { get; }
-
-    public ReactiveCommand<Unit, Unit> Notify { get; }
-
-    public IHistory History { get; }
-
-    public ICommand CreateFolder { get; }
-
-    [Reactive] public string? NewFolderName { get; set; }
-
-    public ICommand GoBack { get; }
-
-    public IObservable<IFolderViewModel> Contents { get; }
-
-    public ICommand Refresh { get; }
 
     private string GetFolderName()
     {
