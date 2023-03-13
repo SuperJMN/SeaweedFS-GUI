@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using CSharpFunctionalExtensions;
 using ReactiveUI;
 using SeaweedFS.Gui.Views;
 using Zafiro.Avalonia;
@@ -13,11 +14,11 @@ using Zafiro.UI.Transfers;
 
 namespace SeaweedFS.Gui.ViewModels;
 
-class FileViewModel : EntryViewModel, IFileViewModel
+public class FileViewModel : EntryViewModel, IFileViewModel
 {
     private readonly ITransferManager transferManager;
     private readonly IStorage storage;
-    private ISeaweedFS seaweed;
+    private readonly ISeaweedFS seaweed;
 
     public FileViewModel(string path, long size, ITransferManager transferManager, IStorage storage, ISeaweedFS seaweed)
     {
@@ -27,7 +28,7 @@ class FileViewModel : EntryViewModel, IFileViewModel
         Path = path;
         Size = size;
 
-        var download = ReactiveCommand.CreateFromObservable(DownloadMe);
+        var download = ReactiveCommand.CreateFromObservable(DoDownload);
         download
             .Do(Add)
             .Subscribe();
@@ -40,11 +41,11 @@ class FileViewModel : EntryViewModel, IFileViewModel
         transferManager.Add(streamTransfer);
     }
     
-    private IObservable<ITransfer> DownloadMe()
+    private IObservable<ITransfer> DoDownload()
     {
         var defaultExtension = ((ZafiroPath)Name).Extension();
         return storage
-            .PickForSave(Name, defaultExtension, new FileTypeFilter("*." + defaultExtension, "*." +  defaultExtension))
+            .PickForSave(Name, defaultExtension, new FileTypeFilter(defaultExtension.Match(ext => "*." + ext, () => "*.*"), defaultExtension.Match(ext => "*." + ext, () => "*.*")))
             .Values()
             .Select(GetTransfer);
     }

@@ -26,7 +26,7 @@ public class RefitUploadUnit : TransferUnit
     protected override string TransferText => "Upload";
     protected override string ReTransferText => "Re-upload";
     public override IObservable<double> Progress => progressSubject.AsObservable();
-    public override TransferKey Key => new TransferKey(Name);
+    public override TransferKey Key => new(Name);
     protected override IObservable<Result> Transfer()
     {
         async Task<Result> Post(CancellationToken ct)
