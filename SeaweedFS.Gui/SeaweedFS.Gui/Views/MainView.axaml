@@ -32,7 +32,7 @@
             <vm:MainViewModelDesign.TransferManager>
 				<vm:TransferManagerDesign>
 					<vm:TransferManagerDesign.TransferList>
-						<vm:TransferDesign IsTransferring="{avalonia:Return True}" Name="Download 1" Percent="{avalonia:Return 0.2}" />
+						<vm:TransferDesign IsTransferring="{avalonia:Return True}" Name="Download 1" Progress="{avalonia:Return 0.2}" />
                     </vm:TransferManagerDesign.TransferList>
                 </vm:TransferManagerDesign>
             </vm:MainViewModelDesign.TransferManager>
@@ -73,7 +73,7 @@
 			<StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
 				<Button Command="{Binding GoBack}">Go back</Button>
 				<Button Command="{Binding Refresh}" Content="Refresh" />
-				<Button Command="{Binding Upload2}" Content="Upload" />
+				<Button Command="{Binding Upload}" Content="Upload" />
 				<Button Content="Create folder">
 					<Button.Flyout>
 						<Flyout Placement="BottomEdgeAlignedLeft">

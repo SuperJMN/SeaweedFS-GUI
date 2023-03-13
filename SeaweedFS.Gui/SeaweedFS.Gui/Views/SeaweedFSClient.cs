@@ -37,11 +37,3 @@ internal class SeaweedFSClient : ISeaweedFS
         return httpClient.GetStreamAsync(filePath);
     }
 }
-
-public interface ISeaweedFS
-{
-    Task<Folder> GetContents(string directoryPath);
-    Task Upload(string path, StreamPart stream);
-    Task CreateFolder(string directoryPath);
-    Task<Stream> GetFileContent(string filePath);
-}

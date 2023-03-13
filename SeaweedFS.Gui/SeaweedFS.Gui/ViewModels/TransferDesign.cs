@@ -17,7 +17,7 @@ public class TransferDesign : ITransfer
     public IObservable<string> ErrorMessage { get; set; }
     public string Name { get; set;  }
     public ReactiveCommand<Unit, Unit> Cancel { get; }
-    public IObservable<double> Percent { get; set; }
+    public IObservable<double> Progress { get; set; }
     public IObservable<TimeSpan> Eta { get; set; }
     public ReactiveCommand<Unit, Result> Start { get; }
     public IObservable<bool> IsTransferring { get; set; }

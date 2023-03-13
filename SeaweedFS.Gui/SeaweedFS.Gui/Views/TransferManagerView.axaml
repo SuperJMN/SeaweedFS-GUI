@@ -20,7 +20,7 @@
                     IsTransferring="{avalonia:Return False}">
 				</viewModels:TransferDesign>
 				<viewModels:TransferDesign
-                    Name="Progressing..." Percent="{avalonia:Return 0.4}"
+                    Name="Progressing..." Progress="{avalonia:Return 0.4}"
 					IsIndeterminate="{avalonia:Return False}"
                     IsTransferring="{avalonia:Return True}">
 				</viewModels:TransferDesign>
@@ -46,7 +46,7 @@
                                              Margin="0 4 0 0"
                                              IsIndeterminate="{Binding IsIndeterminate^}"
                                              ShowProgressText="{Binding !IsIndeterminate^}" Maximum="1"
-                                             Value="{Binding Percent^}" />
+                                             Value="{Binding Progress^}" />
                                 <TextBlock TextAlignment="Center" VerticalAlignment="Center"
                                            Foreground="DarkRed"
                                            Text="{Binding ErrorMessage^}">
