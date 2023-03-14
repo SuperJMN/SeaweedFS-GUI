@@ -14,7 +14,7 @@ namespace SeaweedFS.Gui.Features.Shell
         {
             if (!Design.IsDesignMode)
             {
-                DataContext = CompositionRoot.Create(TopLevel.GetTopLevel(this)!.StorageProvider);
+                DataContext = CompositionRoot.Create(TopLevel.GetTopLevel(this));
             }
         }
     }

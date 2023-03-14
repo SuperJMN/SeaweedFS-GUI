@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using Avalonia.Platform.Storage;
+using CSharpFunctionalExtensions;
 using MoreLinq;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -21,7 +24,7 @@ public class MainViewModel : ViewModelBase, IMainViewModel
     private readonly ISeaweedFS seaweed;
     private readonly IStorage storage;
 
-    public MainViewModel(ISeaweedFS seaweed, IStorage storage)
+    public MainViewModel(ISeaweedFS seaweed, IStorage storage, INotificationService notificationService)
     {
         this.seaweed = seaweed;
         this.storage = storage;
@@ -43,24 +46,37 @@ public class MainViewModel : ViewModelBase, IMainViewModel
             .Subscribe();
 
         Upload = upload;
-        CreateFolder = ReactiveCommand.CreateFromTask(() => seaweed.CreateFolder(GetFolderName()), this.WhenAnyValue(x => x.NewFolderName).SelectNotEmpty());
+
+        var createFolder = ReactiveCommand.CreateFromObservable(
+            () => Observable
+                .FromAsync(() => seaweed.CreateFolder(GetFolderName()))
+                .Timeout(TimeSpan.FromSeconds(5))
+                .Select(_ => Result.Success())
+                .Catch((Exception e) => Observable.Return(Result.Failure(e.Message))),
+            this.WhenAnyValue(x => x.NewFolderName).SelectNotEmpty());
+
+        createFolder.WhereFailure()
+            .Do(notificationService.ShowMessage)
+            .Subscribe();
+
+        CreateFolder = createFolder;
     }
 
-    public ICommand Upload { get; }
+    public IReactiveCommand Upload { get; }
 
     public ITransferManager TransferManager { get; }
 
     public IHistory History { get; }
 
-    public ICommand CreateFolder { get; }
+    public IReactiveCommand CreateFolder { get; }
 
     [Reactive] public string? NewFolderName { get; set; }
 
-    public ICommand GoBack { get; }
+    public IReactiveCommand GoBack { get; }
 
     public IObservable<IFolderViewModel> Contents { get; }
 
-    public ICommand Refresh { get; }
+    public IReactiveCommand Refresh { get; }
 
     private IObservable<IEnumerable<ITransferViewModel>> DoUpload()
     {
@@ -71,8 +87,8 @@ public class MainViewModel : ViewModelBase, IMainViewModel
 
     private ITransferViewModel GetTransfer(IStorable s)
     {
-        var name = s.Path.RouteFragments.Last();
-        return new Upload(name, s.OpenRead, (streamPart, ct) => seaweed.Upload(History.CurrentFolder.Path, streamPart, ct), TransferManager.Remove);
+        var name = s.Name;
+        return new Upload(name, s.OpenRead, (streamPart, ct) => seaweed.Upload(Path.Combine(History.CurrentFolder.Path, name), streamPart, ct), TransferManager.Remove);
     }
 
     private string GetFolderName()

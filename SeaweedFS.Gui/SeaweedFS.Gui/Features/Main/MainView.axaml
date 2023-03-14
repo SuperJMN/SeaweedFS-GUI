@@ -11,33 +11,33 @@
 			 x:CompileBindings="True"
              x:Class="SeaweedFS.Gui.Features.Main.MainView">
 
-    <Design.DataContext>
+	<Design.DataContext>
 		<main:MainViewModelDesign
             NewFolderName="New folder name">
-            <main:MainViewModelDesign.Contents>
+			<main:MainViewModelDesign.Contents>
 				<avalonia:Return>
-                    <avalonia:Return.Value>
+					<avalonia:Return.Value>
 						<main:FolderViewModelDesign>
-                            <main:FolderViewModelDesign.ItemsList>
+							<main:FolderViewModelDesign.ItemsList>
 								<main:FolderViewModelDesign Path="Sample path" Name="Sample folder" />
-                                <main:FolderViewModelDesign Path="Sample path" Name="Another folder" />
-                                <main:FileViewModelDesign Path="Sample path" Name="File1.abc" />
-                                <main:FileViewModelDesign Path="Sample path" Name="File2.def" />
-                                <main:FileViewModelDesign Path="Sample path" Name="Long file with spaces.tmp" />
-                            </main:FolderViewModelDesign.ItemsList>
-                        </main:FolderViewModelDesign>
-                    </avalonia:Return.Value>
-                </avalonia:Return>
-            </main:MainViewModelDesign.Contents>
-            <main:MainViewModelDesign.TransferManager>
+								<main:FolderViewModelDesign Path="Sample path" Name="Another folder" />
+								<main:FileViewModelDesign Path="Sample path" Name="File1.abc" />
+								<main:FileViewModelDesign Path="Sample path" Name="File2.def" />
+								<main:FileViewModelDesign Path="Sample path" Name="Long file with spaces.tmp" />
+							</main:FolderViewModelDesign.ItemsList>
+						</main:FolderViewModelDesign>
+					</avalonia:Return.Value>
+				</avalonia:Return>
+			</main:MainViewModelDesign.Contents>
+			<main:MainViewModelDesign.TransferManager>
 				<transfer:TransferManagerDesign>
 					<transfer:TransferManagerDesign.TransferList>
 						<transfer:TransferDesign IsTransferring="{avalonia:Return True}" Name="Download 1" Progress="{avalonia:Return 0.2}" />
-                    </transfer:TransferManagerDesign.TransferList>
-                </transfer:TransferManagerDesign>
-            </main:MainViewModelDesign.TransferManager>
-        </main:MainViewModelDesign>
-    </Design.DataContext>
+					</transfer:TransferManagerDesign.TransferList>
+				</transfer:TransferManagerDesign>
+			</main:MainViewModelDesign.TransferManager>
+		</main:MainViewModelDesign>
+	</Design.DataContext>
 
 	<UserControl.DataTemplates>
 		<DataTemplate DataType="main:IFolderViewModel">
@@ -65,7 +65,7 @@
 				<TextBlock VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding Name}" />
 			</DockPanel>
 		</DataTemplate>
-    </UserControl.DataTemplates>
+	</UserControl.DataTemplates>
 
 
 	<DockPanel>
@@ -77,11 +77,17 @@
 				<Button Content="Create folder">
 					<Button.Flyout>
 						<Flyout Placement="BottomEdgeAlignedLeft">
-							<DockPanel Width="200">
-								<Button DockPanel.Dock="Right" Content="Create" Command="{Binding CreateFolder}" />
-								<TextBox VerticalAlignment="Center" Watermark="Folder name" Text="{Binding NewFolderName}" />
-							</DockPanel>
-						</Flyout>
+                            <DockPanel IsEnabled="{Binding !CreateFolder.IsExecuting^}">
+                                <Panel DockPanel.Dock="Right" Margin="4">
+                                    <Button Content="Create"
+											Command="{Binding CreateFolder}" />
+                                    <ProgressBar MinWidth="10" IsIndeterminate="True" IsVisible="{Binding CreateFolder.IsExecuting^}"></ProgressBar>
+                                </Panel>
+                                <TextBox VerticalAlignment="Center" Watermark="Folder name"
+                                         Width="120"
+                                         Text="{Binding NewFolderName}" />
+                            </DockPanel>
+                        </Flyout>
 					</Button.Flyout>
 				</Button>
 			</StackPanel>
@@ -89,13 +95,13 @@
 		</DockPanel>
 		<DockPanel>
 
-            <Expander DockPanel.Dock="Bottom" IsExpanded="True" Header="File Transfers" IsVisible="{Binding TransferManager.Transfers.Count}">
+			<Expander DockPanel.Dock="Bottom" IsExpanded="True" Header="File Transfers" IsVisible="{Binding TransferManager.Transfers.Count}">
 				<transfer:TransferManagerView Height="200">
-                    <transfer:TransferManagerView.DataContext>
-                        <Binding Path="TransferManager" />
-                    </transfer:TransferManagerView.DataContext>
-                </transfer:TransferManagerView>
-            </Expander>
+					<transfer:TransferManagerView.DataContext>
+						<Binding Path="TransferManager" />
+					</transfer:TransferManagerView.DataContext>
+				</transfer:TransferManagerView>
+			</Expander>
 
 			<ListBox Items="{Binding Contents^.Items}" />
 		</DockPanel>

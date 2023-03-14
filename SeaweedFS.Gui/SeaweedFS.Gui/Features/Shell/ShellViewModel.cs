@@ -2,6 +2,8 @@ using System;
 using System.Net.Http;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SeaweedFS.Gui.Features.Main;
@@ -12,14 +14,15 @@ namespace SeaweedFS.Gui.Features.Shell;
 
 public class ShellViewModel : ViewModelBase, IShellViewModel
 {
-    public ShellViewModel(IStorage storage)
+    public ShellViewModel(IStorage storage, TopLevel topLevel)
     {
+        TypedAddress = "http://192.168.1.31:8888";
         var p = this.WhenAnyValue(x => x.Address)
             .WhereNotNull()
             .Select(x => Observable
             .Using(
                 () => new HttpClient { BaseAddress = new Uri(x)}, 
-                httpClient => Observable.Return(new MainViewModel(new SeaweedFSClient(httpClient), storage)).Concat(Observable.Never<MainViewModel>())));
+                httpClient => Observable.Return(new MainViewModel(new SeaweedFSClient(httpClient), storage, new NotificationService(new WindowNotificationManager(topLevel)))).Concat(Observable.Never<MainViewModel>())));
 
         Session = p.Switch();
 

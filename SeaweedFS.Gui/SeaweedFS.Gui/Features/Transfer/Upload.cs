@@ -7,7 +7,6 @@ using System.Windows.Input;
 using CSharpFunctionalExtensions;
 using ReactiveUI;
 using Refit;
-using SeaweedFS.Gui.SeaweedFS;
 using Zafiro.Core.Mixins;
 using Zafiro.UI.Transfers;
 
