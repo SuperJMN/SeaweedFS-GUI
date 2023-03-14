@@ -37,7 +37,7 @@ public class History : ReactiveObject, IHistory
         }
     }
 
-    public IFolderViewModel PreviousFolder => currentFolderStack.SkipLast(1).First();
+    public IFolderViewModel PreviousFolder => currentFolderStack.SkipLast(1).FirstOrDefault(new EmptyFolderViewModel());
 
     private void OnBack()
     {

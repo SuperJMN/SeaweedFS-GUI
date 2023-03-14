@@ -10,12 +10,4 @@ public partial class MainView : UserControl
     {
         InitializeComponent();
     }
-
-    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        if (!Design.IsDesignMode)
-        {
-            DataContext = CompositionRoot.Create(TopLevel.GetTopLevel(this)!);
-        }
-    }
 }

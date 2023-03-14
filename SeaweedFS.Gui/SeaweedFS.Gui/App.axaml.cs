@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using SeaweedFS.Gui.Features.Main;
+using SeaweedFS.Gui.Features.Shell;
 
 namespace SeaweedFS.Gui;
 
@@ -20,7 +20,7 @@ public partial class App : Application
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            singleViewPlatform.MainView = new MainView();
+            singleViewPlatform.MainView = new ShellView();
         }
 
         base.OnFrameworkInitializationCompleted();
