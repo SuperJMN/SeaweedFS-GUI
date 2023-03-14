@@ -91,7 +91,7 @@
 					</Button.Flyout>
 				</Button>
 			</StackPanel>
-			<TextBlock Margin="4" VerticalAlignment="Center" Text="{Binding History.CurrentFolder.Path}" />
+			<TextBlock Margin="4" VerticalAlignment="Center" Text="{Binding History.CurrentFolder}" />
 		</DockPanel>
 		<DockPanel>
 

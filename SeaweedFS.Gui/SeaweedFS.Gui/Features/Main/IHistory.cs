@@ -1,18 +1,12 @@
 using System.Reactive;
+using CSharpFunctionalExtensions;
 using ReactiveUI;
 
 namespace SeaweedFS.Gui.Features.Main;
 
-public interface IHistory
+public interface IHistory<T>
 {
     ReactiveCommand<Unit, Unit> GoBack { get; }
-    IFolderViewModel CurrentFolder { get; set; }
-    IFolderViewModel PreviousFolder { get; }
-}
-
-class HistoryDesign : IHistory
-{
-    public ReactiveCommand<Unit, Unit> GoBack { get; }
-    public IFolderViewModel CurrentFolder { get; set; }
-    public IFolderViewModel PreviousFolder { get; }
+    T CurrentFolder { get; set; }
+    Maybe<T> PreviousFolder { get; }
 }

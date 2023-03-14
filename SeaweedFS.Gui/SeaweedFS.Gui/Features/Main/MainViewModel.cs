@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Windows.Input;
-using Avalonia.Platform.Storage;
 using CSharpFunctionalExtensions;
 using MoreLinq;
 using ReactiveUI;
@@ -28,16 +26,18 @@ public class MainViewModel : ViewModelBase, IMainViewModel
     {
         this.seaweed = seaweed;
         this.storage = storage;
-        History = new History(new EmptyFolderViewModel());
+        History = new AddressHistory("");
 
         TransferManager = new TransferManager();
         var refresh = ReactiveCommand.CreateFromObservable(() => OnRefresh(seaweed, History.CurrentFolder));
         Refresh = refresh;
 
-        Contents = this
+        var contents = this
             .WhenAnyValue(x => x.History.CurrentFolder)
-            .Merge(refresh)
-            .SelectMany(f => OnRefresh(seaweed, f));
+            .SelectMany(f => OnRefresh(seaweed, f))
+            .Merge(refresh);
+
+        Contents = contents.WhereSuccess();
 
         GoBack = History.GoBack;
         var upload = ReactiveCommand.CreateFromObservable(DoUpload);
@@ -56,6 +56,8 @@ public class MainViewModel : ViewModelBase, IMainViewModel
             this.WhenAnyValue(x => x.NewFolderName).SelectNotEmpty());
 
         createFolder.WhereFailure()
+            .Merge(contents.WhereFailure())
+            .ObserveOn(RxApp.MainThreadScheduler)
             .Do(notificationService.ShowMessage)
             .Subscribe();
 
@@ -66,7 +68,7 @@ public class MainViewModel : ViewModelBase, IMainViewModel
 
     public ITransferManager TransferManager { get; }
 
-    public IHistory History { get; }
+    public IAddressHistory History { get; }
 
     public IReactiveCommand CreateFolder { get; }
 
@@ -76,7 +78,7 @@ public class MainViewModel : ViewModelBase, IMainViewModel
 
     public IObservable<IFolderViewModel> Contents { get; }
 
-    public IReactiveCommand Refresh { get; }
+    public ReactiveCommand<Unit, Result<IFolderViewModel>> Refresh { get; }
 
     private IObservable<IEnumerable<ITransferViewModel>> DoUpload()
     {
@@ -88,33 +90,33 @@ public class MainViewModel : ViewModelBase, IMainViewModel
     private ITransferViewModel GetTransfer(IStorable s)
     {
         var name = s.Name;
-        return new Upload(name, s.OpenRead, (streamPart, ct) => seaweed.Upload(Path.Combine(History.CurrentFolder.Path, name), streamPart, ct), TransferManager.Remove);
+        return new Upload(name, s.OpenRead, (streamPart, ct) => seaweed.Upload(Path.Combine(History.CurrentFolder, name), streamPart, ct), TransferManager.Remove);
     }
 
     private string GetFolderName()
     {
-        if (History.CurrentFolder.Path == "")
+        if (History.CurrentFolder == "")
         {
             return NewFolderName! + "/";
         }
 
-        if (History.CurrentFolder.Path.EndsWith("/"))
+        if (History.CurrentFolder.EndsWith("/"))
         {
-            return History.CurrentFolder.Path + NewFolderName! + "/";
+            return History.CurrentFolder + NewFolderName! + "/";
         }
 
-        return History.CurrentFolder.Path + "/" + NewFolderName! + "/";
+        return History.CurrentFolder + "/" + NewFolderName! + "/";
     }
 
-    private IObservable<IFolderViewModel> OnRefresh(ISeaweedFS client, IFolderViewModel folderViewModel)
+    private IObservable<Result<IFolderViewModel>> OnRefresh(ISeaweedFS client, string path)
     {
         var fromService = Observable
-            .FromAsync(() => client.GetContents(folderViewModel.Path))
-            .Select(folder => new FolderViewModel(folder.Path, GetChildren(folder), this));
+            .FromAsync(() => client.GetContents(path))
+            .Select(folder => Result.Success((IFolderViewModel)new FolderViewModel(folder.Path, GetChildren(folder), this)));
 
-        var composed = Observable.Defer(() => fromService.Catch((Exception _) => Observable.Return(History.PreviousFolder)));
-
-        return composed;
+        return Observable.Defer(() => fromService
+            .Timeout(TimeSpan.FromSeconds(5))
+            .Catch((Exception ex) => Observable.Return(Result.Failure<IFolderViewModel>(ex.Message))));
     }
 
     private List<IEntryViewModel> GetChildren(Folder folder)

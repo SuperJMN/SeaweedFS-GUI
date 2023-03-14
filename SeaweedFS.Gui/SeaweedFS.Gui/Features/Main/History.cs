@@ -1,17 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
+using CSharpFunctionalExtensions;
 using ReactiveUI;
 
 namespace SeaweedFS.Gui.Features.Main;
 
-public class History : ReactiveObject, IHistory
+public class History<T> : ReactiveObject, IHistory<T>
 {
-    private readonly Stack<IFolderViewModel> currentFolderStack;
+    private readonly Stack<T> currentFolderStack;
 
-    public History(IFolderViewModel initial)
+    public History(T initial)
     {
-        currentFolderStack = new Stack<IFolderViewModel>(new[] { initial });
+        currentFolderStack = new Stack<T>(new[] { initial });
         var whenAnyValue = this.WhenAnyValue(x => x.CanGoBack);
         GoBack = ReactiveCommand.Create(OnBack, whenAnyValue);
     }
@@ -20,12 +21,12 @@ public class History : ReactiveObject, IHistory
 
     private bool CanGoBack => currentFolderStack.Count > 1;
 
-    public IFolderViewModel CurrentFolder
+    public T CurrentFolder
     {
         get => currentFolderStack.Peek();
         set
         {
-            if (value == currentFolderStack.Peek())
+            if (Equals(value, currentFolderStack.Peek()))
             {
                 return;
             }
@@ -37,7 +38,7 @@ public class History : ReactiveObject, IHistory
         }
     }
 
-    public IFolderViewModel PreviousFolder => currentFolderStack.SkipLast(1).FirstOrDefault(new EmptyFolderViewModel());
+    public Maybe<T> PreviousFolder => currentFolderStack.SkipLast(1).TryFirst();
 
     private void OnBack()
     {

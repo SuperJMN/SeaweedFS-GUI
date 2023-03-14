@@ -17,12 +17,14 @@ public class ShellViewModel : ViewModelBase, IShellViewModel
     public ShellViewModel(IStorage storage, TopLevel topLevel)
     {
         TypedAddress = "http://192.168.1.31:8888";
+        var notificationService = new NotificationService(new WindowNotificationManager(topLevel) { Position = NotificationPosition.BottomRight });
+
         var p = this.WhenAnyValue(x => x.Address)
             .WhereNotNull()
             .Select(x => Observable
             .Using(
                 () => new HttpClient { BaseAddress = new Uri(x)}, 
-                httpClient => Observable.Return(new MainViewModel(new SeaweedFSClient(httpClient), storage, new NotificationService(new WindowNotificationManager(topLevel)))).Concat(Observable.Never<MainViewModel>())));
+                httpClient => Observable.Return(new MainViewModel(new SeaweedFSClient(httpClient), storage, notificationService)).Concat(Observable.Never<MainViewModel>())));
 
         Session = p.Switch();
 
