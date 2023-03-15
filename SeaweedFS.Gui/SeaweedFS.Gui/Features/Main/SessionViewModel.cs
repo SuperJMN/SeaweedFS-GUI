@@ -90,7 +90,7 @@ public class SessionViewModel : ViewModelBase, IMainViewModel
     private ITransferViewModel GetTransfer(IStorable s)
     {
         var name = s.Name;
-        return new Upload(name, s.OpenRead, (streamPart, ct) => seaweed.Upload(History.CurrentFolder + "/" + name, streamPart, ct), TransferManager.Remove);
+        return new Upload(name, s.OpenRead, (streamPart, ct) => seaweed.Upload(History.CurrentFolder == "" ? name : History.CurrentFolder + name, streamPart, ct), TransferManager.Remove);
     }
 
     private string GetFolderName()
