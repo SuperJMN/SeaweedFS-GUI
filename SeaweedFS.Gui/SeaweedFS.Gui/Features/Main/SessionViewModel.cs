@@ -42,7 +42,7 @@ public class SessionViewModel : ViewModelBase, IMainViewModel
         GoBack = History.GoBack;
         var upload = ReactiveCommand.CreateFromObservable(DoUpload);
         upload
-            .Do(transfer => transfer.ForEach(t => TransferManager.Add(t)))
+            .Do(transfers => transfers.ForEach(t => TransferManager.Add(t)))
             .Subscribe();
 
         Upload = upload;
