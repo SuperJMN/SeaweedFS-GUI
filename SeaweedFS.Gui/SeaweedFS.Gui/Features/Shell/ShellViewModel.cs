@@ -19,18 +19,24 @@ public class ShellViewModel : ViewModelBase, IShellViewModel
         TypedAddress = "http://192.168.1.31:8888";
         var notificationService = new NotificationService(new WindowNotificationManager(topLevel) { Position = NotificationPosition.BottomRight });
 
-        var p = this.WhenAnyValue(x => x.Address)
+        Session = this
+            .WhenAnyValue(x => x.Address)
             .WhereNotNull()
             .Select(x => Observable
-            .Using(
-                () => new HttpClient { BaseAddress = new Uri(x)}, 
-                httpClient => Observable.Return(new MainViewModel(new SeaweedFSClient(httpClient), storage, notificationService)).Concat(Observable.Never<MainViewModel>())));
+                .Using(
+                    () => new HttpClient { BaseAddress = new Uri(x)}, 
+                    httpClient => CreateSession(storage, httpClient, notificationService).Concat(Observable.Never<SessionViewModel>())))
+            .Switch();
 
-        Session = p.Switch();
+        var startSession = ReactiveCommand.Create(() => Address = TypedAddress, this.WhenAnyValue(x => x.Address, x => x.TypedAddress, (old, @new) => old != @new));
+        Connect = startSession;
+        IsConnected = startSession.Any().StartWith(false);
+    }
 
-        var connect = ReactiveCommand.Create(() => Address = TypedAddress, this.WhenAnyValue(x => x.Address, x => x.TypedAddress, (a, b) => a != b));
-        Connect = connect;
-        IsConnected = connect.Any().StartWith(false);
+    private static IObservable<SessionViewModel> CreateSession(IStorage storage, HttpClient httpClient, INotificationService notificationService)
+    {
+        var sessionViewModel = new SessionViewModel(new SeaweedFSClient(httpClient), storage, notificationService);
+        return Observable.Return(sessionViewModel);
     }
 
     public ICommand Connect { get; }
@@ -43,5 +49,5 @@ public class ShellViewModel : ViewModelBase, IShellViewModel
 
     public IObservable<bool> IsConnected { get; }
 
-    public IObservable<MainViewModel> Session { get; }
+    public IObservable<SessionViewModel> Session { get; }
 }

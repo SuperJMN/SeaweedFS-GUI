@@ -29,7 +29,7 @@
 			<Panel IsVisible="{Binding IsConnected^}">
 				<main:MainView DataContext="{Binding Session^}" />
 			</Panel>
-			<TextBlock FontSize="{StaticResource FontSizeLarge}" VerticalAlignment="Center" TextAlignment="Center" Text="Enter the SeaweedFS Filer URL above" IsVisible="{Binding !IsConnected^}"/>
+			<TextBlock VerticalAlignment="Center" TextAlignment="Center" Text="Enter the SeaweedFS Filer URL above" IsVisible="{Binding !IsConnected^}"/>
 		</Panel>
 	</DockPanel>
 </UserControl>

@@ -8,9 +8,9 @@ namespace SeaweedFS.Gui.Features.Shell;
 
 public class ShellViewModelDesign : IShellViewModel
 {
-    public ReactiveCommand<Unit, IObservable<MainViewModel>> Connect { get; }
+    public ReactiveCommand<Unit, IObservable<SessionViewModel>> Connect { get; }
     public string TypedAddress { get; set; }
     public IObservable<bool> IsConnected { get; }
-    public IObservable<MainViewModel> Session { get; set; }
+    public IObservable<SessionViewModel> Session { get; set; }
     ICommand IShellViewModel.Connect => Connect;
 }

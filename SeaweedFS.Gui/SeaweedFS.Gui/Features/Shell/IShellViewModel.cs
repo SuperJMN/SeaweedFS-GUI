@@ -6,7 +6,7 @@ namespace SeaweedFS.Gui.Features.Shell;
 
 public interface IShellViewModel
 {
-    public IObservable<MainViewModel> Session { get; }
+    public IObservable<SessionViewModel> Session { get; }
     ICommand Connect { get; }
     public string? TypedAddress { get; set; }
     public IObservable<bool> IsConnected { get; }

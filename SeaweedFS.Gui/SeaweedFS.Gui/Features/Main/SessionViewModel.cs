@@ -17,12 +17,12 @@ using Zafiro.UI;
 
 namespace SeaweedFS.Gui.Features.Main;
 
-public class MainViewModel : ViewModelBase, IMainViewModel
+public class SessionViewModel : ViewModelBase, IMainViewModel
 {
     private readonly ISeaweedFS seaweed;
     private readonly IStorage storage;
 
-    public MainViewModel(ISeaweedFS seaweed, IStorage storage, INotificationService notificationService)
+    public SessionViewModel(ISeaweedFS seaweed, IStorage storage, INotificationService notificationService)
     {
         this.seaweed = seaweed;
         this.storage = storage;
