@@ -29,7 +29,7 @@
 					IsIndeterminate="{avalonia:Return False}"
                     Name="Errored" ErrorMessage="{avalonia:Return Something unexpected happened}" IsTransferring="{avalonia:Return False}">
 				</transfer:TransferDesign>
-				<transfer:TransferDesign Name="Download starting..." IsIndeterminate="{avalonia:Return True}" />
+				<transfer:TransferDesign Name="Download starting..." IsTransferring="{avalonia:Return True}" IsIndeterminate="{avalonia:Return True}" />
             </transfer:TransferManagerDesign.TransferList>
 		</transfer:TransferManagerDesign>
 	</Design.DataContext>
@@ -62,9 +62,9 @@
                             <TextBlock VerticalAlignment="Center"
                                        FontWeight="Bold" Text="{Binding Name}" />
                         </DockPanel>
-						<Panel Grid.Row="1" Grid.Column="2"  VerticalAlignment="Center" Margin="4 4 8 4" Width="80">
-							<Button Content="{Binding TransferButtonText^}" Command="{Binding Start}" IsVisible="{Binding !IsTransferring^}" />
-							<Button Content="Cancel" Command="{Binding Cancel}" IsVisible="{Binding IsTransferring^}" />
+						<Panel Grid.Row="1" Grid.Column="2"  VerticalAlignment="Center" Margin="4 4 8 4" Width="120">
+							<Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="{Binding TransferButtonText^}" Command="{Binding Start}" IsVisible="{Binding !IsTransferring^}" />
+							<Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="Cancel" Command="{Binding Cancel}" IsVisible="{Binding IsTransferring^}" />
 						</Panel>
                         <Button Command="{Binding RemoveCommand}" Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" Content="-" />
                     </Grid>

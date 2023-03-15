@@ -45,7 +45,7 @@
 				<Button.Content>
 					<DockPanel>
 						<svg:Svg Path="/Assets/folder.svg" Height="32" DockPanel.Dock="Left" />
-						<TextBlock Margin="4" FontSize="{StaticResource FontSizeLarge}" VerticalAlignment="Center"
+						<TextBlock Margin="4" VerticalAlignment="Center"
                                    Text="{Binding Name}" TextDecorations="Underline" />
 					</DockPanel>
 				</Button.Content>
@@ -95,7 +95,7 @@
 		</DockPanel>
 		<DockPanel>
 
-			<Expander DockPanel.Dock="Bottom" IsExpanded="True" Header="File Transfers" IsVisible="{Binding TransferManager.Transfers.Count}">
+			<Expander DockPanel.Dock="Bottom" IsExpanded="True" HorizontalAlignment="Stretch" Header="File Transfers" IsVisible="{Binding TransferManager.Transfers.Count}">
 				<transfer:TransferManagerView Height="200">
 					<transfer:TransferManagerView.DataContext>
 						<Binding Path="TransferManager" />
