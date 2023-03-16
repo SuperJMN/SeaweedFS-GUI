@@ -36,4 +36,9 @@ internal class SeaweedFSClient : ISeaweedFS
     {
         return httpClient.GetStreamAsync(filePath);
     }
+
+    public Task Delete(string filePath)
+    {
+        return inner.Delete(filePath);
+    }
 }

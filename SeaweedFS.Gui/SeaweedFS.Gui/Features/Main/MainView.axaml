@@ -61,7 +61,8 @@
 						<Setter Property="Opacity" Value="1" />
 					</Style>
 				</DockPanel.Styles>
-				<Button DockPanel.Dock="Right" Content="Download" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Command="{Binding Download}" />
+				<Button DockPanel.Dock="Right" Content="Delete" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Command="{Binding Delete}" />
+                <Button DockPanel.Dock="Right" Content="Download" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Command="{Binding Delete}" />
 				<TextBlock VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding Name}" />
 			</DockPanel>
 		</DataTemplate>
@@ -81,7 +82,7 @@
                                 <Panel DockPanel.Dock="Right" Margin="4">
                                     <Button Content="Create"
 											Command="{Binding CreateFolder}" />
-                                    <ProgressBar MinWidth="10" IsIndeterminate="True" IsVisible="{Binding CreateFolder.IsExecuting^}"></ProgressBar>
+                                    <ProgressBar MinWidth="10" IsIndeterminate="True" IsVisible="{Binding CreateFolder.IsExecuting^}" />
                                 </Panel>
                                 <TextBox VerticalAlignment="Center" Watermark="Folder name"
                                          Width="120"

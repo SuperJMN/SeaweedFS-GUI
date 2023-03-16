@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using CSharpFunctionalExtensions;
@@ -20,7 +21,7 @@ public class FileViewModel : EntryViewModel, IFileViewModel
     private readonly IStorage storage;
     private readonly ISeaweedFS seaweed;
 
-    public FileViewModel(string path, long size, ITransferManager transferManager, IStorage storage, ISeaweedFS seaweed)
+    public FileViewModel(string path, long size, ITransferManager transferManager, IStorage storage, ISeaweedFS seaweed, INotificationService notificationService)
     {
         this.transferManager = transferManager;
         this.storage = storage;
@@ -34,6 +35,15 @@ public class FileViewModel : EntryViewModel, IFileViewModel
             .Subscribe();
 
         Download = download;
+        Delete = ReactiveCommand.CreateFromObservable(() => Observable.FromAsync(() => seaweed.Delete(path))
+            .Timeout(TimeSpan.FromSeconds(5))
+            .Select(_ => Result.Success())
+            .Catch((Exception e) => Observable.Return(Result.Failure(e.Message))));
+
+        Delete
+            .WhereFailure()
+            .Do(notificationService.ShowMessage)
+            .Subscribe();
     }
 
     private void Add(ITransferViewModel streamTransfer)
@@ -57,6 +67,7 @@ public class FileViewModel : EntryViewModel, IFileViewModel
     }
 
     public ICommand Download { get; }
+    public ReactiveCommand<Unit, Result> Delete { get; }
 
     public string Path { get; }
     public long Size { get; }

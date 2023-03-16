@@ -16,4 +16,7 @@ public interface ISeaweedApi
 
     [Post("/{directoryPath}")]
     Task CreateFolder(string directoryPath);
+
+    [Delete("/{filePath}")]
+    Task Delete(string filePath);
 }

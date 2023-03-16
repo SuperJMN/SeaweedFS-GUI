@@ -21,11 +21,13 @@ public class SessionViewModel : ViewModelBase, IMainViewModel
 {
     private readonly ISeaweedFS seaweed;
     private readonly IStorage storage;
+    private readonly INotificationService notificationService;
 
     public SessionViewModel(ISeaweedFS seaweed, IStorage storage, INotificationService notificationService)
     {
         this.seaweed = seaweed;
         this.storage = storage;
+        this.notificationService = notificationService;
         History = new AddressHistory("");
 
         TransferManager = new TransferManager();
@@ -137,6 +139,6 @@ public class SessionViewModel : ViewModelBase, IMainViewModel
             return new FolderViewModel(entry.FullPath[1..], new List<IEntryViewModel>(), this);
         }
 
-        return new FileViewModel(entry.FullPath[1..], entry.FileSize, TransferManager, storage, seaweed);
+        return new FileViewModel(entry.FullPath[1..], entry.FileSize, TransferManager, storage, seaweed, notificationService);
     }
 }
