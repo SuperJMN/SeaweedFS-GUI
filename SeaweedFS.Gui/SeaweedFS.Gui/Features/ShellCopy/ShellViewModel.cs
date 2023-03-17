@@ -1,15 +1,12 @@
 using System;
 using System.Net.Http;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
-using CSharpFunctionalExtensions;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SeaweedFS.Gui.Features.Session;
-using SeaweedFS.Gui.Model;
 using SeaweedFS.Gui.SeaweedFS;
 using Zafiro.Avalonia;
 
@@ -53,24 +50,4 @@ public class ShellViewModel : ViewModelBase, IShellViewModel
     public IObservable<bool> IsConnected { get; }
 
     public IObservable<SessionViewModel> Session { get; }
-}
-
-internal class Root : IRoot
-{
-    private readonly ISeaweedFS seaweed;
-
-    public Root(ISeaweedFS seaweed)
-    {
-        this.seaweed = seaweed;
-    }
-
-    public Task<Result<SeaweedFolder>> Get(string path)
-    {
-        return SeaweedFolder.Create(path, seaweed);
-    }
-}
-
-public interface IRoot
-{
-    Task<Result<SeaweedFolder>> Get(string path);
 }

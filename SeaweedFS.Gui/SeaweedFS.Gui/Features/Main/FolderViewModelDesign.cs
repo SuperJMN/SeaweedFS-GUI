@@ -27,8 +27,3 @@ class FolderViewModelDesign : IFolderViewModel
     public ICommand Navigate => ReactiveCommand.Create(() => { });
     public string Name { get; set; }
 }
-
-public interface IEntryViewModel
-{
-    string Name { get; }
-}

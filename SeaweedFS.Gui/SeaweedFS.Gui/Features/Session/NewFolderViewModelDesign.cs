@@ -6,7 +6,7 @@ using SeaweedFS.Gui.Model;
 
 namespace SeaweedFS.Gui.Features.Session;
 
-class NewFolderViewModelDesign : INewFolderViewModel
+public class NewFolderViewModelDesign : INewFolderViewModel
 {
     public NewFolderViewModelDesign()
     {
@@ -18,6 +18,9 @@ class NewFolderViewModelDesign : INewFolderViewModel
         Children = children;
     }
 
+    public string Path { get; set; }
     public ObservableCollection<IEntryViewModel> ChildrenItems { get; } = new();
     public ReadOnlyObservableCollection<IEntryViewModel> Children { get; }
+    public IEntryModel EntryModel { get; set; }
+    public bool IsSelected { get; set; }
 }

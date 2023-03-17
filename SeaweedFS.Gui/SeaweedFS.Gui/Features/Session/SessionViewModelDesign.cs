@@ -16,10 +16,31 @@ class SessionViewModelDesign : ISessionViewModel
             {
                 new EntryViewModelDesign()
                 {
+                    IsSelected = false,
+                    EntryModel = new FolderModelDesign() { Path = "home"},
+                },
+                new EntryViewModelDesign()
+                {
                     IsSelected = true,
                     EntryModel = new FileModelDesign()
                     {
-                        Path = "home/file.txt",
+                        Path = "home/file1.txt",
+                    }
+                },
+                new EntryViewModelDesign()
+                {
+                    IsSelected = false,
+                    EntryModel = new FileModelDesign()
+                    {
+                        Path = "home/file2.txt",
+                    }
+                },
+                new EntryViewModelDesign()
+                {
+                    IsSelected = true,
+                    EntryModel = new FileModelDesign()
+                    {
+                        Path = "home/file3.txt",
                     }
                 }
             }
