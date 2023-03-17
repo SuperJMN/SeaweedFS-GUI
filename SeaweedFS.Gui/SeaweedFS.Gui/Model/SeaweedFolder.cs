@@ -18,15 +18,13 @@ public class SeaweedFolder : IEntry
     private readonly ISeaweedFS seaweed;
     private readonly SourceCache<IEntry, string> sourceCache;
 
-    public SeaweedFolder(string path, ISeaweedFS seaweed)
+    public SeaweedFolder(Folder folder, ISeaweedFS seaweed)
     {
         this.seaweed = seaweed;
-        Path = path;
+        Path = folder.Path;
 
         sourceCache = new SourceCache<IEntry, string>(entry => entry.Path);
-        var initial = Observable
-            .FromAsync(() => seaweed.GetContents(Path)).SelectMany(GetEntries);
-
+        var initial = GetEntries(folder).ToObservable();
         sourceCache.PopulateFrom(initial);
 
         Children = sourceCache.Connect();
@@ -53,7 +51,7 @@ public class SeaweedFolder : IEntry
     {
         if (entry.Chunks == null)
         {
-            return new SeaweedFolder(entry.FullPath, seaweed);
+            return new SeaweedFolder(new Folder(){ Path = entry.FullPath }, seaweed);
         }
 
         return new SeaweedFile(entry.FullPath);
@@ -74,5 +72,12 @@ public class SeaweedFolder : IEntry
                 sourceCache.AddOrUpdate(seaweedFile);
                 return (IEntry)seaweedFile;
             });
+    }
+
+    public static Task<Result<SeaweedFolder>> Create(string path, ISeaweedFS seaweedFs)
+    {
+        return Result
+            .Try(() => seaweedFs.GetContents(path))
+            .Map(folder => new SeaweedFolder(folder, seaweedFs));
     }
 }

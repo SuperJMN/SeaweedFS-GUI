@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:s="clr-namespace:SeaweedFS.Gui.Features.Shell"
+             xmlns:avalonia="clr-namespace:Zafiro.Avalonia;assembly=Zafiro.Avalonia"
+             xmlns:main="clr-namespace:SeaweedFS.Gui.Features.Main"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="s:IShellViewModel"
+             x:CompileBindings="True"
+             x:Class="SeaweedFS.Gui.Features.ShellCopy.ShellView">
+	<Design.DataContext>
+		<s:ShellViewModelDesign TypedAddress="Sample address">
+			<s:ShellViewModelDesign.Session>
+				<avalonia:Return>
+					<avalonia:Return.Value>
+						<main:MainViewModelDesign />
+					</avalonia:Return.Value>
+				</avalonia:Return>
+			</s:ShellViewModelDesign.Session>
+		</s:ShellViewModelDesign>
+	</Design.DataContext>
+	<DockPanel>
+		<DockPanel DockPanel.Dock="Top" Margin="6">
+			<Button Content="Connect" Command="{Binding Connect}" DockPanel.Dock="Right" />
+			<TextBox Watermark="Filer Address" Text="{Binding TypedAddress}" />
+		</DockPanel>
+		<Panel>
+			<Panel IsVisible="{Binding IsConnected^}">
+				<main:MainView DataContext="{Binding Session^}" />
+			</Panel>
+			<TextBlock VerticalAlignment="Center" TextAlignment="Center" Text="Enter the SeaweedFS Filer URL above" IsVisible="{Binding !IsConnected^}"/>
+		</Panel>
+	</DockPanel>
+</UserControl>

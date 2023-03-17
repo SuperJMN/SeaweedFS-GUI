@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using SeaweedFS.Gui.Features.Shell;
+using ShellView = SeaweedFS.Gui.Features.ShellCopy.ShellView;
 
 namespace SeaweedFS.Gui;
 

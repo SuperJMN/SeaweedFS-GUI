@@ -1,6 +1,6 @@
 using ReactiveUI;
 
-namespace SeaweedFS.Gui.Features.Main
+namespace SeaweedFS.Gui
 {
     public class ViewModelBase : ReactiveObject
     {

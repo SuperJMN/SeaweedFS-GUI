@@ -33,4 +33,14 @@
       <ProjectReference Include="..\..\Zafiro.Avalonia\Zafiro\Source\UI\UI.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Features\Session\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Features\ShellCopy\ShellView.axaml.cs">
+        <DependentUpon>%(Filename)</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

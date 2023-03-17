@@ -8,12 +8,12 @@ namespace SeaweedFS.Tests;
 public class EntriesTests
 {
     [Fact]
-    public void Folder_contents_are_exposed()
+    public async Task Folder_contents_are_exposed()
     {
         var folders = SampleFolders();
 
-        var sut = new SeaweedFolder("folder", SeaweedService(folders));
-        sut.Children.Bind(out var contents).Subscribe();
+        var sut = await SeaweedFolder.Create("folder", SeaweedService(folders));
+        sut.Value.Children.Bind(out var contents).Subscribe();
         contents.Should().NotBeEmpty();
     }
 
@@ -22,9 +22,10 @@ public class EntriesTests
     {
         var folders = SampleFolders();
 
-        var sut = new SeaweedFolder("folder", SeaweedService(folders));
-        sut.Children.Bind(out var contents).Subscribe();
-        var delete = await sut.Delete(contents.First());
+        var sut = await SeaweedFolder.Create("folder", SeaweedService(folders));
+        var seaweedFolder = sut.Value;
+        seaweedFolder.Children.Bind(out var contents).Subscribe();
+        var delete = await seaweedFolder.Delete(contents.First());
         delete.Should().BeSuccess();
     }
 
@@ -33,10 +34,11 @@ public class EntriesTests
     {
         var folders = SampleFolders();
 
-        var sut = new SeaweedFolder("folder", SeaweedService(folders));
-        sut.Children.Bind(out var contents).Subscribe();
+        var sut = await SeaweedFolder.Create("folder", SeaweedService(folders));
+        var seaweedFolder = sut.Value;
+        seaweedFolder.Children.Bind(out var contents).Subscribe();
         var toDelete = contents.First();
-        await sut.Delete(toDelete);
+        await seaweedFolder.Delete(toDelete);
         contents.Should().NotContain(toDelete);
     }
 
@@ -45,9 +47,10 @@ public class EntriesTests
     {
         var folders = SampleFolders();
 
-        var sut = new SeaweedFolder("folder", SeaweedService(folders));
-        sut.Children.Bind(out var contents).Subscribe();
-        var created = await sut.Add("test.jpg", new MemoryStream("pepito"u8.ToArray()), CancellationToken.None);
+        var sut = await SeaweedFolder.Create("folder", SeaweedService(folders));
+        var seaweedFolder = sut.Value;
+        seaweedFolder.Children.Bind(out var contents).Subscribe();
+        var created = await seaweedFolder.Add("test.jpg", new MemoryStream("pepito"u8.ToArray()), CancellationToken.None);
         created.Should().BeSuccess();
     }
 
@@ -56,9 +59,10 @@ public class EntriesTests
     {
         var folders = SampleFolders();
 
-        var sut = new SeaweedFolder("folder", SeaweedService(folders));
-        sut.Children.Bind(out var contents).Subscribe();
-        var created = await sut.Add("test.jpg", new MemoryStream("pepito"u8.ToArray()), CancellationToken.None);
+        var sut = await SeaweedFolder.Create("folder", SeaweedService(folders));
+        var seaweedFolder = sut.Value;
+        seaweedFolder.Children.Bind(out var contents).Subscribe();
+        var created = await seaweedFolder.Add("test.jpg", new MemoryStream("pepito"u8.ToArray()), CancellationToken.None);
         contents.Should().Contain(created.Value);
     }
 
