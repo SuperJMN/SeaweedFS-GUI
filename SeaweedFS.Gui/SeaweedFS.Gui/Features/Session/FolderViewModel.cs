@@ -5,7 +5,7 @@ using SeaweedFS.Gui.Model;
 
 namespace SeaweedFS.Gui.Features.Session;
 
-public class FolderViewModel : INewFolderViewModel
+public class FolderViewModel : IFolderViewModel
 {
     public FolderViewModel(IFolderModel folder)
     {

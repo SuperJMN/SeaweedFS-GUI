@@ -3,7 +3,7 @@ using SeaweedFS.Gui.Model;
 
 namespace SeaweedFS.Gui.Features.Session;
 
-public interface INewFolderViewModel
+public interface IFolderViewModel
 {
     ReadOnlyObservableCollection<IEntryViewModel> Children { get; }
 }

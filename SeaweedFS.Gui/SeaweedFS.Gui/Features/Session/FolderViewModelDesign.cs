@@ -6,9 +6,9 @@ using SeaweedFS.Gui.Model;
 
 namespace SeaweedFS.Gui.Features.Session;
 
-public class NewFolderViewModelDesign : INewFolderViewModel
+public class FolderViewModelDesign : IFolderViewModel
 {
-    public NewFolderViewModelDesign()
+    public FolderViewModelDesign()
     {
         ChildrenItems
             .ToObservableChangeSet()

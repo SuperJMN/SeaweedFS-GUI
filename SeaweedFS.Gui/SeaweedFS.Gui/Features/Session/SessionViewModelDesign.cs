@@ -6,11 +6,11 @@ namespace SeaweedFS.Gui.Features.Session;
 
 class SessionViewModelDesign : ISessionViewModel
 {
-    public IObservable<INewFolderViewModel> CurrentFolder { get; set; }
+    public IObservable<IFolderViewModel> CurrentFolder { get; set; }
 
     public static SessionViewModelDesign SampleData => new()
     {
-        CurrentFolder = Observable.Return(new NewFolderViewModelDesign()
+        CurrentFolder = Observable.Return(new FolderViewModelDesign()
         {
             ChildrenItems =
             {
