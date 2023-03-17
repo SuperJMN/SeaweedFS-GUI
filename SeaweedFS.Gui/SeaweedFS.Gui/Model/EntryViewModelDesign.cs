@@ -1,6 +1,6 @@
 ﻿namespace SeaweedFS.Gui.Model;
 
-public interface IEntryViewModel
+public class EntryViewModelDesign : IEntryViewModel
 {
     public IEntryModel EntryModel { get; set; }
     public bool IsSelected { get; set; }

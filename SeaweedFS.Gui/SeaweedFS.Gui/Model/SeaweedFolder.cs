@@ -13,54 +13,54 @@ using SeaweedFS.Gui.SeaweedFS;
 
 namespace SeaweedFS.Gui.Model;
 
-public class SeaweedFolder : IEntry
+public class SeaweedFolder : IEntryModel
 {
     private readonly ISeaweedFS seaweed;
-    private readonly SourceCache<IEntry, string> sourceCache;
+    private readonly SourceCache<IEntryModel, string> sourceCache;
 
     public SeaweedFolder(Folder folder, ISeaweedFS seaweed)
     {
         this.seaweed = seaweed;
         Path = folder.Path;
 
-        sourceCache = new SourceCache<IEntry, string>(entry => entry.Path);
+        sourceCache = new SourceCache<IEntryModel, string>(entry => entry.Path);
         var initial = GetEntries(folder).ToObservable();
         sourceCache.PopulateFrom(initial);
 
         Children = sourceCache.Connect();
     }
 
-    public Task<Result> Delete(IEntry entry)
+    public Task<Result> Delete(IEntryModel entryModel)
     {
         return Result
-            .Try(() => seaweed.Delete(entry.Path))
-            .Tap(() => sourceCache.Remove(entry.Path));
+            .Try(() => seaweed.Delete(entryModel.Path))
+            .Tap(() => sourceCache.Remove(entryModel.Path));
     }
 
-    private IEnumerable<IEntry> GetEntries(Folder folder)
+    private IEnumerable<IEntryModel> GetEntries(Folder folder)
     {
         if (folder.Entries is null)
         {
-            return Enumerable.Empty<IEntry>();
+            return Enumerable.Empty<IEntryModel>();
         }
 
         return folder.Entries.Select(GetEntry);
     }
 
-    private IEntry GetEntry(Entry entry)
+    private IEntryModel GetEntry(Entry entry)
     {
         if (entry.Chunks == null)
         {
-            return new SeaweedFolder(new Folder(){ Path = entry.FullPath }, seaweed);
+            return new SeaweedFolder(new Folder (){ Path = entry.FullPath }, seaweed);
         }
 
-        return new SeaweedFile(entry.FullPath);
+        return new SeaweedFileModel(entry.FullPath);
     }
 
     public string Path { get; set; }
-    public IObservable<IChangeSet<IEntry, string>> Children { get; }
+    public IObservable<IChangeSet<IEntryModel, string>> Children { get; }
 
-    public Task<Result<IEntry>> Add(string name, MemoryStream contents, CancellationToken cancellationToken)
+    public Task<Result<IEntryModel>> Add(string name, MemoryStream contents, CancellationToken cancellationToken)
     {
         var fullPath = PathUtils.Combine(Path, name);
 
@@ -68,9 +68,9 @@ public class SeaweedFolder : IEntry
             .Try(() => seaweed.Upload(fullPath, new StreamPart(contents, "file"), cancellationToken))
             .Map(() =>
             {
-                var seaweedFile = new SeaweedFile(fullPath);
+                var seaweedFile = new SeaweedFileModel(fullPath);
                 sourceCache.AddOrUpdate(seaweedFile);
-                return (IEntry)seaweedFile;
+                return (IEntryModel)seaweedFile;
             });
     }
 

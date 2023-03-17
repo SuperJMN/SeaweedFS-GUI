@@ -4,6 +4,6 @@ namespace SeaweedFS.Gui.Model;
 
 class EntryViewModel : ReactiveObject, IEntryViewModel
 {
-    public IEntry Entry { get; set; }
+    public IEntryModel EntryModel { get; set; }
     public bool IsSelected { get; set; }
 }

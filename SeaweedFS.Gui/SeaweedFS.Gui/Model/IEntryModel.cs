@@ -1,6 +1,6 @@
 ﻿namespace SeaweedFS.Gui.Model;
 
-public interface IEntry
+public interface IEntryModel
 {
     string Path { get; }
 }

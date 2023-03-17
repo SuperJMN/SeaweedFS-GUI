@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:session="clr-namespace:SeaweedFS.Gui.Features.Session"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:CompileBindings="True"
+             x:DataType="session:ISessionViewModel"
+             x:Class="SeaweedFS.Gui.Features.Session.SessionView" Design.DataContext="{x:Static session:SessionViewModelDesign.SampleData}">
+
+    <ListBox Items="{Binding CurrentFolder^.Children}">
+		<ListBox.ItemTemplate>
+			<DataTemplate DataType="session:EntryViewModel">
+				<DockPanel>
+					<CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsSelected}" />
+					<ContentControl VerticalAlignment="Center" Content="{Binding EntryModel}" />
+				</DockPanel>
+			</DataTemplate>
+		</ListBox.ItemTemplate>
+	</ListBox>
+</UserControl>
