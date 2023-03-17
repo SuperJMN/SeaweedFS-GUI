@@ -6,7 +6,7 @@ namespace SeaweedFS.Gui.Features.ShellCopy;
 
 public interface IShellViewModel
 {
-    public IObservable<SessionViewModel> Session { get; }
+    public IObservable<ISessionViewModel> Session { get; }
     ICommand Connect { get; }
     public string? TypedAddress { get; set; }
     public IObservable<bool> IsConnected { get; }

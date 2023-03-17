@@ -2,7 +2,7 @@
 using System.Reactive.Linq;
 using ReactiveUI;
 using SeaweedFS.Gui.Features.Main;
-using SeaweedFS.Gui.Features.ShellCopy;
+using SeaweedFS.Gui.Model;
 using Zafiro.Avalonia;
 using Zafiro.Core.Mixins;
 
@@ -19,7 +19,7 @@ public class SessionViewModel : ISessionViewModel
 
         CurrentFolder = observable
             .WhereSuccess()
-            .Select(folder => new NewFolderViewModel(folder));
+            .Select(folder => new FolderViewModel(folder));
     }
 
     public IObservable<INewFolderViewModel> CurrentFolder { get; }

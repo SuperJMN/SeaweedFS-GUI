@@ -1,8 +1,8 @@
 ﻿namespace SeaweedFS.Gui.Model;
 
-public class SeaweedFileModel : IFileModel
+public class FileModel : IFileModel
 {
-    public SeaweedFileModel(string fullPath)
+    public FileModel(string fullPath)
     {
         Path = fullPath;
     }

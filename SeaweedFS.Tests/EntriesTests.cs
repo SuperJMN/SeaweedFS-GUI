@@ -12,7 +12,7 @@ public class EntriesTests
     {
         var folders = SampleFolders();
 
-        var sut = await SeaweedFolder.Create("folder", SeaweedService(folders));
+        var sut = await FolderModel.Create("folder", SeaweedService(folders));
         sut.Value.Children.Bind(out var contents).Subscribe();
         contents.Should().NotBeEmpty();
     }
@@ -22,7 +22,7 @@ public class EntriesTests
     {
         var folders = SampleFolders();
 
-        var sut = await SeaweedFolder.Create("folder", SeaweedService(folders));
+        var sut = await FolderModel.Create("folder", SeaweedService(folders));
         var seaweedFolder = sut.Value;
         seaweedFolder.Children.Bind(out var contents).Subscribe();
         var delete = await seaweedFolder.Delete(contents.First());
@@ -34,7 +34,7 @@ public class EntriesTests
     {
         var folders = SampleFolders();
 
-        var sut = await SeaweedFolder.Create("folder", SeaweedService(folders));
+        var sut = await FolderModel.Create("folder", SeaweedService(folders));
         var seaweedFolder = sut.Value;
         seaweedFolder.Children.Bind(out var contents).Subscribe();
         var toDelete = contents.First();
@@ -47,7 +47,7 @@ public class EntriesTests
     {
         var folders = SampleFolders();
 
-        var sut = await SeaweedFolder.Create("folder", SeaweedService(folders));
+        var sut = await FolderModel.Create("folder", SeaweedService(folders));
         var seaweedFolder = sut.Value;
         seaweedFolder.Children.Bind(out var contents).Subscribe();
         var created = await seaweedFolder.Add("test.jpg", new MemoryStream("pepito"u8.ToArray()), CancellationToken.None);
@@ -59,7 +59,7 @@ public class EntriesTests
     {
         var folders = SampleFolders();
 
-        var sut = await SeaweedFolder.Create("folder", SeaweedService(folders));
+        var sut = await FolderModel.Create("folder", SeaweedService(folders));
         var seaweedFolder = sut.Value;
         seaweedFolder.Children.Bind(out var contents).Subscribe();
         var created = await seaweedFolder.Add("test.jpg", new MemoryStream("pepito"u8.ToArray()), CancellationToken.None);

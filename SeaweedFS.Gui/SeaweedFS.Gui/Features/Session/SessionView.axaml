@@ -17,7 +17,7 @@
                     <DockPanel>
                         <svg:Svg Path="/Assets/folder.svg" Height="32" DockPanel.Dock="Left" />
                         <TextBlock Margin="4" VerticalAlignment="Center"
-                                   Text="{Binding Path}" TextDecorations="Underline" />
+                                   Text="{Binding Name}" TextDecorations="Underline" />
                     </DockPanel>
                 </Button.Content>
             </Button>

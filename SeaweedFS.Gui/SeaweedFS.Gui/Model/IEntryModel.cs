@@ -2,5 +2,6 @@
 
 public interface IEntryModel
 {
-    string Path { get; }
+    public string Path { get; }
+    public string Name => this.Name();
 }

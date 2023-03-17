@@ -7,6 +7,7 @@ using Avalonia.Controls.Notifications;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SeaweedFS.Gui.Features.Session;
+using SeaweedFS.Gui.Model;
 using SeaweedFS.Gui.SeaweedFS;
 using Zafiro.Avalonia;
 
@@ -49,5 +50,5 @@ public class ShellViewModel : ViewModelBase, IShellViewModel
 
     public IObservable<bool> IsConnected { get; }
 
-    public IObservable<SessionViewModel> Session { get; }
+    public IObservable<ISessionViewModel> Session { get; }
 }

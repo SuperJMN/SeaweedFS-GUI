@@ -5,9 +5,9 @@ using SeaweedFS.Gui.Model;
 
 namespace SeaweedFS.Gui.Features.Session;
 
-public class NewFolderViewModel : INewFolderViewModel
+public class FolderViewModel : INewFolderViewModel
 {
-    public NewFolderViewModel(SeaweedFolder folder)
+    public FolderViewModel(IFolderModel folder)
     {
         folder.Children
             .Transform(x => (IEntryViewModel)new EntryViewModel(x))

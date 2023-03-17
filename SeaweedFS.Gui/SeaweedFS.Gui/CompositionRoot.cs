@@ -1,7 +1,7 @@
 using System;
 using System.Net.Http;
 using Avalonia.Controls;
-using SeaweedFS.Gui.Features.Shell;
+using SeaweedFS.Gui.Features.ShellCopy;
 using Zafiro.Avalonia;
 
 namespace SeaweedFS.Gui;

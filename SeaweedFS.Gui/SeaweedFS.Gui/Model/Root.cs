@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
-using SeaweedFS.Gui.Model;
 using SeaweedFS.Gui.SeaweedFS;
 
-namespace SeaweedFS.Gui.Features.ShellCopy;
+namespace SeaweedFS.Gui.Model;
 
 internal class Root : IRoot
 {
@@ -14,8 +13,8 @@ internal class Root : IRoot
         this.seaweed = seaweed;
     }
 
-    public Task<Result<SeaweedFolder>> Get(string path)
+    public async Task<Result<IFolderModel>> Get(string path)
     {
-        return SeaweedFolder.Create(path, seaweed);
+        return await FolderModel.Create(path, seaweed);
     }
 }
