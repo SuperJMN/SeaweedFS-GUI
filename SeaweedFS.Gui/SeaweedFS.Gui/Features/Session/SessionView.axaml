@@ -24,7 +24,7 @@
         </DataTemplate>
 
         <DataTemplate DataType="model:IFileModel">
-            <TextBlock Text="{Binding Path}" />
+            <TextBlock Text="{Binding Name}" />
         </DataTemplate>
     </UserControl.DataTemplates>
 

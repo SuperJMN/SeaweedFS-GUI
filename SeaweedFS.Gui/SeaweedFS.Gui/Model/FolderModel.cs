@@ -29,7 +29,8 @@ public class FolderModel : IFolderModel
 
         Children = sourceCache
             .Connect()
-            .SortBy(x => x is IFolderModel, SortDirection.Descending);
+            .Sort(SortExpressionComparer<IEntryModel>.Descending(p => p is IFolderModel)
+                .ThenByAscending(p => p.Name));
     }
 
     public Task<Result> Delete(IEntryModel entryModel)
