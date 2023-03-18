@@ -5,5 +5,5 @@ namespace SeaweedFS.Gui.Model;
 
 public interface IRoot
 {
-    Task<Result<IFolderModel>> Get(string path);
+    Task<Result<IFolder>> Get(string path);
 }

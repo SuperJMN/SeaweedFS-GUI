@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SeaweedFS.Gui.SeaweedFS;
 
-public class Entry
+public class EntryDto
 {
     public string FullPath { get; set; }
     public DateTime Mtime { get; set; }
@@ -26,5 +26,5 @@ public class Entry
     public object Content { get; set; }
     public object Remote { get; set; }
     public long Quota { get; set; }
-    public List<Chunk>? Chunks { get; set; }
+    public List<ChunkDto>? Chunks { get; set; }
 }

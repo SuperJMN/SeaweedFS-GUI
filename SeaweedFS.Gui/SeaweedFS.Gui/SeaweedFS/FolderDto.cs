@@ -2,10 +2,10 @@
 
 namespace SeaweedFS.Gui.SeaweedFS;
 
-public class Folder
+public class FolderDto
 {
     public string Path { get; set; }
-    public List<Entry>? Entries { get; set; }
+    public List<EntryDto>? Entries { get; set; }
     public long Limit { get; set; }
     public string LastFileName { get; set; }
     public bool ShouldDisplayLoadMore { get; set; }

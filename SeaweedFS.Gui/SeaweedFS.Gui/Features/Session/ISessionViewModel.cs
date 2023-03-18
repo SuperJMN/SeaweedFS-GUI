@@ -4,5 +4,5 @@ namespace SeaweedFS.Gui.Features.Session;
 
 public interface ISessionViewModel
 {
-    IObservable<IFolderViewModel> CurrentFolder { get; }
+    IObservable<IFolderContentsViewModel> CurrentFolder { get; }
 }

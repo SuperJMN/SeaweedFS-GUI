@@ -2,6 +2,7 @@
 using Moq;
 using SeaweedFS.Gui.Model;
 using SeaweedFS.Gui.SeaweedFS;
+using Folder = SeaweedFS.Gui.Model.Folder;
 
 namespace SeaweedFS.Tests;
 
@@ -12,7 +13,7 @@ public class EntriesTests
     {
         var folders = SampleFolders();
 
-        var sut = await FolderModel.Create("folder", SeaweedService(folders));
+        var sut = await Folder.Create("folder", SeaweedService(folders));
         sut.Value.Children.Bind(out var contents).Subscribe();
         contents.Should().NotBeEmpty();
     }
@@ -22,7 +23,7 @@ public class EntriesTests
     {
         var folders = SampleFolders();
 
-        var sut = await FolderModel.Create("folder", SeaweedService(folders));
+        var sut = await Folder.Create("folder", SeaweedService(folders));
         var seaweedFolder = sut.Value;
         seaweedFolder.Children.Bind(out var contents).Subscribe();
         var delete = await seaweedFolder.Delete(contents.First());
@@ -34,7 +35,7 @@ public class EntriesTests
     {
         var folders = SampleFolders();
 
-        var sut = await FolderModel.Create("folder", SeaweedService(folders));
+        var sut = await Folder.Create("folder", SeaweedService(folders));
         var seaweedFolder = sut.Value;
         seaweedFolder.Children.Bind(out var contents).Subscribe();
         var toDelete = contents.First();
@@ -47,7 +48,7 @@ public class EntriesTests
     {
         var folders = SampleFolders();
 
-        var sut = await FolderModel.Create("folder", SeaweedService(folders));
+        var sut = await Folder.Create("folder", SeaweedService(folders));
         var seaweedFolder = sut.Value;
         seaweedFolder.Children.Bind(out var contents).Subscribe();
         var created = await seaweedFolder.Add("test.jpg", new MemoryStream("pepito"u8.ToArray()), CancellationToken.None);
@@ -59,28 +60,28 @@ public class EntriesTests
     {
         var folders = SampleFolders();
 
-        var sut = await FolderModel.Create("folder", SeaweedService(folders));
+        var sut = await Folder.Create("folder", SeaweedService(folders));
         var seaweedFolder = sut.Value;
         seaweedFolder.Children.Bind(out var contents).Subscribe();
         var created = await seaweedFolder.Add("test.jpg", new MemoryStream("pepito"u8.ToArray()), CancellationToken.None);
         contents.Should().Contain(created.Value);
     }
 
-    private static Folder SampleFolders()
+    private static Gui.SeaweedFS.FolderDto SampleFolders()
     {
-        return new Folder()
+        return new Gui.SeaweedFS.FolderDto()
         {
             Path = "folder/",
             Entries = new []
             {
-                new Entry(){FullPath = "folder/file1.txt", Chunks = new List<Chunk>() },
-                new Entry(){FullPath = "folder/file2.txt", Chunks = new List<Chunk>() },
+                new EntryDto(){FullPath = "folder/file1.txt", Chunks = new List<ChunkDto>() },
+                new EntryDto(){FullPath = "folder/file2.txt", Chunks = new List<ChunkDto>() },
             }.ToList(),
         };
     }
 
-    private static ISeaweedFS SeaweedService(Folder folders)
+    private static ISeaweedFS SeaweedService(Gui.SeaweedFS.FolderDto foldersDto)
     {
-        return Mock.Of<ISeaweedFS>(x => x.GetContents("folder") == Task.FromResult(folders));
+        return Mock.Of<ISeaweedFS>(x => x.GetContents("folder") == Task.FromResult(foldersDto));
     }
 }

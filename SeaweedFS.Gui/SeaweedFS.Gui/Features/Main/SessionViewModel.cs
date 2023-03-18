@@ -121,24 +121,24 @@ public class SessionViewModel : ViewModelBase, IMainViewModel
             .Catch((Exception ex) => Observable.Return(Result.Failure<IFolderViewModel>(ex.Message))));
     }
 
-    private List<IEntryViewModel> GetChildren(Folder folder)
+    private List<IEntryViewModel> GetChildren(FolderDto folderDto)
     {
-        if (folder.Entries != null)
+        if (folderDto.Entries != null)
         {
-            return folder.Entries.Select(Factory).OrderBy(x => x is IFolderViewModel ? 0 : 1).ToList();
+            return folderDto.Entries.Select(Factory).OrderBy(x => x is IFolderViewModel ? 0 : 1).ToList();
         }
 
         return new List<IEntryViewModel>();
     }
 
 
-    private IEntryViewModel Factory(Entry entry)
+    private IEntryViewModel Factory(EntryDto entryDto)
     {
-        if (entry.Chunks == null)
+        if (entryDto.Chunks == null)
         {
-            return new FolderViewModel(entry.FullPath[1..], new List<IEntryViewModel>(), this);
+            return new FolderViewModel(entryDto.FullPath[1..], new List<IEntryViewModel>(), this);
         }
 
-        return new FileViewModel(entry.FullPath[1..], entry.FileSize, TransferManager, storage, seaweed, notificationService);
+        return new FileViewModel(entryDto.FullPath[1..], entryDto.FileSize, TransferManager, storage, seaweed, notificationService);
     }
 }

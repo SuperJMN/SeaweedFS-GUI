@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:session="clr-namespace:SeaweedFS.Gui.Features.Session"
-             xmlns:model="clr-namespace:SeaweedFS.Gui.Model"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:svg="clr-namespace:Avalonia.Svg;assembly=Avalonia.Svg"
              x:CompileBindings="True"
@@ -11,7 +10,7 @@
              x:Class="SeaweedFS.Gui.Features.Session.SessionView" Design.DataContext="{x:Static session:SessionViewModelDesign.SampleData}">
 
 	<UserControl.DataTemplates>
-		<DataTemplate DataType="model:IFolderModel">
+		<DataTemplate DataType="session:IFolderViewModel">
             <Button Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Left">
                 <Button.Content>
                     <DockPanel>
@@ -23,17 +22,17 @@
             </Button>
         </DataTemplate>
 
-        <DataTemplate DataType="model:IFileModel">
+        <DataTemplate DataType="session:IFileViewModel">
             <TextBlock Text="{Binding Name}" />
         </DataTemplate>
     </UserControl.DataTemplates>
 
     <ListBox Items="{Binding CurrentFolder^.Children}">
 		<ListBox.ItemTemplate>
-			<DataTemplate DataType="model:IEntryViewModel">
+			<DataTemplate DataType="session:IEntryViewModelHost">
 				<DockPanel>
 					<CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsSelected}" />
-					<ContentControl VerticalAlignment="Center" Content="{Binding EntryModel}" />
+					<ContentControl VerticalAlignment="Center" Content="{Binding ViewModel}" />
 				</DockPanel>
 			</DataTemplate>
 		</ListBox.ItemTemplate>

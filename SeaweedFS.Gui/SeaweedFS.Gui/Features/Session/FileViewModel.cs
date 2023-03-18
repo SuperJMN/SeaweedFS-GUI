@@ -2,10 +2,11 @@
 
 namespace SeaweedFS.Gui.Features.Session;
 
-internal class FolderViewModel : IEntryViewModel
+internal class FileViewModel : IFileViewModel
 {
-    public FolderViewModel(IFolder fo)
+    public FileViewModel(IFileModel fi)
     {
+        Path = fi.Path;
     }
 
     public string Path { get; }

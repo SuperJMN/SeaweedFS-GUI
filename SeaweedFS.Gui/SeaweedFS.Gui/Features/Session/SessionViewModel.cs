@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reactive;
 using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
 using ReactiveUI;
@@ -14,23 +13,25 @@ public class SessionViewModel : ISessionViewModel
 {
     public SessionViewModel(IRoot root, IStorage storage, INotificationService notificationService)
     {
-        this.AddressHistory = new AddressHistory("");
+        AddressHistory = new AddressHistory("");
 
-        SetCurrentFolder = ReactiveCommand.CreateFromTask<string, Result<IFolderViewModel>>(async s =>
+        SetCurrentFolder = ReactiveCommand.CreateFromTask<string, Result<IFolderContentsViewModel>>(async s =>
         {
             var result = await root.Get(s);
-            return result.Map(model => (IFolderViewModel)new FolderViewModel(model));
+            var map = result.Map(model => (IFolderContentsViewModel)new FolderContentsViewModel(model));
+            return map;
         });
 
         CurrentFolder = SetCurrentFolder.WhereSuccess();
+        SetCurrentFolder.WhereFailure().Do(notificationService.ShowMessage).Subscribe();
 
         this.WhenAnyValue(x => x.AddressHistory.CurrentFolder)
             .InvokeCommand(SetCurrentFolder);
     }
 
-    public ReactiveCommand<string, Result<IFolderViewModel>> SetCurrentFolder { get; }
+    public ReactiveCommand<string, Result<IFolderContentsViewModel>> SetCurrentFolder { get; }
 
-    public IObservable<IFolderViewModel> CurrentFolder { get; }
+    public IObservable<IFolderContentsViewModel> CurrentFolder { get; }
 
     public AddressHistory AddressHistory { get; }
 }

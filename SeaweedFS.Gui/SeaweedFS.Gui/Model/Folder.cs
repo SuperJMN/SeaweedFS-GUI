@@ -13,18 +13,18 @@ using SeaweedFS.Gui.SeaweedFS;
 
 namespace SeaweedFS.Gui.Model;
 
-public class FolderModel : IFolder
+public class Folder : IFolder
 {
     private readonly ISeaweedFS seaweed;
     private readonly SourceCache<IEntry, string> sourceCache;
 
-    public FolderModel(FolderDto folder, ISeaweedFS seaweed)
+    public Folder(SeaweedFS.FolderDto folderDto, ISeaweedFS seaweed)
     {
         this.seaweed = seaweed;
-        Path = folder.Path;
+        Path = folderDto.Path;
 
         sourceCache = new SourceCache<IEntry, string>(entry => entry.Path);
-        var initial = GetEntries(folder).ToObservable();
+        var initial = GetEntries(folderDto).ToObservable();
         sourceCache.PopulateFrom(initial);
 
         Children = sourceCache
@@ -33,31 +33,31 @@ public class FolderModel : IFolder
                 .ThenByAscending(p => p.Name));
     }
 
-    public Task<Result> Delete(IEntry entryModel)
+    public Task<Result> Delete(IEntry entry)
     {
         return Result
-            .Try(() => seaweed.Delete(entryModel.Path))
-            .Tap(() => sourceCache.Remove(entryModel.Path));
+            .Try(() => seaweed.Delete(entry.Path))
+            .Tap(() => sourceCache.Remove(entry.Path));
     }
 
-    private IEnumerable<IEntry> GetEntries(FolderDto folder)
+    private IEnumerable<IEntry> GetEntries(SeaweedFS.FolderDto folderDto)
     {
-        if (folder.Entries is null)
+        if (folderDto.Entries is null)
         {
             return Enumerable.Empty<IEntry>();
         }
 
-        return folder.Entries.Select(GetEntry);
+        return folderDto.Entries.Select(GetEntry);
     }
 
     private IEntry GetEntry(EntryDto entryDto)
     {
         if (entryDto.Chunks == null)
         {
-            return new FolderModel(new FolderDto { Path = entryDto.FullPath }, seaweed);
+            return new Folder(new SeaweedFS.FolderDto (){ Path = entryDto.FullPath }, seaweed);
         }
 
-        return new FileModel(entryDto.FullPath);
+        return new File(entryDto.FullPath);
     }
 
     public string Path { get; set; }
@@ -71,7 +71,7 @@ public class FolderModel : IFolder
             .Try(() => seaweed.Upload(fullPath, new StreamPart(contents, "file"), cancellationToken))
             .Map(() =>
             {
-                var seaweedFile = new FileModel(fullPath);
+                var seaweedFile = new File(fullPath);
                 sourceCache.AddOrUpdate(seaweedFile);
                 return (IEntry)seaweedFile;
             });
@@ -81,6 +81,6 @@ public class FolderModel : IFolder
     {
         return Result
             .Try(() => seaweedFs.GetContents(path))
-            .Map(folder => (IFolder)new FolderModel(folder, seaweedFs));
+            .Map(folder => (IFolder)new Folder(folder, seaweedFs));
     }
 }

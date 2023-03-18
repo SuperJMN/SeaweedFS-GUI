@@ -1,5 +1,5 @@
 ﻿namespace SeaweedFS.Gui.Model;
 
-public interface IFileModel : IEntry
+public interface IFile : IEntry
 {
 }

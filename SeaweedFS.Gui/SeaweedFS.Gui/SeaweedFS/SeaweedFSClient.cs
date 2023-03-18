@@ -17,7 +17,7 @@ internal class SeaweedFSClient : ISeaweedFS
         inner = RestService.For<ISeaweedApi>(httpClient);
     }
 
-    public Task<Folder> GetContents(string directoryPath)
+    public Task<FolderDto> GetContents(string directoryPath)
     {
         return inner.GetContents(directoryPath);
     }

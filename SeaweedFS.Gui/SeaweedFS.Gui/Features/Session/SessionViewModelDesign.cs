@@ -1,44 +1,43 @@
 ﻿using System;
 using System.Reactive.Linq;
-using SeaweedFS.Gui.Model;
 
 namespace SeaweedFS.Gui.Features.Session;
 
 class SessionViewModelDesign : ISessionViewModel
 {
-    public IObservable<IFolderViewModel> CurrentFolder { get; set; }
+    public IObservable<IFolderContentsViewModel> CurrentFolder { get; set; }
 
     public static SessionViewModelDesign SampleData => new()
     {
-        CurrentFolder = Observable.Return(new FolderViewModelDesign()
+        CurrentFolder = Observable.Return(new FolderContentsViewModelDesign()
         {
             ChildrenItems =
             {
-                new EntryViewModelDesign()
+                new EntryViewModelHostDesign()
                 {
                     IsSelected = false,
-                    EntryModel = new FolderModelDesign() { Path = "home"},
+                    ViewModel = new FolderItemViewModelDesign { Path = "home"},
                 },
-                new EntryViewModelDesign()
+                new EntryViewModelHostDesign()
                 {
                     IsSelected = true,
-                    EntryModel = new FileModelDesign()
+                    ViewModel = new FileItemViewModelDesign()
                     {
                         Path = "home/file1.txt",
                     }
                 },
-                new EntryViewModelDesign()
+                new EntryViewModelHostDesign()
                 {
                     IsSelected = false,
-                    EntryModel = new FileModelDesign()
+                    ViewModel = new FileViewModelDesign()
                     {
                         Path = "home/file2.txt",
                     }
                 },
-                new EntryViewModelDesign()
+                new EntryViewModelHostDesign()
                 {
                     IsSelected = true,
-                    EntryModel = new FileModelDesign()
+                    ViewModel = new FileViewModelDesign()
                     {
                         Path = "home/file3.txt",
                     }

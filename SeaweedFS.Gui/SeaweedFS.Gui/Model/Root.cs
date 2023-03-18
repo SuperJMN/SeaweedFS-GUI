@@ -13,8 +13,8 @@ internal class Root : IRoot
         this.seaweed = seaweed;
     }
 
-    public async Task<Result<IFolderModel>> Get(string path)
+    public async Task<Result<IFolder>> Get(string path)
     {
-        return await FolderModel.Create(path, seaweed);
+        return await Folder.Create(path, seaweed);
     }
 }

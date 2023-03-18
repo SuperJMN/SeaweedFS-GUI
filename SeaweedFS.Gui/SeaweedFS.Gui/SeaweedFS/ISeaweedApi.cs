@@ -8,7 +8,7 @@ namespace SeaweedFS.Gui.SeaweedFS;
 public interface ISeaweedApi
 {
     [Get("/{directoryPath}?pretty=y")]
-    Task<Folder> GetContents(string directoryPath);
+    Task<FolderDto> GetContents(string directoryPath);
 
     [Multipart]
     [Post("/{path}")]

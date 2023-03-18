@@ -6,9 +6,9 @@ using SeaweedFS.Gui.Model;
 
 namespace SeaweedFS.Gui.Features.Session;
 
-public class FolderViewModelDesign : IFolderViewModel
+public class FolderContentsViewModelDesign : IFolderContentsViewModel
 {
-    public FolderViewModelDesign()
+    public FolderContentsViewModelDesign()
     {
         ChildrenItems
             .ToObservableChangeSet()
@@ -19,8 +19,8 @@ public class FolderViewModelDesign : IFolderViewModel
     }
 
     public string Path { get; set; }
-    public ObservableCollection<IEntryViewModel> ChildrenItems { get; } = new();
-    public ReadOnlyObservableCollection<IEntryViewModel> Children { get; }
-    public IEntryModel EntryModel { get; set; }
+    public ObservableCollection<IEntryViewModelHost> ChildrenItems { get; } = new();
+    public ReadOnlyObservableCollection<IEntryViewModelHost> Children { get; }
+    public IEntry Entry { get; set; }
     public bool IsSelected { get; set; }
 }

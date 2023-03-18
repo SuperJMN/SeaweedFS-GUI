@@ -7,16 +7,16 @@ using DynamicData;
 
 namespace SeaweedFS.Gui.Model;
 
-class FolderModelDesign : IFolderModel
+class FolderModelDesign : IFolder
 {
-    public Task<Result> Delete(IEntryModel entryModel)
+    public Task<Result> Delete(IEntry entryModel)
     {
         throw new NotImplementedException();
     }
 
     public string Path { get; set; }
-    public IObservable<IChangeSet<IEntryModel, string>> Children { get; }
-    public Task<Result<IEntryModel>> Add(string name, MemoryStream contents, CancellationToken cancellationToken)
+    public IObservable<IChangeSet<IEntry, string>> Children { get; }
+    public Task<Result<IEntry>> Add(string name, MemoryStream contents, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
