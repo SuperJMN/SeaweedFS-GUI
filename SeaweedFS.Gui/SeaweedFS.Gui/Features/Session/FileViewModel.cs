@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using ReactiveUI;
 using SeaweedFS.Gui.Features.Transfer;
@@ -19,7 +21,7 @@ internal class FileViewModel : IFileViewModel
     private readonly IStorage storage;
     private readonly ITransferManager transferManager;
 
-    public FileViewModel(IFile file, IStorage storage, ITransferManager transferManager)
+    public FileViewModel(IFile file, IStorage storage, ITransferManager transferManager, Func<IFile, Task<Result>> onDelete)
     {
         this.file = file;
         this.storage = storage;
@@ -31,7 +33,10 @@ internal class FileViewModel : IFileViewModel
             .Subscribe();
 
         Download = download;
+        Delete = ReactiveCommand.CreateFromTask(() => onDelete(file));
     }
+
+    public IReactiveCommand Delete { get; }
 
     private void Add(ITransferViewModel streamTransfer)
     {

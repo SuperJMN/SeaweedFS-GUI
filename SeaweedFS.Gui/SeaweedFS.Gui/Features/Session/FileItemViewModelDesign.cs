@@ -6,4 +6,5 @@ internal class FileItemViewModelDesign : IFileViewModel
 {
     public string Path { get; set; }
     public IReactiveCommand Download { get; }
+    public IReactiveCommand Delete { get; }
 }

@@ -33,7 +33,7 @@
                         <Setter Property="Opacity" Value="1" />
                     </Style>
                 </DockPanel.Styles>
-                <!--<Button DockPanel.Dock="Right" Content="Delete" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Command="{Binding Delete}" />-->
+                <Button DockPanel.Dock="Right" Content="Delete" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Command="{Binding Delete}" />
                 <Button DockPanel.Dock="Right" Content="Download" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Command="{Binding Download}" />
                 <TextBlock VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding Name}" />
             </DockPanel>

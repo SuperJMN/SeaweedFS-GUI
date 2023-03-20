@@ -9,11 +9,13 @@ namespace SeaweedFS.Gui.Features.Session;
 
 public class FolderContentsViewModel : IFolderContentsViewModel
 {
+    private readonly IFolder folder;
     private readonly ITransferManager transferManager;
     private readonly Action<string> onGo;
 
     public FolderContentsViewModel(IFolder folder, ITransferManager transferManager, IStorage storage, Action<string> onGo)
     {
+        this.folder = folder;
         this.transferManager = transferManager;
         this.onGo = onGo;
         folder.Children
@@ -29,7 +31,7 @@ public class FolderContentsViewModel : IFolderContentsViewModel
         return entryModel switch
         {
             IFolder fo => new FolderViewModel(fo, onGo),
-            IFile fi => new FileViewModel(fi, storage, transferManager),
+            IFile fi => new FileViewModel(fi, storage, transferManager, folder.Delete),
             _ => throw new NotSupportedException()
         };
     }
