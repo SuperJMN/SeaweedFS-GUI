@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Reactive.Linq;
+using ReactiveUI;
+using SeaweedFS.Gui.Features.Transfer;
 
 namespace SeaweedFS.Gui.Features.Session;
 
 class SessionViewModelDesign : ISessionViewModel
 {
     public IObservable<IFolderContentsViewModel> CurrentFolder { get; set; }
+    public IReactiveCommand GoBack { get; }
+    public ITransferManager TransferManager { get; }
 
     public static SessionViewModelDesign SampleData => new()
     {

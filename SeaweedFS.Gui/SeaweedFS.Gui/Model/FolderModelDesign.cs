@@ -16,7 +16,7 @@ class FolderModelDesign : IFolder
 
     public string Path { get; set; }
     public IObservable<IChangeSet<IEntry, string>> Children { get; }
-    public Task<Result<IEntry>> Add(string name, MemoryStream contents, CancellationToken cancellationToken)
+    public Task<Result<IEntry>> Add(string name, Stream contents, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

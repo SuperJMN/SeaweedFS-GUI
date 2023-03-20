@@ -5,36 +5,63 @@
              xmlns:session="clr-namespace:SeaweedFS.Gui.Features.Session"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:svg="clr-namespace:Avalonia.Svg;assembly=Avalonia.Svg"
+             xmlns:transfer="clr-namespace:SeaweedFS.Gui.Features.Transfer"
              x:CompileBindings="True"
              x:DataType="session:ISessionViewModel"
              x:Class="SeaweedFS.Gui.Features.Session.SessionView" Design.DataContext="{x:Static session:SessionViewModelDesign.SampleData}">
 
 	<UserControl.DataTemplates>
 		<DataTemplate DataType="session:IFolderViewModel">
-            <Button Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Left">
-                <Button.Content>
-                    <DockPanel>
-                        <svg:Svg Path="/Assets/folder.svg" Height="32" DockPanel.Dock="Left" />
-                        <TextBlock Margin="4" VerticalAlignment="Center"
+			<Button Command="{Binding Go}" Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Left">
+				<Button.Content>
+					<DockPanel>
+						<svg:Svg Path="/Assets/folder.svg" Height="32" DockPanel.Dock="Left" />
+						<TextBlock Margin="4" VerticalAlignment="Center"
                                    Text="{Binding Name}" TextDecorations="Underline" />
-                    </DockPanel>
-                </Button.Content>
-            </Button>
-        </DataTemplate>
+					</DockPanel>
+				</Button.Content>
+			</Button>
+		</DataTemplate>
 
-        <DataTemplate DataType="session:IFileViewModel">
-            <TextBlock Text="{Binding Name}" />
-        </DataTemplate>
-    </UserControl.DataTemplates>
+		<DataTemplate DataType="session:IFileViewModel">
+            <DockPanel>
+                <DockPanel.Styles>
+                    <Style Selector="Button">
+                        <Setter Property="Opacity" Value="0" />
+                    </Style>
+                    <Style Selector="Button.Selected">
+                        <Setter Property="Opacity" Value="1" />
+                    </Style>
+                </DockPanel.Styles>
+                <!--<Button DockPanel.Dock="Right" Content="Delete" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Command="{Binding Delete}" />-->
+                <Button DockPanel.Dock="Right" Content="Download" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Command="{Binding Download}" />
+                <TextBlock VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding Name}" />
+            </DockPanel>
+		</DataTemplate>
+	</UserControl.DataTemplates>
 
-    <ListBox Items="{Binding CurrentFolder^.Children}">
-		<ListBox.ItemTemplate>
-			<DataTemplate DataType="session:IEntryViewModelHost">
-				<DockPanel>
-					<CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsSelected}" />
-					<ContentControl VerticalAlignment="Center" Content="{Binding ViewModel}" />
-				</DockPanel>
-			</DataTemplate>
-		</ListBox.ItemTemplate>
-	</ListBox>
+	<DockPanel>
+
+		<Expander DockPanel.Dock="Bottom" IsExpanded="True" HorizontalAlignment="Stretch" Header="File Transfers" IsVisible="{Binding TransferManager.Transfers.Count}">
+			<transfer:TransferManagerView Height="200">
+				<transfer:TransferManagerView.DataContext>
+					<Binding Path="TransferManager" />
+				</transfer:TransferManagerView.DataContext>
+			</transfer:TransferManagerView>
+		</Expander>
+
+		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+			<Button Command="{Binding GoBack}" Content="Back" />
+		</StackPanel>
+		<ListBox Items="{Binding CurrentFolder^.Children}">
+			<ListBox.ItemTemplate>
+				<DataTemplate DataType="session:IEntryViewModelHost">
+					<DockPanel>
+						<CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsSelected}" />
+						<ContentControl VerticalAlignment="Center" Content="{Binding ViewModel}" />
+					</DockPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+	</DockPanel>
 </UserControl>

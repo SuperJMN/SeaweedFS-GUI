@@ -57,13 +57,13 @@ public class Folder : IFolder
             return new Folder(new SeaweedFS.FolderDto (){ Path = entryDto.FullPath }, seaweed);
         }
 
-        return new File(entryDto.FullPath);
+        return new File(entryDto.FullPath, seaweed, entryDto.FileSize);
     }
 
     public string Path { get; set; }
     public IObservable<IChangeSet<IEntry, string>> Children { get; }
 
-    public Task<Result<IEntry>> Add(string name, MemoryStream contents, CancellationToken cancellationToken)
+    public Task<Result<IEntry>> Add(string name, Stream contents, CancellationToken cancellationToken)
     {
         var fullPath = PathUtils.Combine(Path, name);
 
@@ -71,7 +71,7 @@ public class Folder : IFolder
             .Try(() => seaweed.Upload(fullPath, new StreamPart(contents, "file"), cancellationToken))
             .Map(() =>
             {
-                var seaweedFile = new File(fullPath);
+                var seaweedFile = new File(fullPath, seaweed, contents.Length);
                 sourceCache.AddOrUpdate(seaweedFile);
                 return (IEntry)seaweedFile;
             });
