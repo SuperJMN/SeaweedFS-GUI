@@ -38,7 +38,12 @@
 	</Design.DataContext>
 
 	<ListBox Items="{Binding Transfers}">
-		<ItemsControl.ItemTemplate>
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel />
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ItemsControl.ItemTemplate>
 			<DataTemplate>
 				<Border BorderBrush="LightGray" BorderThickness="1" Padding="4">
 					<Grid ColumnDefinitions="Auto * Auto Auto" RowDefinitions="* *">
@@ -70,15 +75,16 @@
 							<Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="Cancel" Command="{Binding Cancel}" IsVisible="{Binding IsTransferring^}" />
 						</Panel>
                         <Button Command="{Binding RemoveCommand}" Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" Content="-" />
+                        
                     </Grid>
 
                     <i:Interaction.Behaviors>
-                        <ia:EventTriggerBehavior EventName="Loaded">
+                        <ia:DataTriggerBehavior Binding="{Binding $parent[ListBoxItem].IsVisible}" Value="True">
                             <ia:InvokeCommandAction Command="{Binding Start}"/>
-                        </ia:EventTriggerBehavior>
+                        </ia:DataTriggerBehavior>
                     </i:Interaction.Behaviors>
 
-				</Border>
+                </Border>
 			</DataTemplate>
 		</ItemsControl.ItemTemplate>
 	</ListBox>
