@@ -26,7 +26,7 @@ public class EntriesTests
         var sut = await Folder.Create("folder", SeaweedService(folders));
         var seaweedFolder = sut.Value;
         seaweedFolder.Children.Bind(out var contents).Subscribe();
-        var delete = await seaweedFolder.Delete(contents.First());
+        var delete = await seaweedFolder.Delete(contents.First().Name);
         delete.Should().BeSuccess();
     }
 
@@ -39,7 +39,7 @@ public class EntriesTests
         var seaweedFolder = sut.Value;
         seaweedFolder.Children.Bind(out var contents).Subscribe();
         var toDelete = contents.First();
-        await seaweedFolder.Delete(toDelete);
+        await seaweedFolder.Delete(toDelete.Name);
         contents.Should().NotContain(toDelete);
     }
 

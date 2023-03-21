@@ -9,7 +9,7 @@ namespace SeaweedFS.Gui.Model;
 
 class FolderModelDesign : IFolder
 {
-    public Task<Result> Delete(IEntry entryModel)
+    public Task<Result> Delete(string path)
     {
         throw new NotImplementedException();
     }

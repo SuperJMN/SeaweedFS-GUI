@@ -18,12 +18,12 @@ public class Folder : IFolder
     private readonly ISeaweedFS seaweed;
     private readonly SourceCache<IEntry, string> sourceCache;
 
-    public Folder(SeaweedFS.FolderDto folderDto, ISeaweedFS seaweed)
+    public Folder(FolderDto folderDto, ISeaweedFS seaweed)
     {
         this.seaweed = seaweed;
         Path = folderDto.Path;
 
-        sourceCache = new SourceCache<IEntry, string>(entry => entry.Path);
+        sourceCache = new SourceCache<IEntry, string>(entry => entry.Name);
         var initial = GetEntries(folderDto).ToObservable();
         sourceCache.PopulateFrom(initial);
 
@@ -33,14 +33,14 @@ public class Folder : IFolder
                 .ThenByAscending(p => p.Name));
     }
 
-    public Task<Result> Delete(IEntry entry)
+    public Task<Result> Delete(string name)
     {
         return Result
-            .Try(() => seaweed.Delete(entry.Path))
-            .Tap(() => sourceCache.Remove(entry.Path));
+            .Try(() => seaweed.Delete(name))
+            .Tap(() => sourceCache.Remove(name));
     }
 
-    private IEnumerable<IEntry> GetEntries(SeaweedFS.FolderDto folderDto)
+    private IEnumerable<IEntry> GetEntries(FolderDto folderDto)
     {
         if (folderDto.Entries is null)
         {
@@ -54,7 +54,7 @@ public class Folder : IFolder
     {
         if (entryDto.Chunks == null)
         {
-            return new Folder(new SeaweedFS.FolderDto (){ Path = entryDto.FullPath }, seaweed);
+            return new Folder(new FolderDto (){ Path = entryDto.FullPath }, seaweed);
         }
 
         return new File(entryDto.FullPath, seaweed, entryDto.FileSize);
@@ -63,11 +63,11 @@ public class Folder : IFolder
     public string Path { get; set; }
     public IObservable<IChangeSet<IEntry, string>> Children { get; }
 
-    public Task<Result<IEntry>> Add(string name, Stream contents, CancellationToken cancellationToken)
+    public async Task<Result<IEntry>> Add(string name, Stream contents, CancellationToken cancellationToken)
     {
         var fullPath = PathUtils.Combine(Path, name);
 
-        return Result
+        var result = await Result
             .Try(() => seaweed.Upload(fullPath, new StreamPart(contents, "file"), cancellationToken))
             .Map(() =>
             {
@@ -75,6 +75,8 @@ public class Folder : IFolder
                 sourceCache.AddOrUpdate(seaweedFile);
                 return (IEntry)seaweedFile;
             });
+
+        return result;
     }
 
     public static Task<Result<IFolder>> Create(string path, ISeaweedFS seaweedFs)

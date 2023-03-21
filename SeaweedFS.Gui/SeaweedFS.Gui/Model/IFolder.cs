@@ -9,7 +9,7 @@ namespace SeaweedFS.Gui.Model;
 
 public interface IFolder : IEntry
 {
-    Task<Result> Delete(IEntry entry);
+    Task<Result> Delete(string name);
     string Path { get; }
     IObservable<IChangeSet<IEntry, string>> Children { get; }
     Task<Result<IEntry>> Add(string name, Stream contents, CancellationToken cancellationToken);

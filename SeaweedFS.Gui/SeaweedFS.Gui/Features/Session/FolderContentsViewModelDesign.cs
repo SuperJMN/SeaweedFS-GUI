@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using DynamicData;
 using DynamicData.Binding;
+using ReactiveUI;
 using SeaweedFS.Gui.Model;
 
 namespace SeaweedFS.Gui.Features.Session;
@@ -21,6 +22,7 @@ public class FolderContentsViewModelDesign : IFolderContentsViewModel
     public string Path { get; set; }
     public ObservableCollection<IEntryViewModelHost> ChildrenItems { get; } = new();
     public ReadOnlyObservableCollection<IEntryViewModelHost> Children { get; }
+    public IReactiveCommand Upload { get; }
     public IEntry Entry { get; set; }
     public bool IsSelected { get; set; }
 }

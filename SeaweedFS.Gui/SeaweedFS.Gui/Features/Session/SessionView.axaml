@@ -24,19 +24,19 @@
 		</DataTemplate>
 
 		<DataTemplate DataType="session:IFileViewModel">
-            <DockPanel>
-                <DockPanel.Styles>
-                    <Style Selector="Button">
-                        <Setter Property="Opacity" Value="0" />
-                    </Style>
-                    <Style Selector="Button.Selected">
-                        <Setter Property="Opacity" Value="1" />
-                    </Style>
-                </DockPanel.Styles>
-                <Button DockPanel.Dock="Right" Content="Delete" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Command="{Binding Delete}" />
-                <Button DockPanel.Dock="Right" Content="Download" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Command="{Binding Download}" />
-                <TextBlock VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding Name}" />
-            </DockPanel>
+			<DockPanel>
+				<DockPanel.Styles>
+					<Style Selector="Button">
+						<Setter Property="Opacity" Value="0" />
+					</Style>
+					<Style Selector="Button.Selected">
+						<Setter Property="Opacity" Value="1" />
+					</Style>
+				</DockPanel.Styles>
+				<Button DockPanel.Dock="Right" Content="Delete" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Command="{Binding Delete}" />
+				<Button DockPanel.Dock="Right" Content="Download" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Command="{Binding Download}" />
+				<TextBlock VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding Name}" />
+			</DockPanel>
 		</DataTemplate>
 	</UserControl.DataTemplates>
 
@@ -53,15 +53,20 @@
 		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
 			<Button Command="{Binding GoBack}" Content="Back" />
 		</StackPanel>
-		<ListBox Items="{Binding CurrentFolder^.Children}">
-			<ListBox.ItemTemplate>
-				<DataTemplate DataType="session:IEntryViewModelHost">
-					<DockPanel>
-						<CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsSelected}" />
-						<ContentControl VerticalAlignment="Center" Content="{Binding ViewModel}" />
-					</DockPanel>
-				</DataTemplate>
-			</ListBox.ItemTemplate>
-		</ListBox>
+		<DockPanel DataContext="{Binding CurrentFolder^}">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <Button Command="{Binding Upload}" Content="Upload" />
+            </StackPanel>
+            <ListBox Items="{Binding Children}">
+				<ListBox.ItemTemplate>
+					<DataTemplate DataType="session:IEntryViewModelHost">
+						<DockPanel>
+							<CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsSelected}" />
+							<ContentControl VerticalAlignment="Center" Content="{Binding ViewModel}" />
+						</DockPanel>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</DockPanel>
 	</DockPanel>
 </UserControl>

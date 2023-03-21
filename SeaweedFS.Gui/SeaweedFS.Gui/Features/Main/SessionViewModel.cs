@@ -8,6 +8,7 @@ using CSharpFunctionalExtensions;
 using MoreLinq;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Refit;
 using SeaweedFS.Gui.Features.Transfer;
 using SeaweedFS.Gui.SeaweedFS;
 using Zafiro.Avalonia;
@@ -92,7 +93,7 @@ public class SessionViewModel : ViewModelBase, IMainViewModel
     private ITransferViewModel GetTransfer(IStorable s)
     {
         var name = s.Name;
-        return new Upload(name, s.OpenRead, (streamPart, ct) => seaweed.Upload(History.CurrentFolder == "" ? name : History.CurrentFolder + name, streamPart, ct), TransferManager.Remove);
+        return new Upload(name, s.OpenRead, (stream, ct) => Result.Try(() => seaweed.Upload(History.CurrentFolder == "" ? name : History.CurrentFolder + name, new StreamPart(stream, "file"), ct)), TransferManager.Remove);
     }
 
     private string GetFolderName()
