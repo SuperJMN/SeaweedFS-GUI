@@ -79,6 +79,13 @@ public class Folder : IFolder
         return result;
     }
 
+    public Task<Result> CreateFolder(string path)
+    {
+        return Result
+            .Try(() => seaweed.CreateFolder(path))
+            .Tap(() => sourceCache.AddOrUpdate(new Folder(new FolderDto { Path = path }, seaweed)));
+    }
+
     public static Task<Result<IFolder>> Create(string path, ISeaweedFS seaweedFs)
     {
         return Result

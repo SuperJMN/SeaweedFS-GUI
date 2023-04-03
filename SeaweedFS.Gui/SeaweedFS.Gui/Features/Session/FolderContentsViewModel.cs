@@ -6,23 +6,24 @@ using System.Reactive.Linq;
 using DynamicData;
 using MoreLinq;
 using ReactiveUI;
-using SeaweedFS.Gui.Features.Main;
+using ReactiveUI.Fody.Helpers;
 using SeaweedFS.Gui.Features.Transfer;
 using SeaweedFS.Gui.Model;
 using Zafiro.Avalonia;
+using Zafiro.Core.Mixins;
 using Zafiro.FileSystem;
 using Zafiro.UI;
 
 namespace SeaweedFS.Gui.Features.Session;
 
-public class FolderContentsViewModel : IFolderContentsViewModel
+public class FolderContentsViewModel : ViewModelBase, IFolderContentsViewModel
 {
     private readonly IFolder folder;
     private readonly ITransferManager transferManager;
     private readonly IStorage storage;
     private readonly Action<string> onGo;
 
-    public FolderContentsViewModel(IFolder folder, ITransferManager transferManager, IStorage storage, Action<string> onGo)
+    public FolderContentsViewModel(IFolder folder, INotificationService notifyNotificationService, ITransferManager transferManager, IStorage storage, Action<string> onGo)
     {
         this.folder = folder;
         this.transferManager = transferManager;
@@ -41,7 +42,19 @@ public class FolderContentsViewModel : IFolderContentsViewModel
             .Subscribe();
 
         Upload = upload;
+
+        var createFolder = ReactiveCommand.CreateFromTask(() => folder.CreateFolder(PathUtils.Combine(this.folder.Path, NewFolderName!)), this.WhenAnyValue(x => x.NewFolderName).NullOrWhitespace().Not());
+        createFolder.WhereFailure()
+            .Do(notifyNotificationService.ShowMessage)
+            .Subscribe();
+
+        CreateFolder = createFolder;
     }
+
+    public IReactiveCommand CreateFolder { get; }
+
+    [Reactive]
+    public string? NewFolderName { get; set; }
 
     private IObservable<IEnumerable<ITransferViewModel>> DoUpload()
     {

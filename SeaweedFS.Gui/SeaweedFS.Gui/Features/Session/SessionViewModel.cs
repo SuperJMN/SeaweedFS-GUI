@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
-using CSharpFunctionalExtensions.ValueTasks;
 using ReactiveUI;
 using SeaweedFS.Gui.Features.Main;
 using SeaweedFS.Gui.Features.Transfer;
@@ -21,7 +20,7 @@ public class SessionViewModel : ISessionViewModel
         SetCurrentFolder = ReactiveCommand.CreateFromTask<string, Result<IFolderContentsViewModel>>(async s =>
         {
             var result = await root.Get(s);
-            var map = result.Map(model => (IFolderContentsViewModel)new FolderContentsViewModel(model, TransferManager, storage, path => AddressHistory.CurrentFolder = path));
+            var map = result.Map(model => (IFolderContentsViewModel)new FolderContentsViewModel(model, notificationService, TransferManager, storage, path => AddressHistory.CurrentFolder = path));
             return map;
         });
 

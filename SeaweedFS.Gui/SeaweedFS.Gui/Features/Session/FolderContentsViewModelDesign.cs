@@ -23,6 +23,8 @@ public class FolderContentsViewModelDesign : IFolderContentsViewModel
     public ObservableCollection<IEntryViewModelHost> ChildrenItems { get; } = new();
     public ReadOnlyObservableCollection<IEntryViewModelHost> Children { get; }
     public IReactiveCommand Upload { get; }
+    public IReactiveCommand CreateFolder { get; }
+    public string? NewFolderName { get; set; }
     public IEntry Entry { get; set; }
     public bool IsSelected { get; set; }
 }

@@ -56,6 +56,22 @@
 		<DockPanel DataContext="{Binding CurrentFolder^}">
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <Button Command="{Binding Upload}" Content="Upload" />
+                <Button Content="New folder">
+                    <Button.Flyout>
+                        <Flyout Placement="BottomEdgeAlignedLeft">
+                            <DockPanel IsEnabled="{Binding !CreateFolder.IsExecuting^}">
+                                <Panel DockPanel.Dock="Right" Margin="4">
+                                    <Button Content="Create"
+                                            Command="{Binding CreateFolder}" />
+                                    <ProgressBar MinWidth="10" IsIndeterminate="True" IsVisible="{Binding CreateFolder.IsExecuting^}" />
+                                </Panel>
+                                <TextBox VerticalAlignment="Center" Watermark="Folder name"
+                                         Width="120"
+                                         Text="{Binding NewFolderName, Mode=TwoWay}" />
+                            </DockPanel>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
             </StackPanel>
             <ListBox Items="{Binding Children}">
 				<ListBox.ItemTemplate>

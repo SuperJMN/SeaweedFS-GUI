@@ -20,4 +20,9 @@ class FolderModelDesign : IFolder
     {
         throw new NotImplementedException();
     }
+
+    public Task<Result> CreateFolder(string path)
+    {
+        throw new NotImplementedException();
+    }
 }

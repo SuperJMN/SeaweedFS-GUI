@@ -56,7 +56,7 @@ public class SessionViewModel : ViewModelBase, IMainViewModel
                 .Timeout(TimeSpan.FromSeconds(5))
                 .Select(_ => Result.Success())
                 .Catch((Exception e) => Observable.Return(Result.Failure(e.Message))),
-            this.WhenAnyValue(x => x.NewFolderName).SelectNotEmpty());
+            this.WhenAnyValue(x => x.NewFolderName).NotNullOrEmpty());
 
         createFolder.WhereFailure()
             .Merge(contents.WhereFailure())

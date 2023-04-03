@@ -7,4 +7,6 @@ public interface IFolderContentsViewModel
 {
     ReadOnlyObservableCollection<IEntryViewModelHost> Children { get; }
     IReactiveCommand Upload { get; }
+    IReactiveCommand CreateFolder { get; }
+    string? NewFolderName { get; set; }
 }
