@@ -9,7 +9,7 @@ namespace SeaweedFS.Gui.Model;
 
 class FolderModelDesign : IFolder
 {
-    public Task<Result> Delete(string path)
+    public Task<Result> DeleteFile(string path)
     {
         throw new NotImplementedException();
     }
@@ -21,7 +21,12 @@ class FolderModelDesign : IFolder
         throw new NotImplementedException();
     }
 
-    public Task<Result> CreateFolder(string path)
+    public Task<Result> CreateFolder(string name)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Result> DeleteFolder(string name)
     {
         throw new NotImplementedException();
     }

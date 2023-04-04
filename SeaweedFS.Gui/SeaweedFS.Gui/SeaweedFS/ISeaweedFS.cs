@@ -11,5 +11,6 @@ public interface ISeaweedFS
     Task Upload(string path, StreamPart stream, CancellationToken cancellationToken);
     Task CreateFolder(string directoryPath);
     Task<Stream> GetFileContent(string filePath);
-    Task Delete(string filePath);
+    Task DeleteFile(string filePath);
+    Task DeleteFolder(string directoryPath);
 }

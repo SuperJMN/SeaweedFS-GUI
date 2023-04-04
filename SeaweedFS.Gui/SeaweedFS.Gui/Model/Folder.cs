@@ -21,7 +21,7 @@ public class Folder : IFolder
     public Folder(FolderDto folderDto, ISeaweedFS seaweed)
     {
         this.seaweed = seaweed;
-        Path = folderDto.Path;
+        Path = folderDto.Path + "/";
 
         sourceCache = new SourceCache<IEntry, string>(entry => entry.Name);
         var initial = GetEntries(folderDto).ToObservable();
@@ -33,10 +33,10 @@ public class Folder : IFolder
                 .ThenByAscending(p => p.Name));
     }
 
-    public Task<Result> Delete(string name)
+    public Task<Result> DeleteFile(string name)
     {
         return Result
-            .Try(() => seaweed.Delete(name))
+            .Try(() => seaweed.DeleteFile(PathUtils.Combine(Path, name)))
             .Tap(() => sourceCache.Remove(name));
     }
 
@@ -60,7 +60,7 @@ public class Folder : IFolder
         return new File(entryDto.FullPath, seaweed, entryDto.FileSize);
     }
 
-    public string Path { get; set; }
+    public string Path { get; }
     public IObservable<IChangeSet<IEntry, string>> Children { get; }
 
     public async Task<Result<IEntry>> Add(string name, Stream contents, CancellationToken cancellationToken)
@@ -79,11 +79,18 @@ public class Folder : IFolder
         return result;
     }
 
-    public Task<Result> CreateFolder(string path)
+    public Task<Result> CreateFolder(string name)
     {
         return Result
-            .Try(() => seaweed.CreateFolder(path))
-            .Tap(() => sourceCache.AddOrUpdate(new Folder(new FolderDto { Path = path }, seaweed)));
+            .Try(() => seaweed.CreateFolder(PathUtils.Combine(Path, name)))
+            .Tap(() => sourceCache.AddOrUpdate(new Folder(new FolderDto { Path = PathUtils.Combine(Path, name) }, seaweed)));
+    }
+
+    public Task<Result> DeleteFolder(string name)
+    {
+        return Result
+            .Try(() => seaweed.DeleteFolder(PathUtils.Combine(Path, name)))
+            .Tap(() => sourceCache.Remove(name));
     }
 
     public static Task<Result<IFolder>> Create(string path, ISeaweedFS seaweedFs)

@@ -18,5 +18,8 @@ public interface ISeaweedApi
     Task CreateFolder(string directoryPath);
 
     [Delete("/{filePath}")]
-    Task Delete(string filePath);
+    Task DeleteFile(string filePath);
+
+    [Delete("/{directoryPath}?recursive=true")]
+    Task DeleteFolder(string directoryPath);
 }

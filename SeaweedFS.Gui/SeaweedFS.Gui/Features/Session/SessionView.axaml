@@ -10,32 +10,45 @@
              x:DataType="session:ISessionViewModel"
              x:Class="SeaweedFS.Gui.Features.Session.SessionView" Design.DataContext="{x:Static session:SessionViewModelDesign.SampleData}">
 
+	<UserControl.Styles>
+
+		<Style Selector="Panel.UnSelected">
+			<Setter Property="Opacity" Value="0" />
+		</Style>
+		<Style Selector="Panel.Selected">
+			<Setter Property="Opacity" Value="1" />
+		</Style>
+
+	</UserControl.Styles>
+
 	<UserControl.DataTemplates>
+
 		<DataTemplate DataType="session:IFolderViewModel">
-			<Button Command="{Binding Go}" Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Left">
-				<Button.Content>
-					<DockPanel>
-						<svg:Svg Path="/Assets/folder.svg" Height="32" DockPanel.Dock="Left" />
-						<TextBlock Margin="4" VerticalAlignment="Center"
-                                   Text="{Binding Name}" TextDecorations="Underline" />
-					</DockPanel>
-				</Button.Content>
-			</Button>
+			<DockPanel>
+
+                <StackPanel DockPanel.Dock="Right" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Classes.UnSelected="{Binding !$parent[ListBoxItem].IsSelected}" >
+                    <Button Content="Delete" Command="{Binding Delete}" />
+                </StackPanel>
+
+                <Button Command="{Binding Go}" Background="Transparent" BorderBrush="Transparent"
+                        HorizontalAlignment="Left">
+					<Button.Content>
+						<DockPanel>
+							<svg:Svg Path="/Assets/folder.svg" Height="32" DockPanel.Dock="Left" />
+							<TextBlock Margin="4" VerticalAlignment="Center" Text="{Binding Name}" TextDecorations="Underline" />
+						</DockPanel>
+					</Button.Content>
+				</Button>
+			</DockPanel>
 		</DataTemplate>
 
 		<DataTemplate DataType="session:IFileViewModel">
 			<DockPanel>
-				<DockPanel.Styles>
-					<Style Selector="Button">
-						<Setter Property="Opacity" Value="0" />
-					</Style>
-					<Style Selector="Button.Selected">
-						<Setter Property="Opacity" Value="1" />
-					</Style>
-				</DockPanel.Styles>
-				<Button DockPanel.Dock="Right" Content="Delete" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Command="{Binding Delete}" />
-				<Button DockPanel.Dock="Right" Content="Download" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Command="{Binding Download}" />
-				<TextBlock VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding Name}" />
+				<StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}" Classes.UnSelected="{Binding !$parent[ListBoxItem].IsSelected}" >
+					<Button Content="Delete" Command="{Binding Delete}" />
+					<Button Content="Download" Command="{Binding Download}" />
+				</StackPanel>
+				<TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
 			</DockPanel>
 		</DataTemplate>
 	</UserControl.DataTemplates>
@@ -54,26 +67,26 @@
 			<Button Command="{Binding GoBack}" Content="Back" />
 		</StackPanel>
 		<DockPanel DataContext="{Binding CurrentFolder^}">
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <Button Command="{Binding Upload}" Content="Upload" />
-                <Button Content="New folder">
-                    <Button.Flyout>
-                        <Flyout Placement="BottomEdgeAlignedLeft">
-                            <DockPanel IsEnabled="{Binding !CreateFolder.IsExecuting^}">
-                                <Panel DockPanel.Dock="Right" Margin="4">
-                                    <Button Content="Create"
+			<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+				<Button Command="{Binding Upload}" Content="Upload" />
+				<Button Content="New folder">
+					<Button.Flyout>
+						<Flyout Placement="BottomEdgeAlignedLeft">
+							<DockPanel IsEnabled="{Binding !CreateFolder.IsExecuting^}">
+								<Panel DockPanel.Dock="Right" Margin="4">
+									<Button Content="Create"
                                             Command="{Binding CreateFolder}" />
-                                    <ProgressBar MinWidth="10" IsIndeterminate="True" IsVisible="{Binding CreateFolder.IsExecuting^}" />
-                                </Panel>
-                                <TextBox VerticalAlignment="Center" Watermark="Folder name"
+									<ProgressBar MinWidth="10" IsIndeterminate="True" IsVisible="{Binding CreateFolder.IsExecuting^}" />
+								</Panel>
+								<TextBox VerticalAlignment="Center" Watermark="Folder name"
                                          Width="120"
                                          Text="{Binding NewFolderName, Mode=TwoWay}" />
-                            </DockPanel>
-                        </Flyout>
-                    </Button.Flyout>
-                </Button>
-            </StackPanel>
-            <ListBox Items="{Binding Children}">
+							</DockPanel>
+						</Flyout>
+					</Button.Flyout>
+				</Button>
+			</StackPanel>
+			<ListBox Items="{Binding Children}">
 				<ListBox.ItemTemplate>
 					<DataTemplate DataType="session:IEntryViewModelHost">
 						<DockPanel>

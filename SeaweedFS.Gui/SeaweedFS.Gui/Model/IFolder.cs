@@ -11,7 +11,8 @@ public interface IFolder : IEntry
 {
     string Path { get; }
     IObservable<IChangeSet<IEntry, string>> Children { get; }
-    Task<Result> Delete(string name);
+    Task<Result> DeleteFile(string name);
     Task<Result<IEntry>> Add(string name, Stream contents, CancellationToken cancellationToken);
-    Task<Result> CreateFolder(string path);
+    Task<Result> CreateFolder(string name);
+    Task<Result> DeleteFolder(string name);
 }

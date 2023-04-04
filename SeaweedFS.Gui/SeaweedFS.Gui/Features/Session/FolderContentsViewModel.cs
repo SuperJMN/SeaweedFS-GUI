@@ -43,7 +43,7 @@ public class FolderContentsViewModel : ViewModelBase, IFolderContentsViewModel
 
         Upload = upload;
 
-        var createFolder = ReactiveCommand.CreateFromTask(() => folder.CreateFolder(PathUtils.Combine(this.folder.Path, NewFolderName!)), this.WhenAnyValue(x => x.NewFolderName).NullOrWhitespace().Not());
+        var createFolder = ReactiveCommand.CreateFromTask(() => folder.CreateFolder(NewFolderName!), this.WhenAnyValue(x => x.NewFolderName).NullOrWhitespace().Not());
         createFolder.WhereFailure()
             .Do(notifyNotificationService.ShowMessage)
             .Subscribe();
@@ -79,8 +79,8 @@ public class FolderContentsViewModel : ViewModelBase, IFolderContentsViewModel
     {
         return entryModel switch
         {
-            IFolder fo => new FolderViewModel(fo, onGo),
-            IFile fi => new FileViewModel(fi, storage, transferManager, file => folder.Delete(file.Name)),
+            IFolder fo => new FolderViewModel(fo, onGo, s => folder.DeleteFolder(s)),
+            IFile fi => new FileViewModel(fi, storage, transferManager, file => folder.DeleteFile(file.Name)),
             _ => throw new NotSupportedException()
         };
     }

@@ -29,7 +29,12 @@ internal class SeaweedFSClient : ISeaweedFS
 
     public Task CreateFolder(string directoryPath)
     {
-        return inner.CreateFolder(directoryPath + "/");
+        return inner.CreateFolder(directoryPath[1..] + "/");
+    }
+
+    public Task DeleteFolder(string directoryPath)
+    {
+        return inner.DeleteFolder(directoryPath);
     }
 
     public Task<Stream> GetFileContent(string filePath)
@@ -37,8 +42,8 @@ internal class SeaweedFSClient : ISeaweedFS
         return httpClient.GetStreamAsync(filePath);
     }
 
-    public Task Delete(string filePath)
+    public Task DeleteFile(string filePath)
     {
-        return inner.Delete(filePath);
+        return inner.DeleteFile(filePath);
     }
 }

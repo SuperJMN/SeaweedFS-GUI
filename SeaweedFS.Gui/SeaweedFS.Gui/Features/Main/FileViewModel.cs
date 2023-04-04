@@ -35,7 +35,7 @@ public class FileViewModel : EntryViewModel, IFileViewModel
             .Subscribe();
 
         Download = download;
-        Delete = ReactiveCommand.CreateFromObservable(() => Observable.FromAsync(() => seaweed.Delete(path))
+        Delete = ReactiveCommand.CreateFromObservable(() => Observable.FromAsync(() => seaweed.DeleteFile(path))
             .Timeout(TimeSpan.FromSeconds(5))
             .Select(_ => Result.Success())
             .Catch((Exception e) => Observable.Return(Result.Failure(e.Message))));
