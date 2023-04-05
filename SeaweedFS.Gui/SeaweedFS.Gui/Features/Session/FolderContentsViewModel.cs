@@ -29,6 +29,7 @@ public class FolderContentsViewModel : ViewModelBase, IFolderContentsViewModel
         this.transferManager = transferManager;
         this.storage = storage;
         this.onGo = onGo;
+
         folder.Children
             .Transform(x => (IEntryViewModelHost)new EntryViewModelHost(GetViewModelModel(x, storage)))
             .Bind(out var children)
