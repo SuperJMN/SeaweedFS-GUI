@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System.Reactive;
+using System.Windows.Input;
+using CSharpFunctionalExtensions;
 using ReactiveUI;
 
 namespace SeaweedFS.Gui.Features.Session;
@@ -7,5 +9,5 @@ internal class FolderItemViewModelDesign : IFolderViewModel
 {
     public string Path { get; set; }
     public ICommand Go { get; }
-    public IReactiveCommand Delete { get; }
+    public ReactiveCommand<Unit, Result> Delete { get; }
 }

@@ -1,7 +1,10 @@
-﻿namespace SeaweedFS.Gui.Features.Session;
+﻿using System.ComponentModel;
 
-public interface IEntryViewModelHost
+namespace SeaweedFS.Gui.Features.Session;
+
+public interface IEntryViewModelHost : INotifyPropertyChanged
 {
     public IEntryViewModel ViewModel { get; set; }
+
     public bool IsSelected { get; set; }
 }

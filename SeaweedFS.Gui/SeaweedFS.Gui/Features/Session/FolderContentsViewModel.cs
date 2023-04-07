@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
+using CSharpFunctionalExtensions;
 using DynamicData;
 using MoreLinq;
 using ReactiveUI;
@@ -22,6 +24,7 @@ public class FolderContentsViewModel : ViewModelBase, IFolderContentsViewModel
     private readonly ITransferManager transferManager;
     private readonly IStorage storage;
     private readonly Action<string> onGo;
+    private readonly ReadOnlyObservableCollection<IEntryViewModelHost> selectables;
 
     public FolderContentsViewModel(IFolder folder, INotificationService notifyNotificationService, ITransferManager transferManager, IStorage storage, Action<string> onGo)
     {
@@ -30,13 +33,24 @@ public class FolderContentsViewModel : ViewModelBase, IFolderContentsViewModel
         this.storage = storage;
         this.onGo = onGo;
 
-        folder.Children
-            .Transform(x => (IEntryViewModelHost)new EntryViewModelHost(GetViewModelModel(x, storage)))
-            .Bind(out var children)
+        var itemChanges = folder
+            .Children
+            .Transform(x => (IEntryViewModelHost) new EntryViewModelHost(GetEntryViewModel(x, storage)))
+            .Replay()
+            .RefCount();
+
+        itemChanges
+            .Bind(out selectables)
             .Subscribe();
 
-        Children = children;
-        
+        var selectedChanges = itemChanges
+            .AutoRefresh(x => x.IsSelected)
+            .Filter(x => x.IsSelected);
+
+        selectedChanges
+            .Bind(out var selection)
+            .Subscribe();
+
         var upload = ReactiveCommand.CreateFromObservable(DoUpload);
         upload
             .Do(transfers => transfers.ForEach(transferManager.Add))
@@ -49,8 +63,25 @@ public class FolderContentsViewModel : ViewModelBase, IFolderContentsViewModel
             .Do(notifyNotificationService.ShowMessage)
             .Subscribe();
 
+        DeleteSelected = ReactiveCommand.CreateFromObservable(() =>
+        {
+            return selection
+                .ToObservable()
+                .SelectMany(x => x.ViewModel.Delete.Execute())
+                .ToList();
+        }, selectedChanges
+            .ToCollection()
+            .Select(x => x.Any()));
+
+        DeleteSelected.Select(x => x.WhereFailure())
+            .Any()
+            .Do(_ => notifyNotificationService.ShowMessage("Some elements could not be deleted"))
+            .Subscribe();
+
         CreateFolder = createFolder;
     }
+
+    public ReactiveCommand<Unit, IList<Result>> DeleteSelected { get; }
 
     public IReactiveCommand CreateFolder { get; }
 
@@ -76,7 +107,7 @@ public class FolderContentsViewModel : ViewModelBase, IFolderContentsViewModel
     
     public IReactiveCommand Upload { get; }
 
-    private IEntryViewModel GetViewModelModel(IEntry entryModel, IStorage storage)
+    private IEntryViewModel GetEntryViewModel(IEntry entryModel, IStorage storage)
     {
         return entryModel switch
         {
@@ -86,5 +117,5 @@ public class FolderContentsViewModel : ViewModelBase, IFolderContentsViewModel
         };
     }
 
-    public ReadOnlyObservableCollection<IEntryViewModelHost> Children { get; }
+    public ReadOnlyObservableCollection<IEntryViewModelHost> Children => selectables;
 }

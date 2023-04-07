@@ -1,4 +1,7 @@
-﻿namespace SeaweedFS.Gui.Model;
+﻿using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
+
+namespace SeaweedFS.Gui.Model;
 
 public interface IEntry
 {

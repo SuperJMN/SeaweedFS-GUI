@@ -20,6 +20,7 @@ internal class FileViewModel : IFileViewModel
     private readonly IFile file;
     private readonly IStorage storage;
     private readonly ITransferManager transferManager;
+    private ReactiveCommand<Unit, Result> delete;
 
     public FileViewModel(IFile file, IStorage storage, ITransferManager transferManager, Func<IFile, Task<Result>> onDelete)
     {
@@ -61,4 +62,6 @@ internal class FileViewModel : IFileViewModel
 
     public string Path { get; }
     public IReactiveCommand Download { get; }
+
+    ReactiveCommand<Unit, Result> IEntryViewModel.Delete => delete;
 }

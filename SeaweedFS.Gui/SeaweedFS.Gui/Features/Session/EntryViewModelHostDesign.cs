@@ -1,6 +1,8 @@
-﻿namespace SeaweedFS.Gui.Features.Session;
+﻿using ReactiveUI;
 
-public class EntryViewModelHostDesign : IEntryViewModelHost
+namespace SeaweedFS.Gui.Features.Session;
+
+public class EntryViewModelHostDesign : ReactiveObject, IEntryViewModelHost
 {
     public IEntryViewModel ViewModel { get; set; }
     public bool IsSelected { get; set; }

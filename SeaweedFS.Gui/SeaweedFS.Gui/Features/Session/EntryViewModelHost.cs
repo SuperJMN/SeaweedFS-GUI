@@ -1,14 +1,19 @@
 ﻿using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace SeaweedFS.Gui.Features.Session;
 
-class EntryViewModelHost : ReactiveObject, IEntryViewModelHost
+public class EntryViewModelHost : ReactiveObject, IEntryViewModelHost
 {
+    private bool isSelected = true;
+
     public EntryViewModelHost(IEntryViewModel viewModel)
     {
         ViewModel = viewModel;
     }
 
     public IEntryViewModel ViewModel { get; set; }
+
+    [Reactive]
     public bool IsSelected { get; set; }
 }

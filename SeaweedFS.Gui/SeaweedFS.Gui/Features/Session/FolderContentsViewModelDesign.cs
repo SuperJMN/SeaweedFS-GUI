@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reactive;
+using CSharpFunctionalExtensions;
 using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
@@ -25,6 +28,7 @@ public class FolderContentsViewModelDesign : IFolderContentsViewModel
     public IReactiveCommand Upload { get; }
     public IReactiveCommand CreateFolder { get; }
     public string? NewFolderName { get; set; }
+    public ReactiveCommand<Unit, IList<Result>> DeleteSelected { get; }
     public IEntry Entry { get; set; }
     public bool IsSelected { get; set; }
 }

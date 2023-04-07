@@ -5,12 +5,13 @@
              xmlns:session="clr-namespace:SeaweedFS.Gui.Features.Session"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SeaweedFS.Gui.Features.Session.FolderContentsView"
-             x:DataType="session:FolderContentsViewModel"
+             x:DataType="session:IFolderContentsViewModel"
              x:CompileBindings="True">
   
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <Button Command="{Binding Upload}" Content="Upload" />
+            <Button Command="{Binding DeleteSelected}" Content="Deleted selected" />
             <Button Content="New folder">
                 <Button.Flyout>
                     <Flyout Placement="BottomEdgeAlignedLeft">
@@ -32,7 +33,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="session:IEntryViewModelHost">
                     <DockPanel>
-                        <CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsSelected}" />
+                        <CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
                         <ContentControl VerticalAlignment="Center" Content="{Binding ViewModel}" />
                     </DockPanel>
                 </DataTemplate>
