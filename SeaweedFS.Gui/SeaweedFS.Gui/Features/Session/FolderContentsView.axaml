@@ -7,38 +7,44 @@
              x:Class="SeaweedFS.Gui.Features.Session.FolderContentsView"
              x:DataType="session:IFolderContentsViewModel"
              x:CompileBindings="True">
-  
-    <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-            <Button Command="{Binding Upload}" Content="Upload" />
-            <Button Command="{Binding DeleteSelected}" Content="Deleted selected" />
-            <Button Content="New folder">
-                <Button.Flyout>
-                    <Flyout Placement="BottomEdgeAlignedLeft">
-                        <DockPanel IsEnabled="{Binding !CreateFolder.IsExecuting^}">
-                            <Panel DockPanel.Dock="Right" Margin="4">
-                                <Button Content="Create"
-                                        Command="{Binding CreateFolder}" />
-                                <ProgressBar MinWidth="10" IsIndeterminate="True" IsVisible="{Binding CreateFolder.IsExecuting^}" />
-                            </Panel>
-                            <TextBox VerticalAlignment="Center" Watermark="Folder name"
-                                     Width="120"
-                                     Text="{Binding NewFolderName, Mode=TwoWay}" />
-                        </DockPanel>
-                    </Flyout>
-                </Button.Flyout>
-            </Button>
-        </StackPanel>
-        <ListBox Items="{Binding Children}">
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="session:IEntryViewModelHost">
-                    <DockPanel>
-                        <CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
-                        <ContentControl VerticalAlignment="Center" Content="{Binding ViewModel}" />
-                    </DockPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-    </DockPanel>
+
+	<DockPanel>
+		<DockPanel DockPanel.Dock="Top">
+			<ToggleButton DockPanel.Dock="Right" Content="Multiselection" IsChecked="{Binding IsMultiselectionEnabled}" />
+            <Panel>
+				<StackPanel  Orientation="Horizontal" IsVisible="{Binding !IsMultiselectionEnabled}">
+					<Button Command="{Binding Upload}" Content="Upload" />
+					<Button Content="New folder">
+						<Button.Flyout>
+							<Flyout Placement="BottomEdgeAlignedLeft">
+								<DockPanel IsEnabled="{Binding !CreateFolder.IsExecuting^}">
+									<Panel DockPanel.Dock="Right" Margin="4">
+										<Button Content="Create"
+                                                Command="{Binding CreateFolder}" />
+										<ProgressBar MinWidth="10" IsIndeterminate="True"
+                                                     IsVisible="{Binding CreateFolder.IsExecuting^}" />
+									</Panel>
+									<TextBox VerticalAlignment="Center" Watermark="Folder name"
+                                             Width="120"
+                                             Text="{Binding NewFolderName, Mode=TwoWay}" />
+								</DockPanel>
+							</Flyout>
+						</Button.Flyout>
+					</Button>
+				</StackPanel>
+				<Button Command="{Binding DeleteSelected}" Content="Deleted selected" IsVisible="{Binding IsMultiselectionEnabled}" />
+			</Panel>
+        </DockPanel>
+		<ListBox Items="{Binding Children}">
+			<ListBox.ItemTemplate>
+				<DataTemplate DataType="session:IEntryViewModelHost">
+					<DockPanel>
+						<CheckBox IsVisible="{Binding IsSelectionEnabled^}" DockPanel.Dock="Left" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+						<ContentControl VerticalAlignment="Center" Content="{Binding ViewModel}" />
+					</DockPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+	</DockPanel>
 
 </UserControl>

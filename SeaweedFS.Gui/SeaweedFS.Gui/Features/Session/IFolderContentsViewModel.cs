@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using CSharpFunctionalExtensions;
@@ -13,4 +14,5 @@ public interface IFolderContentsViewModel
     IReactiveCommand CreateFolder { get; }
     string? NewFolderName { get; set; }
     ReactiveCommand<Unit, IList<Result>> DeleteSelected { get; }
+    bool IsMultiselectionEnabled { get; set; }
 }

@@ -35,7 +35,7 @@ public class FolderContentsViewModel : ViewModelBase, IFolderContentsViewModel
 
         var itemChanges = folder
             .Children
-            .Transform(x => (IEntryViewModelHost) new EntryViewModelHost(GetEntryViewModel(x, storage)))
+            .Transform(x => (IEntryViewModelHost) new EntryViewModelHost(this, GetEntryViewModel(x, storage)))
             .Replay()
             .RefCount();
 
@@ -82,6 +82,9 @@ public class FolderContentsViewModel : ViewModelBase, IFolderContentsViewModel
     }
 
     public ReactiveCommand<Unit, IList<Result>> DeleteSelected { get; }
+
+    [Reactive]
+    public bool IsMultiselectionEnabled { get; set; }
 
     public IReactiveCommand CreateFolder { get; }
 

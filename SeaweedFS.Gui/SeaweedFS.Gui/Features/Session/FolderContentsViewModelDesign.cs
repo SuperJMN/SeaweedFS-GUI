@@ -29,6 +29,7 @@ public class FolderContentsViewModelDesign : IFolderContentsViewModel
     public IReactiveCommand CreateFolder { get; }
     public string? NewFolderName { get; set; }
     public ReactiveCommand<Unit, IList<Result>> DeleteSelected { get; }
+    public bool IsMultiselectionEnabled { get; set; }
     public IEntry Entry { get; set; }
     public bool IsSelected { get; set; }
 }
