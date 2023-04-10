@@ -39,29 +39,7 @@ public class Folder : IFolder
             .Try(() => seaweed.DeleteFile(PathUtils.Combine(Path, name)))
             .Tap(() => sourceCache.Remove(name));
     }
-
-    private IEnumerable<IEntry> GetEntries(FolderDto folderDto)
-    {
-        if (folderDto.Entries is null)
-        {
-            return Enumerable.Empty<IEntry>();
-        }
-
-        return folderDto.Entries.Select(GetEntry);
-    }
-
-    private IEntry GetEntry(EntryDto entryDto)
-    {
-        if (entryDto.Chunks == null)
-        {
-            return new Folder(new FolderDto (){ Path = PathUtils.Normalize(entryDto.FullPath) }, seaweed);
-        }
-
-        return new File(PathUtils.Normalize(entryDto.FullPath), seaweed, entryDto.FileSize);
-    }
-
-  
-
+    
     public string Path { get; }
     public IObservable<IChangeSet<IEntry, string>> Children { get; }
 
@@ -75,7 +53,7 @@ public class Folder : IFolder
             {
                 var seaweedFile = new File(fullPath, seaweed, contents.Length);
                 sourceCache.AddOrUpdate(seaweedFile);
-                return (IEntry)seaweedFile;
+                return (IEntry) seaweedFile;
             });
 
         return result;
@@ -99,6 +77,26 @@ public class Folder : IFolder
     {
         return Result
             .Try(() => seaweedFs.GetContents(path))
-            .Map(folder => (IFolder)new Folder(folder, seaweedFs));
+            .Map(folder => (IFolder) new Folder(folder, seaweedFs));
+    }
+
+    private IEnumerable<IEntry> GetEntries(FolderDto folderDto)
+    {
+        if (folderDto.Entries is null)
+        {
+            return Enumerable.Empty<IEntry>();
+        }
+
+        return folderDto.Entries.Select(GetEntry);
+    }
+
+    private IEntry GetEntry(EntryDto entryDto)
+    {
+        if (entryDto.Chunks == null)
+        {
+            return new Folder(new FolderDto { Path = PathUtils.Normalize(entryDto.FullPath) }, seaweed);
+        }
+
+        return new File(PathUtils.Normalize(entryDto.FullPath), seaweed, entryDto.FileSize);
     }
 }
