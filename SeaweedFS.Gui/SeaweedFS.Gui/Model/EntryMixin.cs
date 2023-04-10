@@ -12,6 +12,7 @@ public static class EntryMixin
         {
             return GetName(self.Path.SkipLast(1).AsString());
         }
+
         return GetName(self.Path);
     }
 

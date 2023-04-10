@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SeaweedFS.Gui.Features.Session
+namespace SeaweedFS.Gui.Features.Session;
+
+public partial class SessionView : UserControl
 {
-    public partial class SessionView : UserControl
+    public SessionView()
     {
-        public SessionView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

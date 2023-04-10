@@ -17,9 +17,9 @@ public class History<T> : ReactiveObject, IHistory<T>
         GoBack = ReactiveCommand.Create(OnBack, whenAnyValue);
     }
 
-    public ReactiveCommand<Unit, Unit> GoBack { get; }
-
     private bool CanGoBack => currentFolderStack.Count > 1;
+
+    public ReactiveCommand<Unit, Unit> GoBack { get; }
 
     public T CurrentFolder
     {

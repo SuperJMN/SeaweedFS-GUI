@@ -3,7 +3,7 @@
              xmlns:local="using:SeaweedFS.Gui"
              x:Class="SeaweedFS.Gui.App" RequestedThemeVariant="Light">
     <Application.DataTemplates>
-        <local:ViewLocator/>
+        <local:ViewLocator />
     </Application.DataTemplates>
 
     <Application.Styles>

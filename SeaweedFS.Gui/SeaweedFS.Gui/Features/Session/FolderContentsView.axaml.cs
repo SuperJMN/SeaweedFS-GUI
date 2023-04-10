@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SeaweedFS.Gui.Features.Session
+namespace SeaweedFS.Gui.Features.Session;
+
+public partial class FolderContentsView : UserControl
 {
-    public partial class FolderContentsView : UserControl
+    public FolderContentsView()
     {
-        public FolderContentsView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

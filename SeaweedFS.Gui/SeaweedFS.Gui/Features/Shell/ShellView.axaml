@@ -9,27 +9,28 @@
              x:DataType="s:IShellViewModel"
              x:CompileBindings="True"
              x:Class="SeaweedFS.Gui.Features.Shell.ShellView">
-	<Design.DataContext>
-		<s:ShellViewModelDesign TypedAddress="Sample address">
-			<s:ShellViewModelDesign.Session>
-				<avalonia:Return>
-					<avalonia:Return.Value>
-						<main:MainViewModelDesign />
-					</avalonia:Return.Value>
-				</avalonia:Return>
-			</s:ShellViewModelDesign.Session>
-		</s:ShellViewModelDesign>
-	</Design.DataContext>
-	<DockPanel>
-		<DockPanel DockPanel.Dock="Top" Margin="6">
-			<Button Content="Connect" Command="{Binding Connect}" DockPanel.Dock="Right" />
-			<TextBox Watermark="Filer Address" Text="{Binding TypedAddress}" />
-		</DockPanel>
-		<Panel>
-			<Panel IsVisible="{Binding IsConnected^}">
-				<main:MainView DataContext="{Binding Session^}" />
-			</Panel>
-			<TextBlock VerticalAlignment="Center" TextAlignment="Center" Text="Enter the SeaweedFS Filer URL above" IsVisible="{Binding !IsConnected^}"/>
-		</Panel>
-	</DockPanel>
+    <Design.DataContext>
+        <s:ShellViewModelDesign TypedAddress="Sample address">
+            <s:ShellViewModelDesign.Session>
+                <avalonia:Return>
+                    <avalonia:Return.Value>
+                        <main:MainViewModelDesign />
+                    </avalonia:Return.Value>
+                </avalonia:Return>
+            </s:ShellViewModelDesign.Session>
+        </s:ShellViewModelDesign>
+    </Design.DataContext>
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top" Margin="6">
+            <Button Content="Connect" Command="{Binding Connect}" DockPanel.Dock="Right" />
+            <TextBox Watermark="Filer Address" Text="{Binding TypedAddress}" />
+        </DockPanel>
+        <Panel>
+            <Panel IsVisible="{Binding IsConnected^}">
+                <main:MainView DataContext="{Binding Session^}" />
+            </Panel>
+            <TextBlock VerticalAlignment="Center" TextAlignment="Center" Text="Enter the SeaweedFS Filer URL above"
+                       IsVisible="{Binding !IsConnected^}" />
+        </Panel>
+    </DockPanel>
 </UserControl>

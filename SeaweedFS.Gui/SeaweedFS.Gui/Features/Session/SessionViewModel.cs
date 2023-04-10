@@ -20,7 +20,7 @@ public class SessionViewModel : ISessionViewModel
         SetCurrentFolder = ReactiveCommand.CreateFromTask<string, Result<IFolderContentsViewModel>>(async s =>
         {
             var result = await root.Get(s);
-            var map = result.Map(model => (IFolderContentsViewModel)new FolderContentsViewModel(model, notificationService, TransferManager, storage, path => AddressHistory.CurrentFolder = path));
+            var map = result.Map(model => (IFolderContentsViewModel) new FolderContentsViewModel(model, notificationService, TransferManager, storage, path => AddressHistory.CurrentFolder = path));
             return map;
         });
 
@@ -32,12 +32,12 @@ public class SessionViewModel : ISessionViewModel
             .InvokeCommand(SetCurrentFolder);
     }
 
+    public ReactiveCommand<string, Result<IFolderContentsViewModel>> SetCurrentFolder { get; }
+
+    public AddressHistory AddressHistory { get; }
+
     public IReactiveCommand GoBack { get; }
     public ITransferManager TransferManager { get; }
 
-    public ReactiveCommand<string, Result<IFolderContentsViewModel>> SetCurrentFolder { get; }
-
     public IObservable<IFolderContentsViewModel> CurrentFolder { get; }
-
-    public AddressHistory AddressHistory { get; }
 }

@@ -9,7 +9,7 @@ public class FolderViewModel : EntryViewModel, IFolderViewModel
     public FolderViewModel(string path, IEnumerable<IEntryViewModel> children, IMainViewModel mainViewModel)
     {
         Path = path;
-        Navigate = ReactiveCommand.Create(() => mainViewModel.History.CurrentFolder = this.Path);
+        Navigate = ReactiveCommand.Create(() => mainViewModel.History.CurrentFolder = Path);
         Items = children;
     }
 

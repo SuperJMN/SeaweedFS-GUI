@@ -7,7 +7,7 @@ using DynamicData;
 
 namespace SeaweedFS.Gui.Model;
 
-class FolderModelDesign : IFolder
+internal class FolderModelDesign : IFolder
 {
     public Task<Result> DeleteFile(string path)
     {
@@ -16,6 +16,7 @@ class FolderModelDesign : IFolder
 
     public string Path { get; set; }
     public IObservable<IChangeSet<IEntry, string>> Children { get; }
+
     public Task<Result<IEntry>> Add(string name, Stream contents, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();

@@ -39,7 +39,7 @@ public class Folder : IFolder
             .Try(() => seaweed.DeleteFile(PathUtils.Combine(Path, name)))
             .Tap(() => sourceCache.Remove(name));
     }
-    
+
     public string Path { get; }
     public IObservable<IChangeSet<IEntry, string>> Children { get; }
 

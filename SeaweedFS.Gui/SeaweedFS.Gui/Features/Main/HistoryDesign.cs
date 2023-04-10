@@ -4,7 +4,7 @@ using ReactiveUI;
 
 namespace SeaweedFS.Gui.Features.Main;
 
-class HistoryDesign : IHistory<string>
+internal class HistoryDesign : IHistory<string>
 {
     public ReactiveCommand<Unit, Unit> GoBack { get; }
     public string CurrentFolder { get; set; }

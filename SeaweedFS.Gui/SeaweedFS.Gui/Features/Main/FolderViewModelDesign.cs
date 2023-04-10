@@ -8,7 +8,7 @@ using ReactiveUI;
 
 namespace SeaweedFS.Gui.Features.Main;
 
-class FolderViewModelDesign : IFolderViewModel
+internal class FolderViewModelDesign : IFolderViewModel
 {
     public FolderViewModelDesign()
     {

@@ -9,19 +9,21 @@
              x:DataType="s:IShellViewModel"
              x:CompileBindings="True"
              x:Class="SeaweedFS.Gui.Features.ShellCopy.ShellView">
-	<Design.DataContext>
-		<s:ShellViewModelDesign TypedAddress="Sample address" Session="{avalonia:Return Value={x:Static session:SessionViewModelDesign.SampleData}}" />
+    <Design.DataContext>
+        <s:ShellViewModelDesign TypedAddress="Sample address"
+                                Session="{avalonia:Return Value={x:Static session:SessionViewModelDesign.SampleData}}" />
     </Design.DataContext>
-	<DockPanel>
-		<DockPanel DockPanel.Dock="Top" Margin="6">
-			<Button Content="Connect" Command="{Binding Connect}" DockPanel.Dock="Right" />
-			<TextBox Watermark="Filer Address" Text="{Binding TypedAddress}" />
-		</DockPanel>
-		<Panel>
-			<Panel IsVisible="{Binding IsConnected^}">
-				<session:SessionView DataContext="{Binding Session^}" />
-			</Panel>
-			<TextBlock VerticalAlignment="Center" TextAlignment="Center" Text="Enter the SeaweedFS Filer URL above" IsVisible="{Binding !IsConnected^}"/>
-		</Panel>
-	</DockPanel>
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top" Margin="6">
+            <Button Content="Connect" Command="{Binding Connect}" DockPanel.Dock="Right" />
+            <TextBox Watermark="Filer Address" Text="{Binding TypedAddress}" />
+        </DockPanel>
+        <Panel>
+            <Panel IsVisible="{Binding IsConnected^}">
+                <session:SessionView DataContext="{Binding Session^}" />
+            </Panel>
+            <TextBlock VerticalAlignment="Center" TextAlignment="Center" Text="Enter the SeaweedFS Filer URL above"
+                       IsVisible="{Binding !IsConnected^}" />
+        </Panel>
+    </DockPanel>
 </UserControl>

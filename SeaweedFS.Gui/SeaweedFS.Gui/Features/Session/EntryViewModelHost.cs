@@ -16,8 +16,7 @@ public class EntryViewModelHost : ReactiveObject, IEntryViewModelHost
     public FolderContentsViewModel FolderContentsViewModel { get; }
     public IEntryViewModel ViewModel { get; set; }
 
-    [Reactive]
-    public bool IsSelected { get; set; }
+    [Reactive] public bool IsSelected { get; set; }
 
     public IObservable<bool> IsSelectionEnabled { get; }
 }

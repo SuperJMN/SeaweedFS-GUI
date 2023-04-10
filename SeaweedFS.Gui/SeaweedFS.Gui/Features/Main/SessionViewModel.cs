@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -21,9 +20,9 @@ namespace SeaweedFS.Gui.Features.Main;
 
 public class SessionViewModel : ViewModelBase, IMainViewModel
 {
+    private readonly INotificationService notificationService;
     private readonly ISeaweedFS seaweed;
     private readonly IStorage storage;
-    private readonly INotificationService notificationService;
 
     public SessionViewModel(ISeaweedFS seaweed, IStorage storage, INotificationService notificationService)
     {
@@ -116,7 +115,7 @@ public class SessionViewModel : ViewModelBase, IMainViewModel
     {
         var fromService = Observable
             .FromAsync(() => client.GetContents(path))
-            .Select(folder => Result.Success((IFolderViewModel)new FolderViewModel(folder.Path, GetChildren(folder), this)));
+            .Select(folder => Result.Success((IFolderViewModel) new FolderViewModel(folder.Path, GetChildren(folder), this)));
 
         return Observable.Defer(() => fromService
             .Timeout(TimeSpan.FromSeconds(5))

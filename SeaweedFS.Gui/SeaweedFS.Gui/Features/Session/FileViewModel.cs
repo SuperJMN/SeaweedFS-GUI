@@ -36,6 +36,10 @@ internal class FileViewModel : IFileViewModel
         Delete = ReactiveCommand.CreateFromTask(() => onDelete(file));
     }
 
+    public string Path { get; }
+    public IReactiveCommand Download { get; }
+    public ReactiveCommand<Unit, Result> Delete { get; }
+
 
     private void Add(ITransferViewModel streamTransfer)
     {
@@ -44,7 +48,7 @@ internal class FileViewModel : IFileViewModel
 
     private IObservable<ITransferViewModel> DoDownload()
     {
-        var defaultExtension = ((ZafiroPath)this.Name()).Extension();
+        var defaultExtension = ((ZafiroPath) this.Name()).Extension();
         return storage
             .PickForSave(this.Name(), defaultExtension, new FileTypeFilter(defaultExtension.Match(ext => "*." + ext, () => "*.*"), defaultExtension.Match(ext => "*." + ext, () => "*.*")))
             .Values()
@@ -53,12 +57,7 @@ internal class FileViewModel : IFileViewModel
 
     private ITransferViewModel GetTransfer(IStorable s)
     {
-        
         var name = s.Path.RouteFragments.Last();
         return new Download(name, () => file.GetStream(), async _ => new ProgressNotifyingStream(await s.OpenWrite(), () => file.Size), transferManager.Remove);
     }
-
-    public string Path { get; }
-    public IReactiveCommand Download { get; }
-    public ReactiveCommand<Unit, Result> Delete { get; }
 }

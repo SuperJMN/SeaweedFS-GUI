@@ -17,9 +17,9 @@ namespace SeaweedFS.Gui.Features.Main;
 
 public class FileViewModel : EntryViewModel, IFileViewModel
 {
-    private readonly ITransferManager transferManager;
-    private readonly IStorage storage;
     private readonly ISeaweedFS seaweed;
+    private readonly IStorage storage;
+    private readonly ITransferManager transferManager;
 
     public FileViewModel(string path, long size, ITransferManager transferManager, IStorage storage, ISeaweedFS seaweed, INotificationService notificationService)
     {
@@ -46,6 +46,14 @@ public class FileViewModel : EntryViewModel, IFileViewModel
             .Subscribe();
     }
 
+    public string Path { get; }
+    public long Size { get; }
+
+    public ICommand Download { get; }
+    public ReactiveCommand<Unit, Result> Delete { get; }
+
+    public string Name => System.IO.Path.GetFileName(Path);
+
     private void Add(ITransferViewModel streamTransfer)
     {
         transferManager.Add(streamTransfer);
@@ -53,7 +61,7 @@ public class FileViewModel : EntryViewModel, IFileViewModel
 
     private IObservable<ITransferViewModel> DoDownload()
     {
-        var defaultExtension = ((ZafiroPath)Name).Extension();
+        var defaultExtension = ((ZafiroPath) Name).Extension();
         return storage
             .PickForSave(Name, defaultExtension, new FileTypeFilter(defaultExtension.Match(ext => "*." + ext, () => "*.*"), defaultExtension.Match(ext => "*." + ext, () => "*.*")))
             .Values()
@@ -63,14 +71,9 @@ public class FileViewModel : EntryViewModel, IFileViewModel
     private ITransferViewModel GetTransfer(IStorable s)
     {
         var name = s.Path.RouteFragments.Last();
-        return new Download(name, () => seaweed.GetFileContent(Path), async _ => new ProgressNotifyingStream(await s.OpenWrite(), () => Size), key => transferManager.Remove(key));
+        return new Download(name,
+            () => seaweed.GetFileContent(Path),
+            async _ => new ProgressNotifyingStream(await s.OpenWrite(), () => Size),
+            transferManager.Remove);
     }
-
-    public ICommand Download { get; }
-    public ReactiveCommand<Unit, Result> Delete { get; }
-
-    public string Path { get; }
-    public long Size { get; }
-
-    public string Name => System.IO.Path.GetFileName(Path);
 }

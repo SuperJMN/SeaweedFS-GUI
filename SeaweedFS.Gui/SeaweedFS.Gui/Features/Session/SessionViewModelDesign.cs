@@ -5,48 +5,48 @@ using SeaweedFS.Gui.Features.Transfer;
 
 namespace SeaweedFS.Gui.Features.Session;
 
-class SessionViewModelDesign : ISessionViewModel
+internal class SessionViewModelDesign : ISessionViewModel
 {
-    public IObservable<IFolderContentsViewModel> CurrentFolder { get; set; }
-    public IReactiveCommand GoBack { get; }
-    public ITransferManager TransferManager { get; }
-
     public static SessionViewModelDesign SampleData => new()
     {
-        CurrentFolder = Observable.Return(new FolderContentsViewModelDesign()
+        CurrentFolder = Observable.Return(new FolderContentsViewModelDesign
         {
             ChildrenItems =
             {
-                new EntryViewModelHostDesign()
+                new EntryViewModelHostDesign
                 {
                     IsSelected = false,
-                    ViewModel = new FolderItemViewModelDesign { Path = "home"},
+                    ViewModel = new FolderItemViewModelDesign { Path = "home" }
                 },
-                new EntryViewModelHostDesign()
+                new EntryViewModelHostDesign
                 {
                     IsSelected = true,
-                    ViewModel = new FileItemViewModelDesign()
+                    ViewModel = new FileItemViewModelDesign
                     {
-                        Path = "home/file1.txt",
+                        Path = "home/file1.txt"
                     }
                 },
-                new EntryViewModelHostDesign()
+                new EntryViewModelHostDesign
                 {
                     IsSelected = false,
-                    ViewModel = new FileViewModelDesign()
+                    ViewModel = new FileViewModelDesign
                     {
-                        Path = "home/file2.txt",
+                        Path = "home/file2.txt"
                     }
                 },
-                new EntryViewModelHostDesign()
+                new EntryViewModelHostDesign
                 {
                     IsSelected = true,
-                    ViewModel = new FileViewModelDesign()
+                    ViewModel = new FileViewModelDesign
                     {
-                        Path = "home/file3.txt",
+                        Path = "home/file3.txt"
                     }
                 }
             }
         })
     };
+
+    public IObservable<IFolderContentsViewModel> CurrentFolder { get; set; }
+    public IReactiveCommand GoBack { get; }
+    public ITransferManager TransferManager { get; }
 }

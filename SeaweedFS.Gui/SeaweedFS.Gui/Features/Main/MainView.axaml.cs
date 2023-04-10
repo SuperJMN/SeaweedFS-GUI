@@ -1,6 +1,4 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.LogicalTree;
 
 namespace SeaweedFS.Gui.Features.Main;
 
