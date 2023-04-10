@@ -34,9 +34,13 @@
     </ItemGroup>
 
     <ItemGroup>
-	    <Compile Update="Features\ShellCopy\ShellView.axaml.cs">
+	    <Compile Update="Features\Shell\ShellView.axaml.cs">
         <DependentUpon>%(Filename)</DependentUpon>
       </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\Main\" />
     </ItemGroup>
 
 </Project>

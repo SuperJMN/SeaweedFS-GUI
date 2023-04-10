@@ -1,4 +1,4 @@
-namespace SeaweedFS.Gui.Features.Main;
+namespace SeaweedFS.Gui.Features.Session;
 
 public class AddressHistory : History<string>, IAddressHistory
 {

@@ -2,7 +2,7 @@ using System.Reactive;
 using CSharpFunctionalExtensions;
 using ReactiveUI;
 
-namespace SeaweedFS.Gui.Features.Main;
+namespace SeaweedFS.Gui.Features.Session;
 
 internal class HistoryDesign : IHistory<string>
 {

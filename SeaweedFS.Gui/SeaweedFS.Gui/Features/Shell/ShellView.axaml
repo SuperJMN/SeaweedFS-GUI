@@ -2,23 +2,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:s="clr-namespace:SeaweedFS.Gui.Features.Shell"
+             xmlns:s="clr-namespace:SeaweedFS.Gui.Features.ShellCopy"
              xmlns:avalonia="clr-namespace:Zafiro.Avalonia;assembly=Zafiro.Avalonia"
-             xmlns:main="clr-namespace:SeaweedFS.Gui.Features.Main"
+             xmlns:session="clr-namespace:SeaweedFS.Gui.Features.Session"
+             xmlns:shell="clr-namespace:SeaweedFS.Gui.Features.Shell"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="s:IShellViewModel"
+             x:DataType="shell:IShellViewModel"
              x:CompileBindings="True"
              x:Class="SeaweedFS.Gui.Features.Shell.ShellView">
     <Design.DataContext>
-        <s:ShellViewModelDesign TypedAddress="Sample address">
-            <s:ShellViewModelDesign.Session>
-                <avalonia:Return>
-                    <avalonia:Return.Value>
-                        <main:MainViewModelDesign />
-                    </avalonia:Return.Value>
-                </avalonia:Return>
-            </s:ShellViewModelDesign.Session>
-        </s:ShellViewModelDesign>
+        <shell:ShellViewModelDesign TypedAddress="Sample address"
+                                Session="{avalonia:Return Value={x:Static session:SessionViewModelDesign.SampleData}}" />
     </Design.DataContext>
     <DockPanel>
         <DockPanel DockPanel.Dock="Top" Margin="6">
@@ -27,7 +21,7 @@
         </DockPanel>
         <Panel>
             <Panel IsVisible="{Binding IsConnected^}">
-                <main:MainView DataContext="{Binding Session^}" />
+                <session:SessionView DataContext="{Binding Session^}" />
             </Panel>
             <TextBlock VerticalAlignment="Center" TextAlignment="Center" Text="Enter the SeaweedFS Filer URL above"
                        IsVisible="{Binding !IsConnected^}" />

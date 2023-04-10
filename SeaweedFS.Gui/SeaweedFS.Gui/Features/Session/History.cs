@@ -4,7 +4,7 @@ using System.Reactive;
 using CSharpFunctionalExtensions;
 using ReactiveUI;
 
-namespace SeaweedFS.Gui.Features.Main;
+namespace SeaweedFS.Gui.Features.Session;
 
 public class History<T> : ReactiveObject, IHistory<T>
 {

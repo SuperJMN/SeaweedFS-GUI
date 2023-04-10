@@ -2,7 +2,6 @@
 using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
 using ReactiveUI;
-using SeaweedFS.Gui.Features.Main;
 using SeaweedFS.Gui.Features.Transfer;
 using SeaweedFS.Gui.Model;
 using Zafiro.Avalonia;
