@@ -21,7 +21,7 @@ public class Folder : IFolder
     public Folder(FolderDto folderDto, ISeaweedFS seaweed)
     {
         this.seaweed = seaweed;
-        Path = folderDto.Path + "/";
+        Path = PathUtils.Normalize(folderDto.Path);
 
         sourceCache = new SourceCache<IEntry, string>(entry => entry.Name);
         var initial = GetEntries(folderDto).ToObservable();
@@ -54,11 +54,13 @@ public class Folder : IFolder
     {
         if (entryDto.Chunks == null)
         {
-            return new Folder(new FolderDto (){ Path = entryDto.FullPath }, seaweed);
+            return new Folder(new FolderDto (){ Path = PathUtils.Normalize(entryDto.FullPath) }, seaweed);
         }
 
-        return new File(entryDto.FullPath, seaweed, entryDto.FileSize);
+        return new File(PathUtils.Normalize(entryDto.FullPath), seaweed, entryDto.FileSize);
     }
+
+  
 
     public string Path { get; }
     public IObservable<IChangeSet<IEntry, string>> Children { get; }

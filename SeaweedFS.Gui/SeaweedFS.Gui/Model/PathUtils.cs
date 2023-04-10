@@ -4,7 +4,7 @@ public static class PathUtils
 {
     public static string Combine(string first, string second)
     {
-        if (first == "")
+        if (first == "" || first == "/")
         {
             return second;
         }
@@ -15,5 +15,10 @@ public static class PathUtils
         }
 
         return first + "/" + second;
+    }
+
+    public static string Normalize(string entryDtoFullPath)
+    {
+        return entryDtoFullPath.StartsWith("/") ? entryDtoFullPath[1..] : entryDtoFullPath;
     }
 }

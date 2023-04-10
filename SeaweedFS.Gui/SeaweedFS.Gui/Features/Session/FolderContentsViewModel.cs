@@ -21,10 +21,10 @@ namespace SeaweedFS.Gui.Features.Session;
 public class FolderContentsViewModel : ViewModelBase, IFolderContentsViewModel
 {
     private readonly IFolder folder;
-    private readonly ITransferManager transferManager;
-    private readonly IStorage storage;
     private readonly Action<string> onGo;
     private readonly ReadOnlyObservableCollection<IEntryViewModelHost> selectables;
+    private readonly IStorage storage;
+    private readonly ITransferManager transferManager;
 
     public FolderContentsViewModel(IFolder folder, INotificationService notifyNotificationService, ITransferManager transferManager, IStorage storage, Action<string> onGo)
     {
@@ -83,13 +83,15 @@ public class FolderContentsViewModel : ViewModelBase, IFolderContentsViewModel
 
     public ReactiveCommand<Unit, IList<Result>> DeleteSelected { get; }
 
-    [Reactive]
-    public bool IsMultiselectionEnabled { get; set; }
+    [Reactive] public bool IsMultiselectionEnabled { get; set; }
 
     public IReactiveCommand CreateFolder { get; }
 
-    [Reactive]
-    public string? NewFolderName { get; set; }
+    [Reactive] public string? NewFolderName { get; set; }
+
+    public IReactiveCommand Upload { get; }
+
+    public ReadOnlyObservableCollection<IEntryViewModelHost> Children => selectables;
 
     private IObservable<IEnumerable<ITransferViewModel>> DoUpload()
     {
@@ -107,8 +109,6 @@ public class FolderContentsViewModel : ViewModelBase, IFolderContentsViewModel
             return result;
         }, key => transferManager.Remove(key));
     }
-    
-    public IReactiveCommand Upload { get; }
 
     private IEntryViewModel GetEntryViewModel(IEntry entryModel, IStorage storage)
     {
@@ -119,6 +119,4 @@ public class FolderContentsViewModel : ViewModelBase, IFolderContentsViewModel
             _ => throw new NotSupportedException()
         };
     }
-
-    public ReadOnlyObservableCollection<IEntryViewModelHost> Children => selectables;
 }
