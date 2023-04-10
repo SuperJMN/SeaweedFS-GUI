@@ -29,7 +29,7 @@ internal class SeaweedFSClient : ISeaweedFS
 
     public Task CreateFolder(string directoryPath)
     {
-        return inner.CreateFolder(directoryPath[1..] + "/");
+        return inner.CreateFolder(directoryPath + "/");
     }
 
     public Task DeleteFolder(string directoryPath)
