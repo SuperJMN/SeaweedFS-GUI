@@ -73,9 +73,11 @@ public class FolderContentsViewModel : ViewModelBase, IFolderContentsViewModel
             .ToCollection()
             .Select(x => x.Any()));
 
-        DeleteSelected.Select(x => x.WhereFailure())
+        DeleteSelected
+            .Where(list => list.Any(result => result.IsFailure))
             .Any()
             .Do(_ => notifyNotificationService.ShowMessage("Some elements could not be deleted"))
+            .Do(_ => IsMultiselectionEnabled = false)
             .Subscribe();
 
         CreateFolder = createFolder;

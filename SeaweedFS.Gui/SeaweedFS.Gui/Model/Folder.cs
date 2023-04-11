@@ -35,9 +35,11 @@ public class Folder : IFolder
 
     public Task<Result> DeleteFile(string name)
     {
-        return Result
+        var deleteFile = Result
             .Try(() => seaweed.DeleteFile(PathUtils.Combine(Path, name)))
             .Tap(() => sourceCache.Remove(name));
+
+        return deleteFile;
     }
 
     public string Path { get; }
