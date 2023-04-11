@@ -6,13 +6,18 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SeaweedFS.Gui.Features.Session.FolderContentsView"
              x:DataType="session:IFolderContentsViewModel"
+             xmlns:svg="clr-namespace:Avalonia.Svg;assembly=Avalonia.Svg"
              x:CompileBindings="True">
 
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
-            <ToggleButton DockPanel.Dock="Right" Content="Multiselection" IsChecked="{Binding IsMultiselectionEnabled}" />
+            <ToggleButton DockPanel.Dock="Right" IsChecked="{Binding IsMultiselectionEnabled}">
+                <ToggleButton.Content>
+                    <svg:Svg Height="20" Path="/Assets/multiselect.svg" />
+                </ToggleButton.Content>
+            </ToggleButton>
             <Panel>
-                <StackPanel Orientation="Horizontal" IsVisible="{Binding !IsMultiselectionEnabled}">
+                <StackPanel Orientation="Horizontal" IsVisible="{Binding !IsMultiselectionEnabled, FallbackValue=True}">
                     <Button Command="{Binding Upload}" Content="Upload" />
                     <Button Content="New folder">
                         <Button.Flyout>
@@ -33,7 +38,7 @@
                     </Button>
                 </StackPanel>
                 <Button Command="{Binding DeleteSelected}" Content="Deleted selected"
-                        IsVisible="{Binding IsMultiselectionEnabled}" />
+                        IsVisible="{Binding IsMultiselectionEnabled, FallbackValue=False}" />
             </Panel>
         </DockPanel>
         <ListBox Items="{Binding Children}">

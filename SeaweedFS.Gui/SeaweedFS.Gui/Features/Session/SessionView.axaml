@@ -70,7 +70,9 @@
         </Expander>
 
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-            <Button Command="{Binding GoBack}" Content="Back" />
+            <Button Command="{Binding GoBack}">
+                <svg:Svg Path="/Assets/back.svg" Height="20" />
+            </Button>
         </StackPanel>
 
         <session:FolderContentsView DataContext="{Binding CurrentFolder^}" />
