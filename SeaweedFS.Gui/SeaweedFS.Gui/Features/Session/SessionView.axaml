@@ -11,71 +11,77 @@
              x:Class="SeaweedFS.Gui.Features.Session.SessionView"
              Design.DataContext="{x:Static session:SessionViewModelDesign.SampleData}">
 
-    <UserControl.Styles>
+	<UserControl.Styles>
 
-        <Style Selector="Panel.UnSelected">
-            <Setter Property="Opacity" Value="0" />
-        </Style>
-        <Style Selector="Panel.Selected">
-            <Setter Property="Opacity" Value="1" />
-        </Style>
+		<Style Selector="Panel.UnSelected">
+			<Setter Property="Opacity" Value="0" />
+		</Style>
+		<Style Selector="Panel.Selected">
+			<Setter Property="Opacity" Value="1" />
+		</Style>
 
-    </UserControl.Styles>
+	</UserControl.Styles>
 
-    <UserControl.DataTemplates>
+	<UserControl.DataTemplates>
 
-        <DataTemplate DataType="session:IFolderViewModel">
-            <DockPanel>
+		<DataTemplate DataType="session:IFolderViewModel">
+			<DockPanel>
 
-                <StackPanel DockPanel.Dock="Right" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}"
+				<StackPanel DockPanel.Dock="Right" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}"
                             Classes.UnSelected="{Binding !$parent[ListBoxItem].IsSelected}">
-                    <Button Content="Delete" Command="{Binding Delete}" />
-                </StackPanel>
+					<Button Command="{Binding Delete}">
+						<svg:Svg  Path="/Assets/delete.svg" Height="20" />
+					</Button>
+				</StackPanel>
 
-                <Button Command="{Binding Go}" Background="Transparent" BorderBrush="Transparent"
+				<Button Command="{Binding Go}" Background="Transparent" BorderBrush="Transparent"
                         HorizontalAlignment="Left">
-                    <Button.Content>
-                        <DockPanel>
-                            <svg:Svg Path="/Assets/folder.svg" Height="32" DockPanel.Dock="Left" />
-                            <TextBlock Margin="4" VerticalAlignment="Center" Text="{Binding Name}"
+					<Button.Content>
+						<DockPanel>
+							<svg:Svg Path="/Assets/folder.svg" Height="32" DockPanel.Dock="Left" />
+							<TextBlock Margin="4" VerticalAlignment="Center" Text="{Binding Name}"
                                        TextDecorations="Underline" />
-                        </DockPanel>
-                    </Button.Content>
-                </Button>
-            </DockPanel>
-        </DataTemplate>
+						</DockPanel>
+					</Button.Content>
+				</Button>
+			</DockPanel>
+		</DataTemplate>
 
-        <DataTemplate DataType="session:IFileViewModel">
-            <DockPanel>
-                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right"
+		<DataTemplate DataType="session:IFileViewModel">
+			<DockPanel>
+				<StackPanel Orientation="Horizontal" DockPanel.Dock="Right"
                             Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}"
                             Classes.UnSelected="{Binding !$parent[ListBoxItem].IsSelected}">
-                    <Button Content="Delete" Command="{Binding Delete}" />
-                    <Button Content="Download" Command="{Binding Download}" />
-                </StackPanel>
-                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-            </DockPanel>
-        </DataTemplate>
-    </UserControl.DataTemplates>
+					<Button Command="{Binding Delete}">
+						<svg:Svg  Path="/Assets/delete.svg" Height="20" />
+					</Button>
+					<Button Command="{Binding Download}">
+						<svg:Svg  Path="/Assets/download-schematic.svg" Height="20" />
+					</Button>
+				</StackPanel>
+				<TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+			</DockPanel>
+		</DataTemplate>
+	</UserControl.DataTemplates>
 
-    <DockPanel>
+	<DockPanel>
 
-        <Expander DockPanel.Dock="Bottom" IsExpanded="True" HorizontalAlignment="Stretch" Header="File Transfers"
+		<Expander DockPanel.Dock="Bottom" IsExpanded="True" HorizontalAlignment="Stretch" Header="File Transfers"
                   IsVisible="{Binding TransferManager.Transfers.Count}">
-            <transfer:TransferManagerView Height="200">
-                <transfer:TransferManagerView.DataContext>
-                    <Binding Path="TransferManager" />
-                </transfer:TransferManagerView.DataContext>
-            </transfer:TransferManagerView>
-        </Expander>
+			<transfer:TransferManagerView Height="200">
+				<transfer:TransferManagerView.DataContext>
+					<Binding Path="TransferManager" />
+				</transfer:TransferManagerView.DataContext>
+			</transfer:TransferManagerView>
+		</Expander>
 
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-            <Button Command="{Binding GoBack}">
-                <svg:Svg Path="/Assets/back.svg" Height="20" />
-            </Button>
-        </StackPanel>
+		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+			<Button Command="{Binding GoBack}">
+				<svg:Svg  Path="/Assets/back.svg" Height="20" />
+			</Button>
+		</StackPanel>
 
-        <session:FolderContentsView DataContext="{Binding CurrentFolder^}" />
+		<session:FolderContentsView DataContext="{Binding CurrentFolder^}" />
 
-    </DockPanel>
+	</DockPanel>
 </UserControl>

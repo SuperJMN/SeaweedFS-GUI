@@ -18,7 +18,9 @@
             </ToggleButton>
             <Panel>
                 <StackPanel Orientation="Horizontal" IsVisible="{Binding !IsMultiselectionEnabled, FallbackValue=True}">
-                    <Button Command="{Binding Upload}" Content="Upload" />
+                    <Button Command="{Binding Upload}">
+                        <svg:Svg  Path="/Assets/upload-schematic.svg" Height="20" />
+                    </Button>
                     <Button Content="New folder">
                         <Button.Flyout>
                             <Flyout Placement="BottomEdgeAlignedLeft">
