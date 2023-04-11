@@ -16,7 +16,7 @@ internal class SessionViewModelDesign : ISessionViewModel
                 new EntryViewModelHostDesign
                 {
                     IsSelected = false,
-                    ViewModel = new FolderItemViewModelDesign { Path = "home" }
+                    ViewModel = new FolderViewModelDesign { Path = "home" }
                 },
                 new EntryViewModelHostDesign
                 {

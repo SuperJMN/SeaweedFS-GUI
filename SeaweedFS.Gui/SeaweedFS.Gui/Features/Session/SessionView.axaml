@@ -11,57 +11,13 @@
              x:Class="SeaweedFS.Gui.Features.Session.SessionView"
              Design.DataContext="{x:Static session:SessionViewModelDesign.SampleData}">
 
-	<UserControl.Styles>
-
-		<Style Selector="Panel.UnSelected">
-			<Setter Property="Opacity" Value="0" />
-		</Style>
-		<Style Selector="Panel.Selected">
-			<Setter Property="Opacity" Value="1" />
-		</Style>
-
-	</UserControl.Styles>
-
 	<UserControl.DataTemplates>
-
 		<DataTemplate DataType="session:IFolderViewModel">
-			<DockPanel>
-
-				<StackPanel DockPanel.Dock="Right" Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}"
-                            Classes.UnSelected="{Binding !$parent[ListBoxItem].IsSelected}">
-					<Button Command="{Binding Delete}">
-						<svg:Svg  Path="/Assets/delete.svg" Height="20" />
-					</Button>
-				</StackPanel>
-
-				<Button Command="{Binding Go}" Background="Transparent" BorderBrush="Transparent"
-                        HorizontalAlignment="Left">
-					<Button.Content>
-						<DockPanel>
-							<svg:Svg Path="/Assets/folder.svg" Height="32" DockPanel.Dock="Left" />
-							<TextBlock Margin="4" VerticalAlignment="Center" Text="{Binding Name}"
-                                       TextDecorations="Underline" />
-						</DockPanel>
-					</Button.Content>
-				</Button>
-			</DockPanel>
-		</DataTemplate>
-
+			<session:FolderView />
+        </DataTemplate>
 		<DataTemplate DataType="session:IFileViewModel">
-			<DockPanel>
-				<StackPanel Orientation="Horizontal" DockPanel.Dock="Right"
-                            Classes.Selected="{Binding $parent[ListBoxItem].IsSelected}"
-                            Classes.UnSelected="{Binding !$parent[ListBoxItem].IsSelected}">
-					<Button Command="{Binding Delete}">
-						<svg:Svg  Path="/Assets/delete.svg" Height="20" />
-					</Button>
-					<Button Command="{Binding Download}">
-						<svg:Svg  Path="/Assets/download-schematic.svg" Height="20" />
-					</Button>
-				</StackPanel>
-				<TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-			</DockPanel>
-		</DataTemplate>
+            <session:FileView />
+        </DataTemplate>
 	</UserControl.DataTemplates>
 
 	<DockPanel>

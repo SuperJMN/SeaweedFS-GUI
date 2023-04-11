@@ -5,7 +5,7 @@ using ReactiveUI;
 
 namespace SeaweedFS.Gui.Features.Session;
 
-internal class FolderItemViewModelDesign : IFolderViewModel
+internal class FolderViewModelDesign : IFolderViewModel
 {
     public string Path { get; set; }
     public ICommand Go { get; }
