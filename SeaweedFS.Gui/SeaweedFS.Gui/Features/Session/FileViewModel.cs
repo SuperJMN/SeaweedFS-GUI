@@ -58,6 +58,15 @@ internal class FileViewModel : IFileViewModel
     private ITransferViewModel GetTransfer(IStorable s)
     {
         var name = s.Path.RouteFragments.Last();
-        return new Download(name, () => file.GetStream(), async _ => new ProgressNotifyingStream(await s.OpenWrite(), () => file.Size), transferManager.Remove);
+        return new Download(name, () => file.GetStream(), async _ =>
+        {
+            var stream = await s.OpenWrite();
+            if (!stream.CanSeek)
+            {
+                stream = new SequentialStream(stream);
+            }
+
+            return new ProgressNotifyingStream(stream, () => file.Size);
+        }, transferManager.Remove);
     }
 }
