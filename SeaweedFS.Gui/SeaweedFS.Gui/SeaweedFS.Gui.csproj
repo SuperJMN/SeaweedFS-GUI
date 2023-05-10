@@ -21,11 +21,7 @@
         <PackageReference Include="ReactiveUI.Fody" Version="18.4.22" />
         <PackageReference Include="Refit" Version="6.3.2" />
         <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\Zafiro.Avalonia\Zafiro.Avalonia\Zafiro.Avalonia.csproj" />
-      <ProjectReference Include="..\..\Zafiro.Avalonia\Zafiro\Source\UI\UI.csproj" />
+        <PackageReference Include="Zafiro.Avalonia" Version="2.5.25" />
     </ItemGroup>
 
 </Project>
