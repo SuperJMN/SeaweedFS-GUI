@@ -17,7 +17,7 @@ internal class SeaweedFSClient : ISeaweedFS
         inner = RestService.For<ISeaweedApi>(httpClient);
     }
 
-    public Task<Folder> GetContents(string directoryPath)
+    public Task<FolderDto> GetContents(string directoryPath)
     {
         return inner.GetContents(directoryPath);
     }
@@ -32,13 +32,18 @@ internal class SeaweedFSClient : ISeaweedFS
         return inner.CreateFolder(directoryPath);
     }
 
+    public Task DeleteFolder(string directoryPath)
+    {
+        return inner.DeleteFolder(directoryPath);
+    }
+
     public Task<Stream> GetFileContent(string filePath)
     {
         return httpClient.GetStreamAsync(filePath);
     }
 
-    public Task Delete(string filePath)
+    public Task DeleteFile(string filePath)
     {
-        return inner.Delete(filePath);
+        return inner.DeleteFile(filePath);
     }
 }

@@ -6,7 +6,8 @@ using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using SeaweedFS.Gui.Features.Main;
+using SeaweedFS.Gui.Features.Session;
+using SeaweedFS.Gui.Model;
 using SeaweedFS.Gui.SeaweedFS;
 using Zafiro.Avalonia;
 
@@ -24,7 +25,7 @@ public class ShellViewModel : ViewModelBase, IShellViewModel
             .WhereNotNull()
             .Select(x => Observable
                 .Using(
-                    () => new HttpClient { BaseAddress = new Uri(x)}, 
+                    () => new HttpClient { BaseAddress = new Uri(x) },
                     httpClient => CreateSession(storage, httpClient, notificationService).Concat(Observable.Never<SessionViewModel>())))
             .Switch();
 
@@ -33,21 +34,19 @@ public class ShellViewModel : ViewModelBase, IShellViewModel
         IsConnected = startSession.Any().StartWith(false);
     }
 
-    private static IObservable<SessionViewModel> CreateSession(IStorage storage, HttpClient httpClient, INotificationService notificationService)
-    {
-        var sessionViewModel = new SessionViewModel(new SeaweedFSClient(httpClient), storage, notificationService);
-        return Observable.Return(sessionViewModel);
-    }
+    [Reactive] public string? Address { get; set; }
 
     public ICommand Connect { get; }
 
-    [Reactive]
-    public string? Address { get; set; }
-
-    [Reactive]
-    public string? TypedAddress { get; set; }
+    [Reactive] public string? TypedAddress { get; set; }
 
     public IObservable<bool> IsConnected { get; }
 
-    public IObservable<SessionViewModel> Session { get; }
+    public IObservable<ISessionViewModel> Session { get; }
+
+    private static IObservable<SessionViewModel> CreateSession(IStorage storage, HttpClient httpClient, INotificationService notificationService)
+    {
+        var sessionViewModel = new SessionViewModel(new Root(new SeaweedFSClient(httpClient)), storage, notificationService);
+        return Observable.Return(sessionViewModel);
+    }
 }

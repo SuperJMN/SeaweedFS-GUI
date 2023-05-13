@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SeaweedFS.Gui.Features.Transfer
+namespace SeaweedFS.Gui.Features.Transfer;
+
+public partial class TransferManagerView : UserControl
 {
-    public partial class TransferManagerView : UserControl
+    public TransferManagerView()
     {
-        public TransferManagerView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

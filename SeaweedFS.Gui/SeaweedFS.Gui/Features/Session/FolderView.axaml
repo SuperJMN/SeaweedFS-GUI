@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="300"
+             xmlns:svg="clr-namespace:Avalonia.Svg;assembly=Avalonia.Svg"
+             xmlns:session="clr-namespace:SeaweedFS.Gui.Features.Session"
+             x:DataType="session:IFolderViewModel"
+             x:CompileBindings="True"
+             x:Class="SeaweedFS.Gui.Features.Session.FolderView">
+
+    <Design.DataContext>
+        <session:FolderViewModelDesign Path="Pepito/Pollito" />
+    </Design.DataContext>
+
+    <UserControl.Styles>
+
+        <Style Selector="StackPanel.ActionsPane">
+            <Setter Property="Opacity" Value="0" />
+        </Style>
+        <Style Selector="StackPanel.ActionsPane.Selected">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+
+    </UserControl.Styles>
+
+    <DockPanel>
+
+        <StackPanel Classes="ActionsPane" DockPanel.Dock="Right" VerticalAlignment="Center">
+            <Classes.Selected>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="$parent[ListBoxItem].IsPointerOver" />
+                    <Binding Path="$parent[ListBoxItem].IsSelected" />
+                </MultiBinding>
+            </Classes.Selected>
+            <Button Command="{Binding Delete}">
+                <svg:Svg  Path="/Assets/delete.svg" Height="20" />
+            </Button>
+        </StackPanel>
+
+        <Button Command="{Binding Go}" Background="Transparent" BorderBrush="Transparent"
+                HorizontalAlignment="Left">
+            <Button.Content>
+                <DockPanel>
+                    <svg:Svg Path="/Assets/folder.svg" Height="32" DockPanel.Dock="Left" />
+                    <TextBlock Margin="4" VerticalAlignment="Center" Text="{Binding Name}"
+                               TextDecorations="Underline" />
+                </DockPanel>
+            </Button.Content>
+        </Button>
+    </DockPanel>
+</UserControl>

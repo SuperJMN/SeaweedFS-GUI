@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:session="clr-namespace:SeaweedFS.Gui.Features.Session"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:svg="clr-namespace:Avalonia.Svg;assembly=Avalonia.Svg"
+             xmlns:transfer="clr-namespace:SeaweedFS.Gui.Features.Transfer"
+             x:CompileBindings="True"
+             x:DataType="session:ISessionViewModel"
+             x:Class="SeaweedFS.Gui.Features.Session.SessionView"
+             Design.DataContext="{x:Static session:SessionViewModelDesign.SampleData}">
+
+	<UserControl.DataTemplates>
+		<DataTemplate DataType="session:IFolderViewModel">
+			<session:FolderView />
+        </DataTemplate>
+		<DataTemplate DataType="session:IFileViewModel">
+            <session:FileView />
+        </DataTemplate>
+	</UserControl.DataTemplates>
+
+	<DockPanel>
+
+		<Expander DockPanel.Dock="Bottom" IsExpanded="True" HorizontalAlignment="Stretch" Header="File Transfers"
+                  IsVisible="{Binding TransferManager.Transfers.Count}">
+			<transfer:TransferManagerView Height="200">
+				<transfer:TransferManagerView.DataContext>
+					<Binding Path="TransferManager" />
+				</transfer:TransferManagerView.DataContext>
+			</transfer:TransferManagerView>
+		</Expander>
+
+		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+			<Button Command="{Binding GoBack}">
+				<svg:Svg  Path="/Assets/back.svg" Height="20" />
+			</Button>
+		</StackPanel>
+
+		<session:FolderContentsView DataContext="{Binding CurrentFolder^}" />
+
+	</DockPanel>
+</UserControl>

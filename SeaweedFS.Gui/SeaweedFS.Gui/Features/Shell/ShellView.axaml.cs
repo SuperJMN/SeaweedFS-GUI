@@ -1,21 +1,20 @@
 using Avalonia;
 using Avalonia.Controls;
 
-namespace SeaweedFS.Gui.Features.Shell
-{
-    public partial class ShellView : UserControl
-    {
-        public ShellView()
-        {
-            InitializeComponent();
-        }
+namespace SeaweedFS.Gui.Features.Shell;
 
-        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+public partial class ShellView : UserControl
+{
+    public ShellView()
+    {
+        InitializeComponent();
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        if (!Design.IsDesignMode)
         {
-            if (!Design.IsDesignMode)
-            {
-                DataContext = CompositionRoot.Create(TopLevel.GetTopLevel(this));
-            }
+            DataContext = CompositionRoot.Create(TopLevel.GetTopLevel(this));
         }
     }
 }

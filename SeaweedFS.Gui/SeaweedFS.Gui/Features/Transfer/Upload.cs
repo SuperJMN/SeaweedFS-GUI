@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CSharpFunctionalExtensions;
 using ReactiveUI;
-using Refit;
 using Zafiro.Core.Mixins;
 using Zafiro.UI.Transfers;
 
@@ -16,9 +15,9 @@ public class Upload : ITransferViewModel
 {
     private readonly ITransfer inner;
 
-    public Upload(string name, Func<Task<Stream>> inputFactory, Func<StreamPart, CancellationToken, Task> func, Action<TransferKey> onRemove)
+    public Upload(string name, Func<Task<Stream>> inputFactory, Func<Stream, CancellationToken, Task<Result>> upload, Action<TransferKey> onRemove)
     {
-        inner = new RefitUploadUnit(name, inputFactory, func);
+        inner = new TaskTransferUnit(name, inputFactory, upload);
         RemoveCommand = ReactiveCommand.Create(() => onRemove(Key), IsTransferring.Not());
     }
 

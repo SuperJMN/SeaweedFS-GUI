@@ -1,11 +1,11 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using SeaweedFS.Gui.Features.Shell;
+using ShellView = SeaweedFS.Gui.Features.Shell.ShellView;
 
 namespace SeaweedFS.Gui;
 
-public partial class App : Application
+public class App : Application
 {
     public override void Initialize()
     {
