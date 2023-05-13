@@ -14,7 +14,8 @@ public interface ISeaweedApi
     [Post("/{path}")]
     Task Upload(string path, StreamPart stream, CancellationToken cancellationToken);
 
-    [Post("/{directoryPath}")]
+    [Multipart]
+    [Post("/{directoryPath}/")]
     Task CreateFolder(string directoryPath);
 
     [Delete("/{filePath}")]
