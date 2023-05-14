@@ -31,7 +31,7 @@ steps:
 - task: CopyFiles@2
   displayName: "Copy published files to artifact staging directory"
   inputs:
-    SourceFolder: '**/publish'
+    SourceFolder: '**\publish\**'
     Contents: '**'
     TargetFolder: '$(build.artifactstagingdirectory)'
 
