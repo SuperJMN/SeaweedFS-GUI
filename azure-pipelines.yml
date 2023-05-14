@@ -24,13 +24,9 @@ steps:
     packageType: 'sdk'
     version: '7.x'
 
-- task: DotNetCoreCLI@2
+- script: |
+    dotnet publish SeaweedFs.Gui/SeaweedFS.Gui.Desktop/SeaweedFS.Gui.Desktop.csproj -a win-x64
   displayName: "Publish"
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'SeaweedFS.Gui/SeaweedFS.Gui.Desktop/SeaweedFS.Gui.Desktop.csproj'
-    arguments: '-a win-x64'
 
 - task: CopyFiles@2
   displayName: "Copy published files to artifact staging directory"
