@@ -19,24 +19,21 @@ steps:
   displayName: 'Run a multi-line script'
 
 - task: UseDotNet@2
+  displayName: "Use .NET 7.x"
   inputs:
     packageType: 'sdk'
     version: '7.x'
 
 - task: DotNetCoreCLI@2
+  displayName: "Publish"
   inputs:
     command: 'publish'
     publishWebProjects: false
     projects: 'SeaweedFS.Gui/SeaweedFS.Gui.Desktop/SeaweedFS.Gui.Desktop.csproj'
-
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'Seaweed.Gui.Desktop.csproj'
     arguments: '-a win-x64'
 
 - task: CopyFiles@2
+  displayName: "Copy published files to artifact staging directory"
   inputs:
     SourceFolder: '**/publish'
     Contents: '**'
