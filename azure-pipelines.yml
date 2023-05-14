@@ -27,6 +27,12 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: false
+    projects: 'SeaweedFS.Gui/SeaweedFS.Gui.Desktop/SeaweedFS.Gui.Desktop.csproj'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
     projects: 'Seaweed.Gui.Desktop.csproj'
     arguments: '-a win-x64'
 
