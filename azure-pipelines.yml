@@ -3,9 +3,9 @@ name: $(date:yyyyMMdd)$(rev:-rr)
 resources:
   repositories:
     - repository: templates
-      endpoint: wieslawsoltes
+      endpoint: SuperJMN
       type: github
-      name: wieslawsoltes/BuildTemplates
+      name: SuperJMN/BuildTemplates
       ref: refs/tags/v2.5.0
 
 variables:
