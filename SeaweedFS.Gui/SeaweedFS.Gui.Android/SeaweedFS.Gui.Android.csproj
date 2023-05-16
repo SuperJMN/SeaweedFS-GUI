@@ -10,6 +10,9 @@
         <AndroidPackageFormat>apk</AndroidPackageFormat>
         <AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <RunAOTCompilation>False</RunAOTCompilation>
+    </PropertyGroup>
 
     <ItemGroup>
         <AndroidResource Include="Icon.png">
@@ -18,10 +21,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)"/>
+        <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SeaweedFS.Gui\SeaweedFS.Gui.csproj"/>
+        <ProjectReference Include="..\SeaweedFS.Gui\SeaweedFS.Gui.csproj" />
     </ItemGroup>
 </Project>
