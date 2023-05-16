@@ -38,19 +38,19 @@ jobs:
 #      BuildConfiguration: ${{ variables.BuildConfiguration }}
 #      Workloads: ${{ variables.Workloads }} ios
 
-  - template: Pack-MyGet.yml@templates
-    parameters:
-      name: 'Pack_MyGet'
-      vmImage: 'windows-2022'
-      BuildConfiguration: ${{ variables.BuildConfiguration }}
-      Workloads: ${{ variables.Workloads }} ios
+#  - template: Pack-MyGet.yml@templates
+#    parameters:
+#      name: 'Pack_MyGet'
+#      vmImage: 'windows-2022'
+#      BuildConfiguration: ${{ variables.BuildConfiguration }}
+#      Workloads: ${{ variables.Workloads }} ios
 
-  - template: Pack-NuGet.yml@templates
-    parameters:
-      name: 'Pack_NuGet'
-      vmImage: 'windows-2022'
-      BuildConfiguration: ${{ variables.BuildConfiguration }}
-      Workloads: ${{ variables.Workloads }} ios
+ # - template: Pack-NuGet.yml@templates
+ #   parameters:
+ #     name: 'Pack_NuGet'
+ #     vmImage: 'windows-2022'
+ #     BuildConfiguration: ${{ variables.BuildConfiguration }}
+ #     Workloads: ${{ variables.Workloads }} ios
 
   - template: Publish-PowerShell.yml@templates
     parameters:
