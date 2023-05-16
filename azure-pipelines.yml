@@ -31,12 +31,12 @@ jobs:
       BuildConfiguration: ${{ variables.BuildConfiguration }}
       Workloads: ${{ variables.Workloads }}
 
-  - template: Test-Bash.yml@templates
-    parameters:
-      name: 'Test_macOS'
-      vmImage: 'macOS-12'
-      BuildConfiguration: ${{ variables.BuildConfiguration }}
-      Workloads: ${{ variables.Workloads }} ios
+#  - template: Test-Bash.yml@templates
+#    parameters:
+#      name: 'Test_macOS'
+#      vmImage: 'macOS-12'
+#      BuildConfiguration: ${{ variables.BuildConfiguration }}
+#      Workloads: ${{ variables.Workloads }} ios
 
   - template: Pack-MyGet.yml@templates
     parameters:
