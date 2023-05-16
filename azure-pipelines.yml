@@ -12,7 +12,7 @@ variables:
   BuildConfiguration: 'Release'
   BuildPlatform: 'Any CPU'
   PublishFramework: 'net7.0'
-  PublishProject: 'ChatGPT.UI.Desktop'
+  PublishProject: 'SeaweedFS.Gui.Desktop'
   PublishRuntime: ''
   Workloads: 'wasm-tools wasm-experimental android'
 
@@ -139,5 +139,5 @@ jobs:
         BuildConfiguration: ${{ variables.BuildConfiguration }}
         Workloads: ${{ variables.Workloads }} ios
         PublishFramework: 'net7.0-android'
-        PublishProject: 'ChatGPT.UI.Android'
+        PublishProject: 'SeaweedFS.Gui.Android'
         PublishRuntime: ''
