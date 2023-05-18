@@ -1,6 +1,6 @@
 # SeaweedFS-GUI
 
-A graphical user interface for [Seaweed File System](https://github.com/seaweedfs/seaweedfs) so you can manage your files easily.
+A graphical user interface for [Seaweed File System](https://github.com/seaweedfs/seaweedfs).
 
 ![image](https://github.com/SuperJMN/SeaweedFS-GUI/assets/3109851/b5732fcb-c019-4b0e-8fd6-aba0771e75ba)
 
