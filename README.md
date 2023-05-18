@@ -2,7 +2,11 @@
 
 A graphical user interface for [Seaweed File System](https://github.com/seaweedfs/seaweedfs) so you can manage your files easily.
 
-Windows Desktop and Android versions should work out of the box. 
+![image](https://github.com/SuperJMN/SeaweedFS-GUI/assets/3109851/b5732fcb-c019-4b0e-8fd6-aba0771e75ba)
+
+# How to use get it?
+
+The best method is to go to the [releases](https://github.com/SuperJMN/SeaweedFS-GUI/releases) page and get the binaries for your OS there.
 
 # How to build (Desktop version for Windows/MacOS/Linux)
 
