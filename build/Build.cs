@@ -53,7 +53,7 @@ class Build : NukeBuild
     Target RestoreWorkloads => _ => _
         .Executes(() =>
         {
-            StartShell($"dotnet workload restore ""{Solution.Path}""").AssertZeroExitCode();
+            StartShell($"dotnet workload restore \"{Solution.Path}\"").AssertZeroExitCode();
         });
 
     Target PublishDesktop => _ => _
